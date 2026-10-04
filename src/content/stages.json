@@ -19,8 +19,8 @@
       "male": 1.72
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/homo-sapiens-female.webp",
+      "male": "portraits/homo-sapiens-male.webp"
     },
     "anatomy": {
       "female": "Dark brown skin, short tightly curled black hair, little body hair. About 1.60 m and 54 kg, slim and long-limbed with modern proportions, fully upright. Modern face with a small chin and a faint brow ridge; braincase slightly longer and lower than today's. Wears a tanned hide wrap fully covering the chest and a hide loincloth.",
@@ -67,8 +67,8 @@
       "male": 1.64
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/neanderthal-female.webp",
+      "male": "portraits/neanderthal-male.webp"
     },
     "anatomy": {
       "female": "Light skin with freckles and straight auburn-red hair (genes suggest some had pale skin and red hair); modest body hair. About 1.55 m and 54 kg, stocky and very strong: wide barrel chest, wide hips, short forearms and shins, large hands. Long low skull, rounded double-arched brow ridge jutting over the eyes, projecting midface, very large wide nose, weak chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -116,8 +116,8 @@
       "male": 1.7
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/denisovan-female.webp",
+      "male": "portraits/denisovan-male.webp"
     },
     "anatomy": {
       "female": "Dark brown skin, dark brown hair and brown eyes, as the Denisova genome suggests; modest body hair. Body barely known: estimated about 1.60 m, robust, broad-shouldered and heavy-boned. Very large, long, low skull, thick brow ridge, broad flat face, wide nose and mouth, very large teeth, no chin. Wears a fur wrap fully covering the chest and a hide loincloth.",
@@ -179,8 +179,8 @@
       "male": 1.75
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/homo-heidelbergensis-female.webp",
+      "male": "portraits/homo-heidelbergensis-male.webp"
     },
     "anatomy": {
       "female": "Warm medium brown skin, dark brown hair, moderate body hair. About 1.57 m and 51 kg, short wide body, broad hips, thick strong limbs, fully upright. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -231,8 +231,8 @@
       "male": 1.78
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/homo-erectus-female.webp",
+      "male": "portraits/homo-erectus-male.webp"
     },
     "anatomy": {
       "female": "Dark brown skin, short tightly curled dark hair, little body hair, like ours. About 1.55 m, slender and long-legged with modern body proportions, narrow hips, fully upright. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -286,8 +286,8 @@
       "male": 1.1
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/homo-floresiensis-female.webp",
+      "male": "portraits/homo-floresiensis-male.webp"
     },
     "anatomy": {
       "female": "Medium brown skin, dark hair, modest body hair. Tiny: about 1.06 m and 30 kg, small but sturdy, wide pelvis, short legs, relatively long arms, shoulders hunched forward, very long flat feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Wears a woven plant-fibre wrap fully covering the chest and a plant-fibre loincloth.",
@@ -331,8 +331,8 @@
       "male": 1.3
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/homo-habilis-female.webp",
+      "male": "portraits/homo-habilis-male.webp"
     },
     "anatomy": {
       "female": "Dark brown skin under a light covering of short dark body hair; dark hair. About 1.05 m and 30 kg, light build, long strong arms, short legs, limb proportions more ape-like than ours, upright. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, projecting lower face, flat broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -388,8 +388,8 @@
       "male": 1.51
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/australopithecus-afarensis-female.webp",
+      "male": "portraits/australopithecus-afarensis-male.webp"
     },
     "anatomy": {
       "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense dark brown body hair, like a chimpanzee's. About 1.05 m and 29 kg, Lucy-sized: long arms with fingertips reaching the knees, short legs, cone-shaped ribcage, upright stance. Small braincase a third of ours, low forehead, brow ridge, flat nose, strongly projecting jaws, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -437,8 +437,8 @@
       "male": 1.25
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/ardipithecus-ramidus-female.webp",
+      "male": "portraits/ardipithecus-ramidus-male.webp"
     },
     "anatomy": {
       "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. About 1.20 m and 50 kg, long arms, very long curved fingers, short legs, a grasping big toe splayed out like a thumb, upright but slightly crouched. Chimp-sized braincase, brow ridge, projecting face, small canines, flat nose. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
@@ -482,8 +482,8 @@
       "male": 1.2
     },
     "images": {
-      "female": "portraits/placeholder-female.svg",
-      "male": "portraits/placeholder-male.svg"
+      "female": "portraits/sahelanthropus-tchadensis-female.webp",
+      "male": "portraits/sahelanthropus-tchadensis-male.webp"
     },
     "anatomy": {
       "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. Body barely known: estimated chimp-sized, about 1.10 m and 35 kg, long arms, short legs, possibly upright on two legs (debated). Small chimp-sized braincase, very prominent brow ridge, sloping face with a short midface, small canines. Wears a simple hide wrap fully covering the chest and a hide loincloth.",

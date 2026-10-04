@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { stages } from '../content/loader'
 import { heightLabel } from './heightLabel'
@@ -22,9 +22,15 @@ function pressBack() {
 }
 
 describe('PortraitViewer', () => {
-  beforeEach(() => history.replaceState({ wyatbGuard: true }, ''))
-  afterEach(() => {
+  let back: MockInstance<History['back']>
+
+  beforeEach(() => {
+    history.replaceState({ wyatbGuard: true }, '')
+    back = vi.spyOn(history, 'back').mockImplementation(() => {})
+  })
+  afterEach(async () => {
     cleanup()
+    await new Promise((resolve) => setTimeout(resolve))
     vi.restoreAllMocks()
   })
 
@@ -47,7 +53,6 @@ describe('PortraitViewer', () => {
   })
 
   it('closes on Escape and drops its history entry', async () => {
-    const back = vi.spyOn(history, 'back').mockImplementation(() => {})
     const onClose = vi.fn()
     const view = render(<Harness open onClose={onClose} />)
     fireEvent.keyDown(window, { key: 'Escape' })
@@ -73,7 +78,9 @@ describe('PortraitViewer', () => {
     expect(dialog).toContainElement(document.activeElement as HTMLElement)
 
     view.rerender(<Harness open={false} onClose={onClose} />)
-    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
-    expect(trigger).toHaveFocus()
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).toBeNull()
+      expect(trigger).toHaveFocus()
+    })
   })
 })

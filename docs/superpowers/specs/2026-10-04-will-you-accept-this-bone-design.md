@@ -46,7 +46,7 @@ src/components/ shared UI (Button, PortraitViewer, PlayerTile, Countdown, BoneBu
 src/share/      shareCard.ts (canvas render), share.ts (Web Share with fallbacks)
 src/theme/      tokens.css, global styles
 src/paywall.ts  isStageUnlocked(index) — returns true; the only paywall seam
-public/portraits/  <stage-id>-female.webp, <stage-id>-male.webp; placeholder-female.svg, placeholder-male.svg
+public/portraits/  <stage-id>-female.webp, <stage-id>-male.webp
 tools/          generate_portraits.py (OpenAI), prompt template, style test outputs (tools/out/, gitignored)
 ```
 

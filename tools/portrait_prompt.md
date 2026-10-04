@@ -14,12 +14,18 @@ A photorealistic picture-day shoot. The joke is that it looks like a real studio
 {STYLE BLOCK}. Full-length standing portrait: the whole body from the top of the head to the soles of the bare feet is inside a vertical 2:3 frame, with a small margin above the head and below the feet, figure centred, standing on the studio floor where the backdrop sweeps down behind the feet. Natural, relaxed neutral stance, weight on both feet, arms relaxed at the sides, body turned slightly in three-quarter view, face towards the camera. Clothing: {clothing}. Subject: an adult {sex} {species}, about 30 years old, an ordinary unretouched individual, scientifically based on current museum reconstructions, photographed exactly like any other customer at a portrait studio, not sexualised, no glamour or fashion-model styling. Anatomy and body: {anatomy note}. {fix}Arms, legs, shoulders, build and body hair clearly visible. Expression: {expression}, mouth closed. Natural proportions, no makeup, no jewellery, no modern items.
 ```
 
-Style block: `Photorealistic full-length studio portrait photograph from a professional portrait studio's picture day: a dark mottled hand-painted canvas backdrop in charcoal and deep warm brown, classic portrait-studio muslin; professional softbox key light from the front left with soft fill and a subtle rim light; neutral, colour-accurate white balance so skin tones read true; sharp focus on the subject with natural photographic depth of field, the backdrop softly out of focus; true-to-life colour, natural skin texture with pores and fine hairs, shot on a full-frame camera with an 85mm lens; a clean modern commercial studio portrait, not a field, documentary or scientific photograph`
+Style block: `Photorealistic full-length studio portrait photograph from a professional portrait studio's picture day: a dark mottled hand-painted canvas backdrop in charcoal and deep warm brown, classic portrait-studio muslin; professional softbox key light from the front left with soft fill, plus a soft rim light and hair light from behind that trace the head, hair, shoulders and arms with a thin warm glow so the figure separates cleanly from the dark backdrop; neutral, colour-accurate white balance so skin tones read true; sharp focus on the subject with natural photographic depth of field, the backdrop softly out of focus; true-to-life colour, natural skin texture with pores and fine hairs, shot on a full-frame camera with an 85mm lens; a clean modern commercial studio portrait, not a field, documentary or scientific photograph`
 
-`{fix}` is the `EXTRA` entry for that stage id (photo style only). It sits right after the anatomy note so the model weighs it. Current entries:
+`{fix}` is built by `fix_text(stage, sex)` (photo style only) and sits right after the anatomy note so the model weighs it:
 
-- `neanderthal`: a concrete face description. Thick brow visor in two arches shading deep-set eyes, hairline just above it, no upright forehead, long low skull with a bulge at the back, midface pushed forward, nose as wide as the mouth, cheeks sloping back, long upper lip, jaw with no chin, skin not deeply tanned. Without it the photo model draws a modern man with a big nose.
-- `australopithecus-afarensis`, `ardipithecus-ramidus`, `sahelanthropus-tchadensis`: `EARLY_APE_FIX` (see Known fixes).
+1. `EXTRA_SKIN[(stage, sex)]` if present. Neanderthal female: `Pale, freckled skin, not tanned.` Neanderthal male: `Light olive, weathered skin, not deeply tanned.`
+2. `EXTRA[stage]`, the face check, identical for both sexes. Every stage except Homo sapiens has one:
+   - `neanderthal`: low sloping forehead, rounded double-arched brow visor jutting over deep-set eyes, long low skull with a bulge at the back, cheekbones swept back, midface pushed forward around a large wide nose, long upper lip, receding chin with no chin point.
+   - `denisovan`, `homo-heidelbergensis`, `homo-erectus`, `homo-floresiensis`, `homo-habilis`: short face checks built from their notes (forehead, brow, face projection, nose, chin). Untested in photo style.
+   - `australopithecus-afarensis`, `ardipithecus-ramidus`, `sahelanthropus-tchadensis`: `EARLY_APE_FIX` (see Known fixes).
+3. Females also get `FEMALE_MATCH`: `She is just as archaic as the males of her species: the same forehead, brow ridge, midface, jaw, nose and chin, only slightly smaller and without a beard; her face must not look like a modern woman's.`
+
+Without these the photo model draws modern faces with big noses, females more than males.
 
 When a species keeps failing, add an `EXTRA` entry rather than relying on `--extra`.
 
@@ -31,10 +37,12 @@ Every species gets the identical modern studio setup, light and treatment. Never
 
 `{clothing}` comes before the anatomy so the garment is the first thing the model reads:
 
-- female: `minimal period clothing; a simple hide wrap that fully covers her chest, and a wide hide wrap around the hips that fully covers the groin and buttocks and reaches mid-thigh; arms, shoulders and lower legs bare`
+- female: `minimal period clothing; a hide wrap that passes over one shoulder and fully covers her chest, like a simple one-shouldered hide top tied at the side, loose and unfitted, hanging straight down from the shoulder without shaping to the body, not a strapless band; and a wide hide wrap around the hips that fully covers the groin and buttocks and reaches mid-thigh; arms and lower legs bare`
 - male: `minimal period clothing; a wide hide wrap around the hips that fully covers the groin and buttocks and reaches mid-thigh; arms and lower legs bare`
 
-The hip wrap replaced the old small "hide loincloth". A photoreal bare-chested male in a small loincloth was blocked once by output moderation (`moderation_blocked`, `sexual`). The mid-thigh wrap has passed every call since.
+The garment sentence at the end of each anatomy note (`Wears ...` / `Bare-chested, ...`) is cut off before the note goes in, so it cannot fight the clothing slot.
+
+The one-shoulder top replaced a chest wrap that the model drew as a strapless band. The hip wrap replaced the old small "hide loincloth". A photoreal bare-chested male in a small loincloth was blocked once by output moderation (`moderation_blocked`, `sexual`). The mid-thigh wrap has passed every call since.
 
 ## Style B: full-length oil portrait (kept)
 
@@ -54,17 +62,20 @@ Style B does not get the `EXTRA` fixes. Pass them with `--extra` if needed.
 
 Style block: `1990s school picture-day portrait photograph, mottled blue laser-swirl studio backdrop, soft frontal key light, slight film grain, photographic, natural skin texture`
 
-The anatomy notes end with full-body garments (loincloths, bare-chested males). Style A's own "wrap that fully covers the chest" line overrides that, but check the result.
+The garment sentence is cut from the anatomy note here too, so Style A's own chest wrap line is the only clothing.
 
 ## Shared slots
 
 - `{anatomy note}` comes from `anatomy.female` / `anatomy.male` in `src/content/stages.json`. Each note describes the whole body, in this order: skin colour first (the model drifts darker), hair and body hair, height in metres and weight, build, limb proportions, posture, skull and face, then the garment. Keep each under about 70 words.
 - `{expression}`: female "calm and patient", male "calm, mildly amused".
 
-Calls with a reference image (the edits endpoint) wrap the template:
+Calls with reference images (the edits endpoint) wrap the template. The first image is always the style anchor. A female also gets her own species' male as a second image when it exists, so she is built from the same skull and face. Each image is described by `reference_text()`:
 
-- Before: "The reference image shows a different individual of a different species. Use it only as the reference for photographic style, studio backdrop, lighting, colour grade, framing and rendering. Do not copy its anatomy, face, skull, body proportions, skin colour, hair or clothing. Create a new portrait of a new individual:"
-- After: "Match the lighting, colour grade, framing and rendering of the reference images exactly."
+- Different species: "{label} shows a different individual of a different species. Use it only as the reference for photographic style, studio backdrop, lighting, colour grade, framing and rendering. Do not copy its anatomy, face, skull, body proportions, skin colour, hair or clothing."
+- Same species: "{label} shows another individual of the same species as the new portrait. [If first: Use it as the reference for photographic style, studio backdrop, lighting, colour grade, framing and rendering.] Use it as the reference for species anatomy: give the new individual the same skull, forehead, brow ridge, midface, nose, jaw and chin shapes, the same limb proportions and the same amount of body hair, adapted to a {sex}, as a clearly different person. Do not copy its skin colour, hair colour, clothing or pose."
+- Then "Create a new portrait of a new individual:" and the template, ending with "Match the lighting, colour grade, framing and rendering of the reference images exactly."
+
+The old wording called every reference "a different species", so the Neanderthal female was told not to copy the Neanderthal male's anatomy.
 
 ## Prompt rules
 
@@ -82,9 +93,9 @@ Calls with a reference image (the edits endpoint) wrap the template:
 5. Anatomy and proportions match the note: build, limb lengths, posture, body hair, brow, face projection, nose, chin. Crop the face to check: at full size a heavy-browed modern face can pass for a Neanderthal.
 6. Skin and hair follow the note. Across the set, older species are not darker.
 7. Calm or mildly amused expression. Mouth closed. Not a caricature.
-8. Photo style: photoreal studio look on the dark mottled backdrop, same light across the set, nothing ethnographic (see Sensitivity rule).
+8. Photo style: photoreal studio look on the dark mottled backdrop, same softbox and soft rim light across the set, figure separates from the backdrop at phone size, nothing ethnographic (see Sensitivity rule).
 
-Regenerate a failure with `--only <key>`, at most twice per image. Put lasting fixes in `EXTRA` or the template. Use `--extra` only for one-off tests.
+Regenerate a failure with `--only <key>`, at most twice per image. Judge faces from a Pillow crop, never from the full frame. Put lasting fixes in `EXTRA` or the template. Use `--extra` only for one-off tests.
 
 ## Known fixes
 
@@ -92,12 +103,15 @@ Photo test (gpt-image-2), Neanderthal and A. afarensis:
 
 - Try 1 (fixes appended at the end of the prompt): Neanderthal faces read as modern humans with big noses. Afarensis skin came out medium brown, fingertips only reached mid-thigh, legs near human length.
 - Try 2: moved `{fix}` right after the anatomy note, added "neutral, colour-accurate white balance" to the style block, and used the stronger `EARLY_APE_FIX` below. Afarensis passed. Neanderthal faces still too modern. The hip garment was widened after a moderation block.
-- Try 3: the concrete Neanderthal face text now in `EXTRA`. Male clearly Neanderthal. Female passes but is softer, so check her face first in the full run.
+- Try 3: concrete Neanderthal face text in `EXTRA`. Male clearly Neanderthal (kept as the anchor). Reviewer failed both females: modern faces with big noses, not matching their males.
+- Try 4: sex-aware fixes (`EXTRA_SKIN`, `FEMALE_MATCH`), face text for every archaic stage, stronger ape nose and eyes, one-shoulder top, rim and hair light. Neanderthal female better but still soft; afarensis female kept a human nasal bridge and human eyes.
+- Try 5: same-species reference wording, and each female gets her male as a second reference. Neanderthal female passed. Afarensis female closer but still had a raised bridge between the eyes.
+- Try 6 (afarensis female only): flat area between the eyes, eyes with almost no white. Face passed and matches the male. The top came out fitted and shaped to the bust, so the female garment now says "loose and unfitted, hanging straight down from the shoulder". That wording is not yet tested.
 
 `EARLY_APE_FIX` (afarensis, Ardipithecus, Sahelanthropus):
 
 ```
-Skin check, most important: every patch of bare skin (face, ears, palms, hands, feet) is pale pinkish-beige like a young chimpanzee's face, light with pink undertones, clearly not brown; only the dense hair covering the body is dark brown. Proportions check: arms much longer than a human's, the fingertips hanging level with the kneecaps; legs short, no longer than the torso; cone-shaped ribcage widening to a broad belly and pelvis. Face check: ape-like, closer to a chimpanzee than a human, with the jaws pushed far forward into a muzzle, a flat nose with no bridge, a low small braincase, no forehead and no chin.
+Skin check, most important: every patch of bare skin (face, ears, palms, hands, feet) is pale pinkish-beige like a young chimpanzee's face, light with pink undertones, clearly not brown; only the dense body hair is dark. Proportions check: arms much longer than a human's, the fingertips hanging level with the kneecaps; legs short, no longer than the torso; cone-shaped ribcage widening to a broad belly and pelvis. Face check, most important: an ape's face, closer to a chimpanzee than a human. The jaws and mouth push far forward into a strong muzzle, so in three-quarter view the lower face sticks out well past the nose; the nose is flat against the face like a chimpanzee's, just two wide nostrils with no bridge, no human nasal bridge and no nose tip sticking out, and the area between the eyes is flat and wide with no raised ridge running down to the nose; small, ape-like dark brown eyes with almost no white showing, set deep under a heavy brow ridge; a low small braincase with no forehead; no chin.
 ```
 
 Older Style B fix for the same species (pass with `--extra`): `Skin check: the face, ears, hands and feet are pale pinkish-beige, clearly lighter than the reference figure's skin and much lighter than the dark body hair, like a chimpanzee's pale skin. Proportions check: arms clearly longer than a human's, fingertips hanging down to the knees; legs short relative to the long torso; cone-shaped ribcage widening to a broad belly and pelvis.`
@@ -119,8 +133,8 @@ python tools/generate_portraits.py --full-body-test
 python tools/generate_portraits.py --style-test --style A
 ```
 
-- `--photo-test`: photo style, Neanderthal and A. afarensis, female and male. The Neanderthal male is made first with `/v1/images/generations`. The other three use `/v1/images/edits` with it as a style, backdrop and lighting reference only. PNGs, `prompts.json` and a labelled 1x4 `contact-sheet.png` go to `tools/out/photo-test/`. Rejected tries are in `tools/out/photo-test/rejected/`.
-- `--all`: every stage in `stages.json`, female then male, through `/v1/images/edits`. `--style` defaults to `photo` and `--anchor` to `tools/out/photo-test/neanderthal-male.png`. The anchor is always a reference; the male also gets that stage's female for a matching pair. Raw PNGs go to `tools/out/all/`. Each is saved uncropped at 1024x1536 (2:3) as WebP (quality 80) at `public/portraits/<stage-id>-<sex>.webp`.
+- `--photo-test`: photo style, Neanderthal and A. afarensis, female and male. The Neanderthal male is made first with `/v1/images/generations`. The other three use `/v1/images/edits` with it as the style reference. Males are made before females, and each female also gets her species' male as an anatomy reference. PNGs, `prompts.json` and a labelled 1x4 `contact-sheet.png` go to `tools/out/photo-test/`. Rejected tries are in `tools/out/photo-test/rejected/`.
+- `--all`: every stage in `stages.json`, male then female, through `/v1/images/edits`. `--style` defaults to `photo` and `--anchor` to `tools/out/photo-test/neanderthal-male.png`. The anchor is always the first reference (treated as same species when its file name matches the stage). The female also gets that stage's male from `tools/out/all/`, so rerunning a female alone still pairs her with the existing male. Raw PNGs go to `tools/out/all/`. Each is saved uncropped at 1024x1536 (2:3) as WebP (quality 80) at `public/portraits/<stage-id>-<sex>.webp`.
 - `--full-body-test`: Style B version of the photo test, into `tools/out/full-body-test/`.
 - `--style-test`: the older A/B comparison (8 images) into `tools/out/style-test/`.
 - `--contact-sheet`: rebuilds all three contact sheets from the PNGs on disk.
