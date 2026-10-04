@@ -1,0 +1,432 @@
+[
+  {
+    "id": "homo-sapiens",
+    "order": 1,
+    "species": "Early Homo sapiens",
+    "lived": {
+      "fromYearsAgo": 315000,
+      "toYearsAgo": 0,
+      "display": "About 315,000 years ago to tonight"
+    },
+    "description": "Our first contestant should look familiar, because it's you, about 300,000 years ago. Same face, slightly longer head. No idea what tonight has in store. Let's ease in.",
+    "facts": [
+      "The oldest Homo sapiens fossils found so far come from Jebel Irhoud in Morocco, not East Africa, and are about 315,000 years old.",
+      "Their faces already fall within the range of people alive today, but their braincases were longer and lower than ours."
+    ],
+    "punchline": "Cutting this one means breaking up with your own species. Bold opener.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "Fully modern body, about 160 cm, slim to medium build. Modern face with a small chin and only a faint brow ridge; braincase a little longer and lower than today's. Dark brown skin, dark brown eyes, short dark natural hair, little body hair. Simple tanned hide wrap fully covering chest and shoulders.",
+      "male": "Fully modern body, about 170 cm, lean and muscular. Modern face with a defined chin and a slight brow ridge; braincase a little longer and lower than today's. Dark brown skin, dark brown eyes, short dark natural hair and a short beard. Simple tanned hide wrap fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Thermoluminescence dating puts the Jebel Irhoud fossils at about 315,000 years old, the oldest known Homo sapiens.",
+        "url": "https://www.nature.com/articles/nature22335"
+      },
+      {
+        "claim": "Jebel Irhoud fossils are the earliest known Homo sapiens, found in Morocco rather than East Africa.",
+        "url": "https://www.nature.com/articles/nature22336"
+      },
+      {
+        "claim": "Jebel Irhoud faces are modern while the braincase is archaic and elongated.",
+        "url": "https://www.eva.mpg.de/press/news/2017/2017-06-07-the-first-of-our-kind/"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "neanderthal",
+    "order": 2,
+    "species": "Neanderthal",
+    "lived": {
+      "fromYearsAgo": 400000,
+      "toYearsAgo": 40000,
+      "display": "About 400,000 to 40,000 years ago"
+    },
+    "description": "Next up, one of our two closest relatives. The other is waiting backstage. Neanderthals lived across Ice Age Europe and western and central Asia, shorter and stockier than us and built for the cold. They also have history with your family, so play nice.",
+    "facts": [
+      "Neanderthal brains were as large as ours, and often larger.",
+      "Most people outside Africa carry 1 to 2% Neanderthal DNA. One 2024 study traces most of it to a stretch of mixing that began around 50,000 years ago and lasted about 7,000 years.",
+      "The oldest known evidence of anyone making fire, about 400,000 years old, comes from Barnham in England, and researchers think early Neanderthals lit it."
+    ],
+    "punchline": "Some of your ancestors already said yes. You inherited the receipts.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 155 cm, stocky and powerful, wide chest, short forearms. Long low skull, rounded double-arched brow ridge, large forward-projecting midface, swept-back cheekbones, very large wide nose, weak chin. Light to medium skin, brown to auburn hair (some evidence of variation), modest body hair. Fur-lined hide cloak fully covering chest and shoulders.",
+      "male": "About 165 cm, barrel-chested and heavily muscled, short limbs. Long low skull, rounded double-arched brow ridge, large forward-projecting midface, swept-back cheekbones, very large wide nose, weak chin. Light to medium skin, brown to auburn hair and beard (some evidence of variation), moderate body hair. Fur-lined hide cloak fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Neanderthals lived about 400,000 to 40,000 years ago across Europe and southwestern to central Asia; their brains were as large as ours and often larger.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-neanderthalensis"
+      },
+      {
+        "claim": "Non-Africans carry 1-2% Neanderthal DNA; the main interbreeding began about 50,500 years ago, averaged about 47,000, and lasted about 7,000 years.",
+        "url": "https://www.sciencedaily.com/releases/2024/12/241212145726.htm"
+      },
+      {
+        "claim": "Barnham, UK: earliest evidence of fire-making, about 400,000 years old, probably by early Neanderthals.",
+        "url": "https://www.nhm.ac.uk/discover/news/2025/december/earliest-fire-making-dating-back-400-000-years-unearthed-in-suffolk-england.html"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "denisovan",
+    "order": 3,
+    "species": "Denisovan",
+    "nickname": "Dragon Man",
+    "lived": {
+      "fromYearsAgo": 200000,
+      "toYearsAgo": 40000,
+      "display": "About 200,000 to 40,000 years ago"
+    },
+    "description": "Our mystery guest. For years we knew Denisovans mostly from DNA, a finger bone, a few teeth and a couple of jawbones, until a skull from Harbin in China turned out to be one of them. Tonight, for the first time, they get to show you their face.",
+    "facts": [
+      "In 2025, proteins from the Harbin \"Dragon Man\" skull and DNA from the tartar on its teeth showed it was Denisovan, and at least 146,000 years old.",
+      "A girl from Denisova Cave in Siberia had a Neanderthal mother and a Denisovan father.",
+      "Many Tibetans carry a Denisovan version of the EPAS1 gene, which helps people cope with life at high altitude."
+    ],
+    "punchline": "Neanderthal mom, Denisovan dad. Holidays were tense.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "Probably robust and broad-bodied, about 160 cm (body largely unknown). Very large, long, low skull with a thick brow ridge, broad flat face, wide nose, wide mouth, large teeth, no chin. Dark skin, dark brown hair and brown eyes, as the Denisova genome suggests; modest body hair. Heavy fur cloak fully covering chest and shoulders.",
+      "male": "Probably robust and broad-bodied, about 170 cm (body largely unknown). Very large, long, low skull with a heavy brow ridge, broad flat face, wide nose, wide mouth, large teeth, strong jaw, no chin. Dark skin, dark brown hair and beard, brown eyes, as the Denisova genome suggests. Heavy fur cloak fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Harbin skull identified as Denisovan from proteins and dental-calculus mtDNA; at least 146,000 years old.",
+        "url": "https://english.cas.cn/research/highlight/palaeontology/202506/t20250619_1045850.shtml"
+      },
+      {
+        "claim": "Denisova 11, a female at least 13 years old, had a Neanderthal mother and a Denisovan father (Slon et al. 2018).",
+        "url": "https://www.nature.com/articles/s41586-018-0455-x"
+      },
+      {
+        "claim": "The Tibetan high-altitude EPAS1 variant came from Denisovans.",
+        "url": "https://www.nature.com/articles/nature13408"
+      },
+      {
+        "claim": "Xiahe mandible from the Tibetan Plateau identified as Denisovan by ancient proteins.",
+        "url": "https://www.nature.com/articles/s41586-019-1139-x"
+      },
+      {
+        "claim": "Penghu 1 mandible from Taiwan identified as a male Denisovan by ancient proteins.",
+        "url": "https://www.science.org/doi/10.1126/science.ads3888"
+      },
+      {
+        "claim": "Denisova 25 molar belonged to a Denisovan who lived about 200,000 years ago (preprint, not yet peer-reviewed).",
+        "url": "https://www.biorxiv.org/content/10.1101/2025.10.20.683404v1"
+      },
+      {
+        "claim": "A Denisovan rib from Baishiya Karst Cave dates to about 48,000-32,000 years ago.",
+        "url": "https://www.nature.com/articles/s41586-024-07612-9"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "homo-heidelbergensis",
+    "order": 4,
+    "species": "Homo heidelbergensis",
+    "lived": {
+      "fromYearsAgo": 700000,
+      "toYearsAgo": 200000,
+      "display": "About 700,000 to 200,000 years ago"
+    },
+    "description": "This one comes with a complicated past. Homo heidelbergensis lived in Africa and Europe and was possibly close to the common ancestor we share with Neanderthals and Denisovans. Some scientists want to retire the name altogether, so tread carefully.",
+    "facts": [
+      "Scientists once filed the skeletons from Spain's Pit of Bones under this species, until their anatomy and then ancient DNA put them on the early Neanderthal line.",
+      "A 2021 proposal wanted to drop the name and call the African fossils Homo bodoensis instead."
+    ],
+    "punchline": "Scientists can't agree what to call this one. Sounds like a few of your situationships.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 157 cm, short wide body, strong. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, no chin. Warm medium brown skin, dark brown hair, moderate body hair. Hide cape fully covering chest and shoulders.",
+      "male": "About 175 cm, broad and powerfully built. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, heavy jaw, no chin. Warm medium brown skin, dark brown hair and short beard, moderate body hair. Hide cape fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Homo heidelbergensis lived about 700,000 to 200,000 years ago in Africa and Europe.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-heidelbergensis"
+      },
+      {
+        "claim": "Sima de los Huesos crania show derived Neanderthal features, placing them at the roots of the Neanderthal lineage.",
+        "url": "https://www.science.org/doi/10.1126/science.1253958"
+      },
+      {
+        "claim": "Nuclear DNA places the Sima de los Huesos hominins on the Neanderthal line.",
+        "url": "https://www.nature.com/articles/nature17405"
+      },
+      {
+        "claim": "Roksandic et al. propose Homo bodoensis and suppressing Homo heidelbergensis.",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9297855/"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "homo-erectus",
+    "order": 5,
+    "species": "Homo erectus",
+    "lived": {
+      "fromYearsAgo": 2000000,
+      "toYearsAgo": 110000,
+      "display": "About 2 million to 110,000 years ago"
+    },
+    "description": "Long legs, built for walking, and a serious travel habit. Homo erectus started in Africa and made it as far as Georgia, China and Indonesia. Fair warning: this contestant does not stay in one place.",
+    "facts": [
+      "Homo erectus is generally considered the first species we know of with fossils outside Africa, at Dmanisi in Georgia, about 1.8 million years ago.",
+      "It was probably the first species to use fire, but it seems to have carried and kept natural fire rather than making its own.",
+      "The species lasted nearly 2 million years, about six times longer than Homo sapiens has been around."
+    ],
+    "punchline": "Went nearly two million years. Can you say the same?",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 150-160 cm, slender with long legs and modern body proportions. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Dark brown skin, short dark hair, little body hair like ours. Simple hide wrap fully covering chest and shoulders.",
+      "male": "About 170-185 cm, tall and lean with long legs and modern body proportions. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Dark brown skin, short dark hair and sparse beard, little body hair like ours. Simple hide wrap fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Homo erectus height range, modern body proportions, range across Africa, Georgia, China and Indonesia; generally considered the first species to expand beyond Africa.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-erectus"
+      },
+      {
+        "claim": "Oldest known Homo erectus (DNH 134, Drimolen) dates to about 2 million years ago.",
+        "url": "https://www.science.org/doi/10.1126/science.aaw7293"
+      },
+      {
+        "claim": "Last Homo erectus at Ngandong, about 117,000 to 108,000 years ago.",
+        "url": "https://www.nature.com/articles/s41586-019-1863-2"
+      },
+      {
+        "claim": "Dmanisi Homo erectus fossils date to 1.85-1.77 million years ago; older tools in China mean someone left Africa earlier.",
+        "url": "https://www.sciencenews.org/article/shangchen-stone-tools-put-early-hominids-china-earlier"
+      },
+      {
+        "claim": "Wonderwerk Cave fire use 1.07-1.79 million years ago; fire was collected from natural sources, not made.",
+        "url": "https://www.sciencedaily.com/releases/2026/06/260623083123.htm"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "homo-floresiensis",
+    "order": 6,
+    "species": "Homo floresiensis",
+    "lived": {
+      "fromYearsAgo": 100000,
+      "toYearsAgo": 50000,
+      "display": "About 100,000 to 50,000 years ago"
+    },
+    "description": "Joining us from the island of Flores in Indonesia, a relative who stood about 1.1 meters tall. Everyone calls them the Hobbit, and scientists still argue over how they got so small. Do not underestimate this one.",
+    "facts": [
+      "They may have eaten Stegodon, an extinct dwarf relative of elephants, and they shared the island with giant Komodo dragons.",
+      "Their brains were about a third the size of ours, and they still made and used stone tools."
+    ],
+    "punchline": "Dodged Komodo dragons, sized up mini elephants. Your last date complained about parking.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 106 cm and 30 kg, small but sturdy, shoulders set slightly forward, relatively large feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Medium brown skin, dark hair, modest body hair. Woven plant-fiber or hide wrap fully covering chest and shoulders.",
+      "male": "About 110 cm, small but sturdy, shoulders set slightly forward, relatively large feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Medium brown skin, dark hair and sparse beard, modest body hair. Woven plant-fiber or hide wrap fully covering chest and shoulders."
+    },
+    "sources": [
+      {
+        "claim": "Homo floresiensis: 100,000-50,000 years ago, 106 cm, 30 kg, small brain, stone tools, Stegodon, Komodo dragons, Hobbit nickname.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-floresiensis"
+      },
+      {
+        "claim": "Stegodon butchery at Liang Bua was first credited to H. floresiensis but is now linked to later Homo sapiens; floresiensis may still have eaten Stegodon meat.",
+        "url": "https://www.nhm.ac.uk/discover/homo-floresiensis-hobbit.html"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "homo-habilis",
+    "order": 7,
+    "species": "Homo habilis",
+    "nickname": "Handy Man",
+    "lived": {
+      "fromYearsAgo": 2400000,
+      "toYearsAgo": 1400000,
+      "display": "About 2.4 to 1.4 million years ago"
+    },
+    "description": "Meet Handy Man, one of the earliest members of our own genus, from eastern and southern Africa. Small, with long, strong arms, habilis got famous as the first toolmaker. Well. About that.",
+    "facts": [
+      "The oldest stone tools claimed so far, from Lomekwi in Kenya, are about 3.3 million years old, roughly 900,000 years older than the oldest Homo habilis, though some researchers question their age.",
+      "Habilis shared Africa with Homo erectus for about half a million years.",
+      "The most complete habilis skeleton found so far, about 2 million years old, belonged to someone weighing only 31 to 33 kilograms."
+    ],
+    "punchline": "Took credit for someone else's tools. We've all dated one.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 100-120 cm, light build, long strong arms. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, lower face projects forward, flat broad nose, no chin. Medium brown skin, dark hair, a light covering of fine body hair. Simple hide wrap draped over both shoulders, fully covering the chest.",
+      "male": "About 120-135 cm, light but strong build, long strong arms. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, lower face projects forward, flat broad nose, no chin. Medium brown skin, dark hair, a light covering of fine body hair. Simple hide wrap draped over both shoulders, fully covering the chest."
+    },
+    "sources": [
+      {
+        "claim": "Homo habilis lived 2.4-1.4 million years ago, had long arms, and coexisted with Homo erectus for about half a million years.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-habilis"
+      },
+      {
+        "claim": "The oldest known stone tools are 3.3 million years old, older than the genus Homo.",
+        "url": "https://www.nhm.ac.uk/discover/homo-habilis-early-maker-stone-tools.html"
+      },
+      {
+        "claim": "Lomekwi 3 stone tools, West Turkana, Kenya, 3.3 million years ago.",
+        "url": "https://geology.rutgers.edu/images/Publications_PDFS/Harmand_et_al_2015_short.pdf"
+      },
+      {
+        "claim": "KNM-ER 64061, about 2.04 million years old, weighed an estimated 30.7-32.7 kg.",
+        "url": "https://www.sci.news/othersciences/anthropology/homo-habilis-skeleton-14485.html"
+      },
+      {
+        "claim": "Domínguez-Rodrigo and Alcalá question whether the Lomekwi 3 tools come from the 3.3-million-year-old layers.",
+        "url": "https://www.researchgate.net/publication/337862801_Pliocene_Archaeology_at_Lomekwi_3_New_Evidence_Fuels_More_Skepticism"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "australopithecus-afarensis",
+    "order": 8,
+    "species": "Australopithecus afarensis",
+    "nickname": "Lucy",
+    "lived": {
+      "fromYearsAgo": 3850000,
+      "toYearsAgo": 2950000,
+      "display": "About 3.85 to 2.95 million years ago"
+    },
+    "description": "Our most famous guest tonight. Lucy was found in Ethiopia in 1974 and has been the poster girl for human evolution ever since. She walked upright, but she never gave up the trees.",
+    "facts": [
+      "The team named Lucy at a party in camp the night she was found, with the Beatles' \"Lucy in the Sky with Diamonds\" playing over and over.",
+      "Footprints at Laetoli in Tanzania, about 3.66 million years old, are the oldest widely accepted trail of upright walking.",
+      "One 2016 study suggests Lucy died after falling from a tall tree, though other scientists dispute it."
+    ],
+    "punchline": "Lucy may have fallen hard for someone. Out of a tree, if one study is right.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 105 cm and 29 kg, small, long arms, short legs, cone-shaped ribcage. Small braincase about a third of ours, low forehead, brow ridge, flat nose, strongly projecting lower face and jaw, no chin. Covered in dark brown body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
+      "male": "About 151 cm and 42 kg, much larger than females, long arms, sturdy. Small braincase about a third of ours, low forehead, brow ridge, flat nose, strongly projecting lower face and jaw, no chin. Covered in dark brown body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+    },
+    "sources": [
+      {
+        "claim": "A. afarensis lived 3.85-2.95 million years ago; size, brain, face; Lucy found at Hadar in 1974; Laetoli footprints.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/australopithecus-afarensis"
+      },
+      {
+        "claim": "Lucy was named during a camp celebration while the Beatles song played.",
+        "url": "https://iho.asu.edu/aboutLucy"
+      },
+      {
+        "claim": "Lucy's fractures may come from a fall out of a tall tree (Kappelman et al. 2016).",
+        "url": "https://www.nature.com/articles/nature19332"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "ardipithecus-ramidus",
+    "order": 9,
+    "species": "Ardipithecus ramidus",
+    "nickname": "Ardi",
+    "lived": {
+      "fromYearsAgo": 4400000,
+      "toYearsAgo": 4400000,
+      "display": "About 4.4 million years ago"
+    },
+    "description": "We're deep in the family album now. Ardi lived in Ethiopia 4.4 million years ago, and her team thinks she climbed trees and walked upright on the ground. They place her in woodland, which would upend the old idea that walking upright began on open savanna. Some geologists say her home was more open, so keep an open mind.",
+    "facts": [
+      "Ardi's big toe stuck out to the side and could grip branches, while the rest of her foot was stiff enough for walking upright.",
+      "Ardi was found in 1994, but the team took 15 years to publish her.",
+      "Males had small canine teeth, which some scientists read as a sign of less fighting between males."
+    ],
+    "punchline": "Fifteen years before going public. Still faster than some of your exes.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "About 120 cm and 50 kg, long arms, grasping big toe. Small braincase about chimp-sized, brow ridge, projecting face, small canines, flat nose. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
+      "male": "About 120-130 cm, similar in size to females, long arms, grasping big toe. Small braincase about chimp-sized, brow ridge, projecting face, small canines barely larger than females', flat nose. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+    },
+    "sources": [
+      {
+        "claim": "Ardi: 4.4 million years ago, 120 cm, 50 kg, divergent big toe with a rigid foot, small male canines, found 1994 and published 2009, wooded setting.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/ardipithecus-ramidus"
+      },
+      {
+        "claim": "Cerling et al. argue Ardi's habitat was tree or bush savanna with 5-25% tree cover, not woodland.",
+        "url": "https://www.sciencedaily.com/releases/2010/05/100527141955.htm"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  },
+  {
+    "id": "sahelanthropus-tchadensis",
+    "order": 10,
+    "species": "Sahelanthropus tchadensis",
+    "nickname": "Toumaï",
+    "lived": {
+      "fromYearsAgo": 7000000,
+      "toYearsAgo": 6000000,
+      "display": "About 7 to 6 million years ago"
+    },
+    "description": "Our final contestant comes from Chad, roughly 7 million years ago, and may be one of the very first members of the human family. Most of what we know comes from one skull found in 2001. If you've made it this far, I'm impressed, and a little concerned.",
+    "facts": [
+      "\"Toumaï\" means \"hope of life\" in Chad's Goran language.",
+      "A January 2026 study argues its thigh bone shows it may have walked upright. Critics call the evidence weak: the bone is badly damaged, and some of its features turn up in primates that don't walk upright.",
+      "Its brain was about the size of a chimpanzee's, but it had small canine teeth, a trait it shares with later members of the human family."
+    ],
+    "punchline": "\"Hope of life.\" Which is exactly what got this group to stage ten.",
+    "images": {
+      "female": "portraits/placeholder-female.svg",
+      "male": "portraits/placeholder-male.svg"
+    },
+    "anatomy": {
+      "female": "Body largely unknown; assume chimp-sized, about 110-120 cm, long arms. Small braincase, very prominent brow ridge, sloping face with a short midface, small canines. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
+      "male": "Body largely unknown; assume chimp-sized, about 120-130 cm, long arms. Small braincase, very prominent thick brow ridge, sloping face with a short midface, small canines. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+    },
+    "sources": [
+      {
+        "claim": "Sahelanthropus: 7-6 million years ago in Chad, found 2001, small brain, prominent brow ridges, small canines, sloping face.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/sahelanthropus-tchadensis"
+      },
+      {
+        "claim": "Toumaï means \"hope of life\" in the local Goran language.",
+        "url": "https://becominghuman.org/hominin-fossils/sahelanthropus-tchadensis/"
+      },
+      {
+        "claim": "January 2026 Science Advances study argues the femur shows bipedalism; critics call the evidence weak, citing poor preservation and features also seen in nonbipedal primates.",
+        "url": "https://www.scientificamerican.com/article/earliest-human-ancestor-may-have-walked-on-two-legs/"
+      }
+    ],
+    "lastChecked": "2026-10-04"
+  }
+]

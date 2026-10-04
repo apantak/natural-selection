@@ -50,7 +50,7 @@ public/portraits/  <stage-id>-female.webp, <stage-id>-male.webp; placeholder-fem
 tools/          generate_portraits.py (OpenAI), prompt template, style test outputs (tools/out/, gitignored)
 ```
 
-- The engine is a reducer: `gameReducer(state, action) → state`. Votes enter only through `submitVotes(StageVotes)`, so a future networked vote source plugs in without engine changes.
+- The engine is a reducer: `createReducer(stageCount)` returns `(state, action) → state`. Votes enter only through `submitVotes(StageVotes)`, so a future networked vote source plugs in without engine changes.
 - State persists to `sessionStorage` on every change and restores on load, so a phone lock or reload doesn't lose the game. Cleared on New game; nothing survives the tab.
 - Android back button: a history entry per screen; back asks "Quit game?" during play.
 - Stages are imported at build time from `src/content/stages.json`. A content validator (JSON schema via ajv + file existence for images) runs in `npm run check:content` and in CI.

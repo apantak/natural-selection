@@ -1,0 +1,207 @@
+.setup__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.setup__field {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  border: var(--hairline);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui) var(--ease-out);
+}
+
+.setup__field:focus-within {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-card), var(--glow-gold);
+}
+
+.setup__input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-md);
+  background: transparent;
+  outline: none;
+}
+
+.setup__input::placeholder {
+  color: var(--color-ivory-faint);
+}
+
+.setup__input[aria-invalid='true'] {
+  color: var(--color-danger);
+}
+
+.setup__add {
+  flex: none;
+}
+
+.setup__error {
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 550;
+  color: var(--color-danger);
+}
+
+.setup__count {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-ivory-muted);
+  font-size: var(--text-sm);
+}
+
+.setup__count-text strong {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--color-gold-bright);
+}
+
+.setup__pips {
+  display: flex;
+  gap: 6px;
+}
+
+.setup__pip {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-gold-line);
+  border-radius: 50%;
+  transition: background-color var(--dur-ui) var(--ease-out), box-shadow var(--dur-ui) var(--ease-out);
+}
+
+.setup__pip--min {
+  margin-right: 6px;
+}
+
+.setup__pip--on {
+  border-color: var(--color-gold-bright);
+  background: var(--color-gold-bright);
+  box-shadow: 0 0 10px rgba(236, 202, 132, 0.6);
+}
+
+.setup__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setup__row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-lg);
+  padding: var(--space-1) var(--space-1) var(--space-1) 0;
+  border: var(--hairline);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(90deg, rgba(255, 236, 200, 0.04), transparent 60%),
+    var(--color-surface-solid);
+  box-shadow: var(--shadow-card);
+}
+
+.setup__grip {
+  display: grid;
+  flex: none;
+  place-items: center;
+  align-self: stretch;
+  width: 2.25rem;
+  color: var(--color-ivory-faint);
+  cursor: grab;
+  touch-action: none;
+}
+
+.setup__grip svg {
+  width: 12px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.setup__grip:active {
+  cursor: grabbing;
+}
+
+.setup__number {
+  flex: none;
+  width: 1.25rem;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.setup__name {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 550;
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+
+.setup__row-actions {
+  display: flex;
+  flex: none;
+}
+
+.setup__icon-btn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: var(--tap-min);
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-ivory-muted);
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.setup__icon-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.setup__icon-btn:not(:disabled):hover {
+  color: var(--color-ivory);
+  background: rgba(241, 230, 210, 0.06);
+}
+
+.setup__icon-btn--danger {
+  width: var(--tap-min);
+  color: var(--color-rose);
+}
+
+.setup__icon-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.setup__empty {
+  padding: var(--space-6) var(--space-4);
+  border: 1px dashed var(--color-gold-line);
+  border-radius: var(--radius-lg);
+}
+
+.setup__status {
+  color: var(--color-ivory-muted);
+}

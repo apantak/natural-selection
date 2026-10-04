@@ -1,0 +1,42 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dialog);
+  display: grid;
+  place-items: center;
+  padding:
+    calc(var(--safe-top) + var(--gutter))
+    calc(var(--safe-right) + var(--gutter))
+    calc(var(--safe-bottom) + var(--gutter))
+    calc(var(--safe-left) + var(--gutter));
+  background: var(--color-scrim);
+  backdrop-filter: blur(6px);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(100%, 26rem);
+  padding: var(--space-6) var(--space-5) var(--space-5);
+  text-align: center;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(120, 44, 52, 0.35), transparent 70%),
+    var(--color-surface-solid);
+  box-shadow: var(--shadow-lift), var(--glow-gold);
+}
+
+.dialog__title {
+  font-size: var(--text-xl);
+}
+
+.dialog__message {
+  color: var(--color-ivory-muted);
+}
+
+.dialog__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}

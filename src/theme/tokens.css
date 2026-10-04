@@ -1,0 +1,96 @@
+:root {
+  --color-bg: #15100c;
+  --color-bg-deep: #0d0907;
+  --color-velvet: #3d1a1f;
+  --color-velvet-deep: #26100f;
+  --color-wood: #2b1d14;
+  --color-surface: rgba(52, 37, 27, 0.72);
+  --color-surface-solid: #2a1f18;
+  --color-surface-raised: #362820;
+  --color-scrim: rgba(10, 7, 5, 0.82);
+
+  --color-ivory: #f1e6d2;
+  --color-ivory-muted: #cbbba2;
+  --color-ivory-faint: #998870;
+  --color-ink: #1d140c;
+
+  --color-gold: #c9a45c;
+  --color-gold-bright: #ecca84;
+  --color-gold-deep: #8d6b30;
+  --color-gold-line: rgba(201, 164, 92, 0.42);
+  --color-gold-wash: rgba(201, 164, 92, 0.1);
+
+  --color-rose: #d9a0a3;
+  --color-rose-deep: #a8636b;
+  --color-rose-wash: rgba(217, 160, 163, 0.12);
+
+  --color-accept: var(--color-gold-bright);
+  --color-cutoff: var(--color-rose);
+  --color-danger: #e58a7b;
+
+  --gradient-gold: linear-gradient(180deg, #f0d28f 0%, #d2ad63 48%, #a9843e 100%);
+  --gradient-velvet: radial-gradient(120% 70% at 50% -10%, rgba(120, 44, 52, 0.55) 0%, rgba(61, 26, 31, 0.25) 45%, transparent 75%);
+  --gradient-vignette: radial-gradient(140% 100% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.6) 100%);
+  --gradient-fade-up: linear-gradient(180deg, rgba(21, 16, 12, 0) 0%, rgba(21, 16, 12, 0.92) 38%, var(--color-bg) 100%);
+  --texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .85 0 0 0 0 .7 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --texture-wood: repeating-linear-gradient(92deg, rgba(255, 220, 170, 0.018) 0 2px, transparent 2px 9px, rgba(0, 0, 0, 0.05) 9px 11px, transparent 11px 23px);
+
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-xs: 0.9375rem;
+  --text-sm: 1.0625rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5rem;
+  --text-xl: 2rem;
+  --text-2xl: clamp(2.25rem, 9vw, 3rem);
+  --text-hero: clamp(3rem, 14vw, 4.75rem);
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.25;
+  --leading-body: 1.5;
+  --tracking-eyebrow: 0.18em;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --gutter: 1.25rem;
+  --content-max: 34rem;
+
+  --tap-min: 56px;
+  --tap-lg: 64px;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --hairline: 1px solid var(--color-gold-line);
+  --shadow-card: 0 1px 0 rgba(255, 236, 200, 0.06) inset, 0 18px 40px -18px rgba(0, 0, 0, 0.8);
+  --shadow-lift: 0 24px 60px -20px rgba(0, 0, 0, 0.85);
+  --glow-gold: 0 0 0 1px rgba(236, 202, 132, 0.35), 0 10px 32px -10px rgba(201, 164, 92, 0.65);
+  --glow-rose: 0 0 0 1px rgba(217, 160, 163, 0.35), 0 10px 32px -12px rgba(217, 160, 163, 0.55);
+  --text-glow: 0 0 24px rgba(236, 202, 132, 0.28);
+
+  --dur-fast: 120ms;
+  --dur-ui: 240ms;
+  --dur-slow: 420ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  --z-burst: 40;
+  --z-overlay: 50;
+  --z-dialog: 60;
+
+  color-scheme: dark;
+}

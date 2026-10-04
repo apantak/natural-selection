@@ -1,0 +1,52 @@
+.home .screen__body {
+  justify-content: center;
+}
+
+.home__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding-top: var(--space-6);
+  text-align: center;
+}
+
+.home__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.home__bone {
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 22px rgba(236, 202, 132, 0.45));
+}
+
+.home__bone span {
+  display: inline-block;
+  transform: rotate(-24deg);
+}
+
+.home__title {
+  max-width: 11ch;
+}
+
+.home__title .accent {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.home__tagline {
+  max-width: 22ch;
+}
+
+.home__gate {
+  display: flex;
+}
+
+.home__note {
+  margin-top: calc(-1 * var(--space-1));
+}

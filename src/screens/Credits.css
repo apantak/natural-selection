@@ -1,0 +1,59 @@
+.credits__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.credits__stage-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.credits__number {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-style: italic;
+  color: var(--color-gold);
+  font-variant-numeric: lining-nums;
+}
+
+.credits__species {
+  font-size: var(--text-lg);
+}
+
+.credits__nickname {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-sm);
+}
+
+.credits__sources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 0 0 var(--space-4);
+  border-left: var(--hairline);
+  list-style: none;
+}
+
+.credits__sources li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.credits__claim {
+  font-size: var(--text-sm);
+  color: var(--color-ivory-muted);
+}
+
+.credits__link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}

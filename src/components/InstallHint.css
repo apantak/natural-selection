@@ -1,0 +1,41 @@
+.install-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2) var(--space-3) var(--space-4);
+  overflow: hidden;
+  border-color: rgba(217, 160, 163, 0.35);
+}
+
+.install-hint__icon {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-rose);
+}
+
+.install-hint__text {
+  flex: 1;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--color-ivory-muted);
+}
+
+.install-hint__text strong {
+  color: var(--color-ivory);
+  font-weight: 650;
+}
+
+.install-hint__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border: 0;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  color: var(--color-ivory-muted);
+  background: transparent;
+  cursor: pointer;
+}

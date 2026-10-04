@@ -1,0 +1,71 @@
+.player-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 7.5rem;
+  padding: var(--space-4) var(--space-3);
+  border: 1px solid rgba(217, 160, 163, 0.28);
+  border-radius: var(--radius-lg);
+  color: var(--color-ivory-muted);
+  background:
+    linear-gradient(180deg, rgba(255, 236, 200, 0.03), transparent 50%),
+    var(--color-surface);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition:
+    border-color var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out),
+    color var(--dur-ui) var(--ease-out);
+}
+
+.player-tile--selected {
+  color: var(--color-ivory);
+  border-color: rgba(236, 202, 132, 0.75);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(236, 202, 132, 0.22), transparent 70%),
+    var(--color-surface-raised);
+  box-shadow: var(--shadow-card), var(--glow-gold);
+}
+
+.player-tile:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.player-tile__name {
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+
+.player-tile__status {
+  display: grid;
+  min-height: 2rem;
+}
+
+.player-tile__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-rose);
+  background: var(--color-rose-wash);
+}
+
+.player-tile--selected .player-tile__chip {
+  color: var(--color-ink);
+  background: var(--gradient-gold);
+}
