@@ -4,7 +4,7 @@
 
 ## Model
 
-The script calls `GET /v1/models` and picks `gpt-image-2`, then `gpt-image-1.5`, then `gpt-image-1`. `KEY_MODEL` pins single keys to another model in `--all` and `--retouch` (heidelbergensis male and female and the Denisovan female use `gpt-image-2.5-flare`). `--model` overrides both. Every call uses `size 1024x1536` and `quality medium` (about $0.04 per image).
+The script calls `GET /v1/models` and picks `gpt-image-2`, then `gpt-image-1.5`, then `gpt-image-1`. `KEY_MODEL` pins single keys to another model in `--all` and `--retouch` (heidelbergensis and Denisovan, both sexes, use `gpt-image-2.5-flare`). `--model` overrides both. Every call uses `size 1024x1536` and `quality medium` (about $0.04 per image).
 
 ## Style photo: full-length studio photograph (the game style, default)
 
@@ -40,7 +40,7 @@ These seven read as living older people with a heavy brow, so stronger face word
 - Brow ridge casts a band of shadow over the eyes; low flat nose, no tall bridge; no chin. Wide face for Denisovan and heidelbergensis.
 - Females add `YOUNG_FEMALE`: `About 30, smooth skin, no wrinkles, no facial hair.` Denisovan and heidelbergensis females also add `ARCHAIC_FEMALE` (face = the male's face without the beard, muzzle like the H. erectus reference). `ARCHAIC_FEMALE` is untested: the API ran out of credit before it could run.
 
-`FACE_DONOR[(stage, sex)]` names a passing image (`<stage>-<sex>` key) as a face reference (`REF_FACE`): the H. erectus male for heidelbergensis (both sexes) and the Denisovan female (was the Neanderthal anchor until try 8), A. afarensis of the same sex for floresiensis male and habilis. When the donor is the anchor, the anchor's own slot becomes the face reference (plus style), so it is not sent twice. Females also keep their own species' male as a same-species reference. The model takes the face and head shape from it but keeps the species' own build, height, skin, hair and body hair from the note. `--all` generates every stage without a donor first, so the donor images exist before they are used.
+`FACE_DONOR[(stage, sex)]` names a passing image (`<stage>-<sex>` key) as a face reference (`REF_FACE`): the H. erectus male for heidelbergensis (both sexes), A. afarensis of the same sex for floresiensis male and habilis. When the donor is the anchor, the anchor's own slot becomes the face reference (plus style), so it is not sent twice. Females also keep their own species' male as a same-species reference. The model takes the face and head shape from it but keeps the species' own build, height, skin, hair and body hair from the note. `--all` generates every stage without a donor first, so the donor images exist before they are used.
 
 ### Sensitivity rule
 
@@ -52,6 +52,8 @@ Every species gets the identical modern studio setup, light and treatment. Never
 
 - female: `minimal period clothing; a hide wrap that passes over one shoulder and fully covers her chest, like a simple one-shouldered hide top tied at the side, loose and unfitted, hanging straight down from the shoulder without shaping to the body, not a strapless band; and a wide hide wrap around the hips that fully covers the groin and buttocks and reaches mid-thigh; arms and lower legs bare`
 - male: `minimal period clothing; a wide hide wrap around the hips that fully covers the groin and buttocks and reaches mid-thigh; arms and lower legs bare`
+
+`CLOTHING[(stage, sex)]` overrides the slot for one species. Denisovan (both sexes) wears a heavy dark brown fur cloak over the shoulders (closed over the female's chest) and a mid-thigh fur hip wrap, for the cold-climate range (Siberia, Tibetan plateau).
 
 The garment sentence at the end of each anatomy note (`Wears ...` / `Bare-chested, ...`) is cut off before the note goes in, so it cannot fight the clothing slot.
 
@@ -210,3 +212,60 @@ Results:
 - Floresiensis female (4 in all, cap reached): two retouches of the review-6 image. Kept try 2: young, smooth face with no whiskers, and the muzzle is unchanged. A faint net pattern is still on the upper arm. Each retouch darkens the backdrop a little (corner mean 26/24/21, then 24/22/19, then 22/19/16, against a set of about 29-33). Visible on the contact sheet but still the same backdrop.
 - Habilis female (3 in all): one retouch of the review-6 image. Pass. About 30, smooth hairless face, the muzzle is unchanged, and the skin is much smoother (a faint trace on the arm). The brow is still modest. Backdrop 24/22/20.
 - The kept floresiensis and habilis females are retouches. `--all` will not recreate them. A fresh `--all` run for those keys has to be followed by `--retouch`.
+
+## Try 9 (Denisovan made distinct from heidelbergensis)
+
+The Denisovan pair looked the same as the heidelbergensis pair (same erectus-donor face, profile head, hide clothes). Images before this round are `rejected/denisovan-*-pre9.png`. Rejected tries are `rejected/denisovan-*-t9a*.png`. Logs: `tools/out/t9-*.log`.
+
+Tool changes:
+
+- `EXTRA["denisovan"]` now describes the Harbin "Dragon Man" skull (Denisovan per the 2025 protein and mtDNA studies): very large long low braincase, thick but straight, level brow bar, large almost square eye sockets, very wide flat face with broad flat forward-facing cheekbones, flat midface (not drawn forward like a Neanderthal's), very broad flat nose, wide mouth over big broad jaws with very large molars, no chin.
+- New `harbin_head(hair)` for both Denisovan `EXTRA_SEX` entries: silicone museum reconstruction of the Harbin skull, head turned only about 30 degrees so the face width shows, groove above the brow then a 45-degree forehead into a long low skull, brow shelf shading the square eye sockets, flat nose root, jaws bulging past the nose base, dark brown skin, brown eyes. Plus `ARCHAIC_SHADE` and `ARCHAIC_NEUTRAL`.
+- Male: short rough straight black hair lying close to the head, thin sparse beard, about 35. Female: straight black hair pulled back and tied at the nape, plus `BARE_FEMALE_FACE` and `YOUNG_SKIN`.
+- `CLOTHING[("denisovan", sex)]`: fur cloak and fur hip wrap (see Clothing). `build_prompt` reads it before the per-sex default.
+- Denisovan female `FACE_DONOR` removed. The Neanderthal anchor is now only the style reference (`REF_STYLE`: not for face). The female still gets the new male as her same-species pair.
+- `KEY_MODEL` adds `denisovan-male` (flare). `EXPRESSIONS` adds the male: "neutral, no smile".
+
+Results (all on `gpt-image-2.5-flare`; no gpt-image-2 fallback was needed):
+
+- Denisovan male (3 tries, cap reached): try 1 had a wide face and the fur cloak but read as a living older man (upright lined forehead, fleshy bridged nose, lit eyes, full curly beard). Try 2 added the brow groove, the 45-degree forehead and straight hair: a little better. Try 3 added `ARCHAIC_SHADE`, hair close to the head, jaws forward. Kept: thick brow shelf, sloping forehead, wide flat face, straight close black hair, sparse beard, fur cloak. Faint forehead lines and a slight nose bridge remain.
+- Denisovan female (3 tries, cap reached): try 1 kept. Archaic (brow shelf, sloping forehead, wide face), hair tied back, fur cloak closed over the chest, hip wrap. She looks older than 30 and a little masculine, with faint jaw shadow and forehead lines. Try 2 ("softer, fuller cheeks, not a frown") and try 3 ("clearly a woman, smooth forehead") both added chin stubble and read more male. The male pair's beard and lines leak through. The tool holds the try 1 wording.
+- Distinct from heidelbergensis at phone size: near-frontal wide face against heidelbergensis' profile, straight black hair, and a dark fur cloak against the hide wraps. See `tools/out/full/compare-archaic.png` (face crops of Neanderthal, Denisovan, heidelbergensis and erectus, male and female rows).
+- Backdrop and light match the set (corner means 23/21/19 and 36/32/29, anchor 19/18/16 and 32/29/26).
+
+## Try 10 (Denisovan vs heidelbergensis, after review 9)
+
+Review 9 failed both Denisovans on crit A: long brown hair tied back, the same 3/4 pose and a long face, so they matched the heidelbergensis pair. Only the fur set them apart. Images before this round are `rejected/denisovan-*-pre10.png`. Rejected tries are `rejected/denisovan-*-t10a1.png`. Logs: `tools/out/t10-*.log`. Max 2 tries per key, all on `gpt-image-2.5-flare`.
+
+Tool changes:
+
+- `harbin_head(hair)` rewritten. Head turned only about 15 degrees (heidelbergensis uses 45 to 70). Hard width numbers: cheekbones 1.5 times the forehead width, moon-shaped face as wide as tall, square eye sockets more than an eye-width apart, mouth corners past the pupils, thin flat lips, huge square jaws, no chin. Brow bar "as thick as a thumb" with a groove above it, and "from the front almost no forehead shows above the brow bar". No nose bridge at all. "Clearly unlike the Kabwe / heidelbergensis reconstruction (long, narrow, forward-drawn face)". The old "jaws bulge forward past the nose" line is gone.
+- New `HARBIN_HAIR` for both sexes: jet-black, coarse, straight, lank, cropped to about 1 cm, lying flat like short fur, not curly, not long, braided or tied back.
+- Male: only sparse black stubble on the jaw, no full beard; "about 30 with smooth, unlined skin".
+- Female: built on the male reference's skull and face shape "but unmistakably a woman" (smaller, smoother, softer face, rounder cheeks, lighter jaw, hairless chin, jaw and lip), the same width numbers, "not a living woman and not any living population". Expression is now "calm and relaxed, not frowning, no smile" (the neutral face read as a scowl).
+
+Results:
+
+- Male (2 tries, cap reached): try 1 was near-frontal, wide and short-haired but read as a living older man (upright lined forehead, fleshy lips, curly crop, heavy stubble). Try 2 (thumb-thick brow shelf with groove, no forehead above it, thin lips, smooth skin) kept. Clearly distinct from heidelbergensis at phone size: frontal wide face, short black crop, fur cloak. Strong brow shelf reads archaic. Faint forehead lines, a slight nose bridge and a curly texture in the crop remain.
+- Female (2 tries, cap reached): try 1 copied the male (scowl, stubble shadow), so she read as a man. Try 2 kept: same Denisovan face, less scowl, chest fully covered by the closed cloak. Still fails crit C: masculine, faint chin and jaw stubble, faint forehead lines. The male pair's stubble leaks through. The 1 cm crop on a female also reads male. Next step if needed: a `--retouch` limited to skin (smooth chin and jaw, no lines), since retouching face shape modernises archaic faces.
+- Backdrop corners 20/18/16 and 32/29/27 (male), 20/19/16 and 32/30/27 (female), anchor 17/16/14 and 28/26/24.
+- `tools/out/full/compare-archaic.png` rebuilt (face crops, Neanderthal, Denisovan, heidelbergensis, erectus).
+
+## Try 11 (both females given hair, Denisovan female made a woman)
+
+The Denisovan female read as a copy of the male (stubble, 1 cm crop, masculine). The floresiensis female was almost bald. Images before this round are `rejected/*-pre11.png` (and `rejected/compare-archaic-pre11.png`). Rejected tries are `rejected/*-t11a1.png`. Logs: `tools/out/t11-*.log`. Max 2 tries per key, 4 calls in all.
+
+Tool changes:
+
+- `HARBIN_HAIR` is now a dict by sex. Male: the 1 cm crop as before. Female: jet-black straight hair to the shoulders, parted in the middle, combed back off the forehead, two plaits in front of the shoulders, not tied at the nape.
+- New `NO_PAIR` set: `references()` skips the male pair for these female keys. Denisovan female is in it, so she only gets the Neanderthal anchor as a style reference. The male's stubble and forehead lines no longer leak in.
+- Denisovan female `EXTRA_SEX`: no longer "built on the male reference". Female cues are the plaits, a hairless smooth face, slimmer neck, narrower shoulders and slightly finer features. The face bones stay "as heavy and archaic as a Denisovan man's": brow shelf hiding the upper eyelids, hairline just above the brow bar, no bridge, broad flat wedge nose, no chin. `YOUNG_SKIN` dropped and `ARCHAIC_TAIL` added for this key.
+- Floresiensis female: `archaic_head(..., hair=...)` with dark wavy hair to the shoulders pushed back behind the ears. `smooth_skin(...)` swapped for `YOUNG_SKIN`. "Keep this face shape" now points at the male reference's skull and muzzle.
+
+Results:
+
+- Denisovan female (2 tries, flare): try 1 was clearly a woman with plaits and a hairless face. It failed as archaic: thin brow, upright forehead, a fleshy nose and lit eyes, so she read as a living woman. Try 2 (heavier bone wording) kept: plaits, smooth jaw, a thicker brow shelf, a low sloping hairline and a wide flat face. The fur cloak is closed over the chest. Remaining faults: she looks closer to 40 than 30 (nasolabial folds, a light frown), the nose is still fleshy, the eyes are not shaded and there is a faint speckle under the chin. She is less archaic than the male, but now reads as female and as a different person.
+- Floresiensis female: try 1 was a fresh `--all` on gpt-image-2 with the male pair. Wavy shoulder-length hair pushed back, the muzzle and sloping forehead kept, tiny build and clothing fine. Skin failed: crackle and net lines on the shoulder and face, forehead lines, looked about 45. Try 2 was one `--retouch` of try 1 (`RETOUCH` entry unchanged, gpt-image-2). Kept: smooth young skin, no whiskers, hair and muzzle unchanged. The brow got a little lighter and the eyes show more white. The pre-11 image was a stack of two retouches. This is one retouch on a fresh image.
+- Backdrop corners: Denisovan female 19/17/15 and 32/29/26, floresiensis female 19/18/16 and 30/25/21. The pre-11 floresiensis was 8/7/4 and 19/16/12, so the new one matches the set better.
+- The kept floresiensis female is again a retouch. A fresh `--all` for that key must be followed by `--retouch`.
+- `contact-sheet.png` rebuilt. `compare-archaic.png` has the new Denisovan female tile (crop 220,20 to 740,540).

@@ -101,6 +101,19 @@ CLOTHING = {
         "minimal period clothing; a wide hide wrap around the hips that fully covers the groin and buttocks "
         "and reaches mid-thigh; arms and lower legs bare"
     ),
+    ("denisovan", "male"): (
+        "cold-climate clothing; a heavy, shaggy dark brown fur cloak draped over both shoulders and upper arms, "
+        "hanging down the back to the knees and open at the front over the chest; a wide fur wrap around the "
+        "hips that fully covers the groin and buttocks and reaches mid-thigh; forearms and lower legs bare, "
+        "bare feet"
+    ),
+    ("denisovan", "female"): (
+        "cold-climate clothing; a heavy, shaggy dark brown fur cloak draped over both shoulders and upper arms "
+        "and closed across the front, so thick fur fully covers her chest from the collarbones to the waist, "
+        "loose and unfitted, hanging straight with no shape of the body showing through; a wide fur wrap "
+        "around the hips that fully covers the groin and buttocks and reaches mid-thigh; forearms and lower "
+        "legs bare, bare feet"
+    ),
 }
 
 REF_LABELS = ("The first reference image", "The second reference image", "The third reference image")
@@ -177,11 +190,14 @@ EXTRA = {
         "forwards; a long upper lip; a large jaw with a receding chin and no chin point. "
     ),
     "denisovan": ARCHAIC_LEAD + (
-        "A huge, long, low skull with a flat forehead that slopes straight back from the brow; a massive, "
-        "thick bar of brow ridge jutting far out over large square eye sockets, casting the eyes into shadow; "
-        "a very broad, tall, flat face with wide cheekbones; a very wide, low, flat nose; a long upper lip over a "
-        "wide mouth; a huge, deep jaw pushed forward with very large teeth and a receding chin with no chin "
-        "point. "
+        "The face is built on the Harbin skull and looks clearly different from Homo heidelbergensis and "
+        "Neanderthals: a very large, long, low braincase with a low forehead sloping back; a thick but almost "
+        "straight, level brow bar running across both eyes, less arched than a Neanderthal's; large, almost "
+        "square eye sockets set wide apart; a very wide, flat face, as wide as it is long, with broad, flat, "
+        "forward-facing cheekbones and no hollow beneath them; the midface flat and wide, not drawn forward "
+        "like a Neanderthal's; a very broad, flat nose with wide nostrils and a low, flat root; a wide mouth "
+        "over big, broad jaws with very large molars, so the lower face is broad and square; no chin, the jaw "
+        "line slopes back from the lower lip. "
     ),
     "homo-heidelbergensis": ARCHAIC_LEAD + (
         "A long, low skull with a low forehead sloping straight back from the brow; a very large, thick, "
@@ -262,6 +278,41 @@ def smooth_skin(areas):
     )
 
 
+def harbin_head(hair):
+    return (
+        "Head check, most important: the head looks like a silicone museum reconstruction built on the Harbin "
+        "'Dragon Man' skull, an extinct Denisovan, not any living person and not any living human population. "
+        "It must look clearly unlike the Kabwe / Homo heidelbergensis reconstruction, which has a long, narrow, "
+        "forward-drawn face. The head faces almost straight at the camera, turned only about 15 degrees, so "
+        f"the full width of the face reads. {hair}, so the forehead, the whole brow bar and the huge, long, low "
+        "skull are fully visible. Face width: the face at the cheekbones is about one and a half times as wide "
+        "as the forehead, a broad, flat, moon-shaped face as wide as it is tall; the cheekbones are big, flat, "
+        "forward-facing plates and the widest part of the head; the eye sockets are big square holes set wide "
+        "apart, more than one eye-width between them; the mouth is very wide, its corners reaching past the "
+        "pupils, with thin, flat lips; the jaws are huge and square at the corners, and there is no chin. A "
+        "thick, straight, level bar of bone as thick as a thumb runs unbroken across both eyes like a shelf, "
+        "with a groove above it; from the front almost no forehead shows above the brow bar, because the low "
+        "forehead runs straight back at 45 degrees into a low, flat-topped skull; the forehead skin is smooth "
+        "and taut with no horizontal lines. Small, deep-set eyes far back in the square sockets. The nose root "
+        "is flat and sunk level with the inner eye corners, with no nose bridge at all; the nose is very broad "
+        "and flat with no rounded fleshy tip. Dark brown skin and dark brown eyes. If in doubt, make the face wider and flatter and the "
+        "brow bar thicker, not smaller. "
+    )
+
+
+HARBIN_HAIR = {
+    "male": (
+        "Jet-black, not brown, very short, coarse, straight, lank hair cropped to about 1 cm all over the head, "
+        "lying flat like short fur, not curly or coiled; not long, not braided, not tied back, no ponytail"
+    ),
+    "female": (
+        "Jet-black, not brown, thick, coarse, straight hair grown to the shoulders, parted in the middle and "
+        "combed straight back off the forehead and temples, then hanging in two simple plaits in front of the "
+        "shoulders; not tied back at the nape, no bun, no ponytail, not curly, not cropped"
+    ),
+}
+
+
 def archaic_head(fossil, sex, turn="about 45 degrees", hair=None):
     return (
         f"Head check, most important: the head looks like a museum reconstruction built on the {fossil}, an "
@@ -276,16 +327,9 @@ def archaic_head(fossil, sex, turn="about 45 degrees", hair=None):
 
 
 EXTRA_SEX = {
-    ("denisovan", "male"): (
-        "Head turned well into three-quarter view, almost profile, so the forward projection of the face is "
-        "obvious. Short hair off the forehead. The brow ridge is a single continuous bony shelf as thick as a "
-        "thumb, running unbroken across both eyes and sticking out past the eye sockets like a roof, with a "
-        "deep notch above it where the flat forehead starts. The cheekbones are very wide and flat, the face at "
-        "least a third wider than a modern man's. The nose is very wide and flat, with nostrils as wide as the "
-        "mouth and almost no bridge. The upper and lower jaws push forward in front of the eyes. A long, convex "
-        "upper lip bulges over very large teeth. The beard is trimmed short so the receding chinless jaw line "
-        "shows. "
-    ) + ARCHAIC_TAIL,
+    ("denisovan", "male"): harbin_head(
+        HARBIN_HAIR["male"] + "; only a few sparse black stubble hairs on the jaw, no full beard, no moustache"
+    ) + "A man of about 30 with smooth, unlined skin. " + ARCHAIC_SHADE + ARCHAIC_NEUTRAL,
     ("homo-erectus", "male"): (
         "The head looks like a Turkana Boy / Sangiran 17 museum reconstruction, not a person. A very long, "
         "low, narrow skull that clearly sticks out at the back. The forehead is almost flat and slopes sharply "
@@ -302,16 +346,16 @@ EXTRA_SEX = {
         "out in a short muzzle. A long upper lip, and no chin: the jaw slopes back. Head turned to "
         "three-quarter view. The same skull as the male of her species, only slightly smaller. "
     ),
-    ("denisovan", "female"): archaic_head("Harbin skull", "female", hair=ARCHAIC_HAIR) + (
-        "A woman of about 30, smaller and finer-boned than the Denisovan male, clearly female in face shape, "
-        "and younger than the male reference. Completely hairless face: jaw, chin, cheeks and upper lip are "
-        "bare skin the same tone as the forehead, no stubble or shadow; no forehead lines, eye bags or "
-        "nasolabial folds. Museum reconstruction from the Harbin skull: a very wide face with a long low skull; "
-        "a thick, straight brow bar with both eyes deep in its shadow; the forehead slopes straight back from "
-        "the brow at 45 degrees; the nose root is flat and sunk level with the inner eye corners, no bridge, "
-        "very wide flat nostrils; the upper jaw and thin lips push forward past the nose base; very large "
-        "molars widen the lower face; no chin bump. "
-    ) + ARCHAIC_SHADE + ARCHAIC_NEUTRAL + YOUNG_SKIN + ARCHAIC_TAIL,
+    ("denisovan", "female"): harbin_head(HARBIN_HAIR["female"]) + (
+        "A woman of about 30, clearly a woman at a glance from her long plaits, her completely hairless, "
+        "smooth face, a slimmer neck, narrower shoulders and slightly smaller, finer features than a man's. "
+        "The bones of her face are as heavy and archaic as a Denisovan man's: the brow shelf sticks out so far "
+        "that it hides the upper eyelids and keeps both eyes in shadow, and the hairline starts just above the "
+        "brow bar because the forehead slopes straight back; the nose has no bridge between the eyes and is a "
+        "broad flat wedge with nostrils flaring sideways, not a rounded fleshy nose; a very wide, flat face, a "
+        "wide mouth and no chin. Not a living woman and not any living population: a silicone museum "
+        "reconstruction head on the Harbin skull. "
+    ) + BARE_FEMALE_FACE + ARCHAIC_SHADE + ARCHAIC_NEUTRAL + ARCHAIC_TAIL,
     ("homo-heidelbergensis", "male"): archaic_head(
         "Kabwe 1 skull", "male", hair=ARCHAIC_HAIR + ", and a short trimmed dark beard with no grey",
     ) + (
@@ -339,13 +383,16 @@ EXTRA_SEX = {
         "Shoulders rolled forward, arms long with fingertips near the knees, legs visibly short, and very long "
         "flat feet. "
     ) + smooth_skin("chest, belly, arms and legs") + ARCHAIC_TAIL,
-    ("homo-floresiensis", "female"): archaic_head("LB1 skull from Liang Bua", "female") + (
+    ("homo-floresiensis", "female"): archaic_head(
+        "LB1 skull from Liang Bua", "female",
+        hair="Natural dark wavy hair grown to the shoulders, pushed straight back from the face and tucked "
+        "behind the ears, not a buzz cut, not cropped, not bald",
+    ) + (
         "A tiny, low, grapefruit-sized braincase, small for the face. A rounded bony brow ridge. The jaws "
         "and teeth push forward into a short muzzle well in front of the nose, like an australopith's. A long "
         "upper lip. Shoulders rolled forward, arms long with fingertips near the knees, legs visibly short, "
-        "and very long flat feet. The same skull and body as the male, slightly smaller. Keep this face shape "
-        "and skull exactly. "
-    ) + BARE_FEMALE_FACE + smooth_skin("shoulders, arms, neck and legs") + YOUNG_FEMALE + ARCHAIC_TAIL,
+        "and very long flat feet. The same skull, muzzle and body as the male reference, slightly smaller. "
+    ) + BARE_FEMALE_FACE + YOUNG_SKIN + YOUNG_FEMALE + ARCHAIC_TAIL,
     ("homo-habilis", "male"): archaic_head("KNM-ER 1813 skull", "male") + (
         "The braincase is visibly small and rounded, clearly smaller than Homo erectus's, so the face looks "
         "large for the head. The face is closer to an australopith's than to a human's: the jaws push well "
@@ -381,10 +428,11 @@ EXTRA_SEX = {
     ),
 }
 
+NO_PAIR = {("denisovan", "female")}
+
 FACE_DONOR = {
     ("homo-heidelbergensis", "male"): "homo-erectus-male",
     ("homo-heidelbergensis", "female"): "homo-erectus-male",
-    ("denisovan", "female"): "homo-erectus-male",
     ("homo-floresiensis", "male"): "australopithecus-afarensis-male",
     ("homo-habilis", "male"): "australopithecus-afarensis-male",
     ("homo-habilis", "female"): "australopithecus-afarensis-female",
@@ -393,6 +441,7 @@ FACE_DONOR = {
 KEY_MODEL = {
     "homo-heidelbergensis-male": "gpt-image-2.5-flare",
     "homo-heidelbergensis-female": "gpt-image-2.5-flare",
+    "denisovan-male": "gpt-image-2.5-flare",
     "denisovan-female": "gpt-image-2.5-flare",
 }
 
@@ -433,7 +482,8 @@ EXPRESSIONS = {
     "male": "calm, mildly amused",
     ("homo-heidelbergensis", "male"): "neutral, no smile",
     ("homo-heidelbergensis", "female"): "neutral, no smile",
-    ("denisovan", "female"): "neutral, no smile",
+    ("denisovan", "male"): "neutral, no smile",
+    ("denisovan", "female"): "calm and relaxed, not frowning, no smile",
 }
 
 
@@ -560,7 +610,7 @@ def build_prompt(style, subj, sex, roles, extra):
         sex=sex,
         species=subj["species"],
         anatomy=anatomy.rstrip("."),
-        clothing=CLOTHING[sex],
+        clothing=CLOTHING.get((subj["id"], sex), CLOTHING[sex]),
         expression=EXPRESSIONS.get((subj["id"], sex), EXPRESSIONS[sex]),
         fix=fix_text(subj["id"], sex) if style == "photo" else "",
     )
@@ -604,7 +654,7 @@ def references(anchor, anchor_stage, stage_id, sex, pair, stages=()):
         else:
             refs.append(pair.parent / f"{donor}.png")
             roles.append(species)
-    if sex == "female" and pair.exists() and pair.stem != anchor.stem:
+    if sex == "female" and (stage_id, sex) not in NO_PAIR and pair.exists() and pair.stem != anchor.stem:
         refs.append(pair)
         roles.append("same")
     return refs, tuple(roles)
