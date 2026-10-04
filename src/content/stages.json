@@ -19,8 +19,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "Fully modern body, about 160 cm, slim to medium build. Modern face with a small chin and only a faint brow ridge; braincase a little longer and lower than today's. Dark brown skin, dark brown eyes, short dark natural hair, little body hair. Simple tanned hide wrap fully covering chest and shoulders.",
-      "male": "Fully modern body, about 170 cm, lean and muscular. Modern face with a defined chin and a slight brow ridge; braincase a little longer and lower than today's. Dark brown skin, dark brown eyes, short dark natural hair and a short beard. Simple tanned hide wrap fully covering chest and shoulders."
+      "female": "Dark brown skin, short tightly curled black hair, little body hair. About 1.60 m and 54 kg, slim and long-limbed with modern proportions, fully upright. Modern face with a small chin and a faint brow ridge; braincase slightly longer and lower than today's. Wears a tanned hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Dark brown skin, short tightly curled black hair and a short beard, light body hair. About 1.72 m and 65 kg, lean and muscular, long legs, modern proportions, fully upright. Modern face with a defined chin and a slight brow ridge; braincase slightly longer and lower than today's. Bare-chested, wearing a tanned hide loincloth."
     },
     "sources": [
       {
@@ -59,8 +59,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 155 cm, stocky and powerful, wide chest, short forearms. Long low skull, rounded double-arched brow ridge, large forward-projecting midface, swept-back cheekbones, very large wide nose, weak chin. Light to medium skin, brown to auburn hair (some evidence of variation), modest body hair. Fur-lined hide cloak fully covering chest and shoulders.",
-      "male": "About 165 cm, barrel-chested and heavily muscled, short limbs. Long low skull, rounded double-arched brow ridge, large forward-projecting midface, swept-back cheekbones, very large wide nose, weak chin. Light to medium skin, brown to auburn hair and beard (some evidence of variation), moderate body hair. Fur-lined hide cloak fully covering chest and shoulders."
+      "female": "Light skin with freckles and straight auburn-red hair (genes suggest some had pale skin and red hair); modest body hair. About 1.55 m and 54 kg, stocky and very strong: wide barrel chest, wide hips, short forearms and shins, large hands. Long low skull, rounded double-arched brow ridge jutting over the eyes, projecting midface, very large wide nose, weak chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Light olive skin, weathered; dark brown hair and full beard; moderate body hair on chest, arms and legs. About 1.65 m and 65 kg, barrel-chested and heavily muscled, short forearms and shins, thick joints, large hands. Long low skull, heavy double-arched brow ridge jutting over the eyes, projecting midface, very large wide nose, weak chin. Bare-chested, wearing a fur-trimmed hide loincloth."
     },
     "sources": [
       {
@@ -100,8 +100,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "Probably robust and broad-bodied, about 160 cm (body largely unknown). Very large, long, low skull with a thick brow ridge, broad flat face, wide nose, wide mouth, large teeth, no chin. Dark skin, dark brown hair and brown eyes, as the Denisova genome suggests; modest body hair. Heavy fur cloak fully covering chest and shoulders.",
-      "male": "Probably robust and broad-bodied, about 170 cm (body largely unknown). Very large, long, low skull with a heavy brow ridge, broad flat face, wide nose, wide mouth, large teeth, strong jaw, no chin. Dark skin, dark brown hair and beard, brown eyes, as the Denisova genome suggests. Heavy fur cloak fully covering chest and shoulders."
+      "female": "Dark brown skin, dark brown hair and brown eyes, as the Denisova genome suggests; modest body hair. Body barely known: estimated about 1.60 m, robust, broad-shouldered and heavy-boned. Very large, long, low skull, thick brow ridge, broad flat face, wide nose and mouth, very large teeth, no chin. Wears a fur wrap fully covering the chest and a hide loincloth.",
+      "male": "Dark brown skin, dark brown hair and beard, brown eyes, as the Denisova genome suggests; moderate body hair. Body barely known: estimated about 1.70 m, robust, broad and heavily built. Very large, long, low skull like the Harbin skull, heavy brow ridge, broad flat face, wide nose and mouth, very large teeth, no chin. Bare-chested, wearing a fur loincloth."
     },
     "sources": [
       {
@@ -155,8 +155,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 157 cm, short wide body, strong. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, no chin. Warm medium brown skin, dark brown hair, moderate body hair. Hide cape fully covering chest and shoulders.",
-      "male": "About 175 cm, broad and powerfully built. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, heavy jaw, no chin. Warm medium brown skin, dark brown hair and short beard, moderate body hair. Hide cape fully covering chest and shoulders."
+      "female": "Warm medium brown skin, dark brown hair, moderate body hair. About 1.57 m and 51 kg, short wide body, broad hips, thick strong limbs, fully upright. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Warm medium brown skin, dark brown hair and short beard, moderate body hair. About 1.75 m and 62 kg, tall, broad and powerfully built, heavy bones, thick muscular limbs. Large braincase, very large brow ridge, flatter face than earlier species, broad nose, heavy jaw, no chin. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
@@ -199,8 +199,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 150-160 cm, slender with long legs and modern body proportions. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Dark brown skin, short dark hair, little body hair like ours. Simple hide wrap fully covering chest and shoulders.",
-      "male": "About 170-185 cm, tall and lean with long legs and modern body proportions. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Dark brown skin, short dark hair and sparse beard, little body hair like ours. Simple hide wrap fully covering chest and shoulders."
+      "female": "Dark brown skin, short tightly curled dark hair, little body hair, like ours. About 1.55 m, slender and long-legged with modern body proportions, narrow hips, fully upright. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Dark brown skin, short tightly curled dark hair, sparse beard, little body hair, like ours. About 1.78 m and 60 kg, tall and lean, long legs, narrow hips, a modern-like body like the Turkana Boy skeleton. Long low skull, thick straight brow ridge, receding forehead, projecting lower face, broad nose, no chin. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
@@ -246,8 +246,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 106 cm and 30 kg, small but sturdy, shoulders set slightly forward, relatively large feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Medium brown skin, dark hair, modest body hair. Woven plant-fiber or hide wrap fully covering chest and shoulders.",
-      "male": "About 110 cm, small but sturdy, shoulders set slightly forward, relatively large feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Medium brown skin, dark hair and sparse beard, modest body hair. Woven plant-fiber or hide wrap fully covering chest and shoulders."
+      "female": "Medium brown skin, dark hair, modest body hair. Tiny: about 1.06 m and 30 kg, small but sturdy, wide pelvis, short legs, relatively long arms, shoulders hunched forward, very long flat feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Wears a woven plant-fibre wrap fully covering the chest and a plant-fibre loincloth.",
+      "male": "Medium brown skin, dark hair and sparse beard, modest body hair. Tiny: estimated about 1.10 m and 32 kg, small but sturdy, wide pelvis, short legs, relatively long arms, shoulders hunched forward, very long flat feet. Small skull, receding forehead, brow ridge, no chin, relatively large teeth. Bare-chested, wearing a woven plant-fibre loincloth."
     },
     "sources": [
       {
@@ -283,8 +283,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 100-120 cm, light build, long strong arms. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, lower face projects forward, flat broad nose, no chin. Medium brown skin, dark hair, a light covering of fine body hair. Simple hide wrap draped over both shoulders, fully covering the chest.",
-      "male": "About 120-135 cm, light but strong build, long strong arms. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, lower face projects forward, flat broad nose, no chin. Medium brown skin, dark hair, a light covering of fine body hair. Simple hide wrap draped over both shoulders, fully covering the chest."
+      "female": "Dark brown skin under a light covering of short dark body hair; dark hair. About 1.05 m and 30 kg, light build, long strong arms, short legs, limb proportions more ape-like than ours, upright. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, projecting lower face, flat broad nose, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Dark brown skin under a light covering of short dark body hair; dark hair. About 1.30 m and 37 kg, light, wiry build, long strong arms, short legs, limb proportions more ape-like than ours, upright. Rounder braincase than australopiths, small brow ridge, smaller face and teeth, projecting lower face, flat broad nose, no chin. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
@@ -332,8 +332,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 105 cm and 29 kg, small, long arms, short legs, cone-shaped ribcage. Small braincase about a third of ours, low forehead, brow ridge, flat nose, strongly projecting lower face and jaw, no chin. Covered in dark brown body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
-      "male": "About 151 cm and 42 kg, much larger than females, long arms, sturdy. Small braincase about a third of ours, low forehead, brow ridge, flat nose, strongly projecting lower face and jaw, no chin. Covered in dark brown body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+      "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense dark brown body hair, like a chimpanzee's. About 1.05 m and 29 kg, Lucy-sized: long arms with fingertips reaching the knees, short legs, cone-shaped ribcage, upright stance. Small braincase a third of ours, low forehead, brow ridge, flat nose, strongly projecting jaws, no chin. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense dark brown body hair, like a chimpanzee's. About 1.51 m and 42 kg, much bigger than females: long powerful arms with fingertips reaching the knees, short legs, curved fingers, cone-shaped ribcage, upright stance. Small braincase a third of ours, low forehead, brow ridge, flat nose, strongly projecting jaws, no chin. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
@@ -373,8 +373,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "About 120 cm and 50 kg, long arms, grasping big toe. Small braincase about chimp-sized, brow ridge, projecting face, small canines, flat nose. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
-      "male": "About 120-130 cm, similar in size to females, long arms, grasping big toe. Small braincase about chimp-sized, brow ridge, projecting face, small canines barely larger than females', flat nose. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+      "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. About 1.20 m and 50 kg, long arms, very long curved fingers, short legs, a grasping big toe splayed out like a thumb, upright but slightly crouched. Chimp-sized braincase, brow ridge, projecting face, small canines, flat nose. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. About 1.25 m, close to female size, long arms, very long curved fingers, short legs, a grasping big toe splayed out like a thumb, upright but slightly crouched. Chimp-sized braincase, brow ridge, projecting face, small canines barely larger than females', flat nose. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
@@ -410,8 +410,8 @@
       "male": "portraits/placeholder-male.svg"
     },
     "anatomy": {
-      "female": "Body largely unknown; assume chimp-sized, about 110-120 cm, long arms. Small braincase, very prominent brow ridge, sloping face with a short midface, small canines. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention).",
-      "male": "Body largely unknown; assume chimp-sized, about 120-130 cm, long arms. Small braincase, very prominent thick brow ridge, sloping face with a short midface, small canines. Covered in dark body hair; skin beneath light to medium. Simple hide wrap draped over both shoulders, fully covering the chest (an artistic convention)."
+      "female": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. Body barely known: estimated chimp-sized, about 1.10 m and 35 kg, long arms, short legs, possibly upright on two legs (debated). Small chimp-sized braincase, very prominent brow ridge, sloping face with a short midface, small canines. Wears a simple hide wrap fully covering the chest and a hide loincloth.",
+      "male": "Pale pinkish-beige skin on the face, ears, hands and feet, much lighter than the dense black body hair, like a chimpanzee's. Body barely known: estimated chimp-sized, about 1.20 m and 45 kg, long arms, short legs, possibly upright on two legs (debated). Small chimp-sized braincase, very thick, prominent brow ridge, sloping face with a short midface, small canines. Bare-chested, wearing a hide loincloth."
     },
     "sources": [
       {
