@@ -51,6 +51,20 @@ export function Home() {
         <motion.p variants={fadeUp} className="lede home__tagline">
           A dating show across 7 million years of human relatives.
         </motion.p>
+        <motion.section variants={fadeUp} className="card home__how" aria-labelledby="home-how">
+          <span id="home-how" className="eyebrow">
+            How it works
+          </span>
+          <p className="home__pitch">
+            Last resort. Nobody else left on Earth. Would you accept the bone?
+          </p>
+          <ol className="home__steps">
+            <li>Meet one human relative per round, each further back in time.</li>
+            <li>On three, everyone votes at once: 👍 accept or 👎 cutoff.</li>
+            <li>Then explain yourself. Out loud. To your friends.</li>
+          </ol>
+          <p className="faint small">The show ends when nobody accepts.</p>
+        </motion.section>
       </motion.div>
       <InstallHint />
     </ScreenLayout>

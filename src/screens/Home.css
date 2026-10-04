@@ -43,6 +43,28 @@
   max-width: 22ch;
 }
 
+.home__how {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 26rem;
+  text-align: left;
+}
+
+.home__pitch {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.25;
+}
+
+.home__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-left: 1.25em;
+  font-size: var(--text-md);
+}
+
 .home__gate {
   display: flex;
 }
