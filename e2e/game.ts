@@ -17,8 +17,13 @@ export async function startShow(page: Page) {
   await expect(page.getByText('Stage 1 of 10')).toBeVisible()
 }
 
+export function voteTiles(page: Page) {
+  return page.locator('.vote-grid').getByRole('button')
+}
+
 export async function playStage(page: Page, accepters: string[]) {
   await page.getByRole('button', { name: 'Collect the votes' }).click()
+  await expect(page.getByRole('heading', { name: 'Who accepted the bone?' })).toBeVisible()
   for (const name of accepters) {
     const tile = page.getByRole('button', { name: new RegExp(`^${name}`) })
     await tile.click()

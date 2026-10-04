@@ -1,18 +1,24 @@
+import { useId } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Button, PlayerTile, ScreenLayout } from '../../components'
+import { Button, nameFit, PlayerTile, ScreenLayout } from '../../components'
 import type { Player, PlayerId } from '../../game/types'
-import { fadeUp, springPop, stagger } from '../../theme/motion'
+import { fadeUp, springPop, springUi, stagger } from '../../theme/motion'
+
+export interface OutPlayer extends Player {
+  since: number
+}
 
 interface TallyProps {
   eyebrow: string
   players: Player[]
+  out: OutPlayer[]
   accepted: ReadonlySet<PlayerId>
   onToggle: (id: PlayerId) => void
   onSubmit: () => void
   onBlindVote: () => void
 }
 
-export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit, onBlindVote }: TallyProps) {
+export function VoteTally({ eyebrow, players, out, accepted, onToggle, onSubmit, onBlindVote }: TallyProps) {
   const count = players.filter((p) => accepted.has(p.id)).length
 
   return (
@@ -73,6 +79,35 @@ export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit, onBl
           </motion.div>
         ))}
       </motion.div>
+      {out.length > 0 && <OutList players={out} delay={0.08 + players.length * 0.04} />}
     </ScreenLayout>
+  )
+}
+
+function OutList({ players, delay }: { players: OutPlayer[]; delay: number }) {
+  const headingId = useId()
+  return (
+    <motion.section
+      className="vote-out"
+      aria-labelledby={headingId}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ...springUi, delay }}
+    >
+      <h2 className="vote-out__title">
+        <span id={headingId}>Out</span>
+        <span className="vote-out__note">Heckling only</span>
+      </h2>
+      <ul className="vote-out__list">
+        {players.map((p) => (
+          <li key={p.id} className="vote-out__chip">
+            <span className="vote-out__name" style={nameFit(p.name)}>
+              {p.name}
+            </span>
+            <span className="vote-out__since">Out since stage {p.since}</span>
+          </li>
+        ))}
+      </ul>
+    </motion.section>
   )
 }

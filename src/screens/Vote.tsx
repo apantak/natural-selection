@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, type Variants } from 'motion/react'
 import { useGame } from '../app/useGame'
+import { activePlayers, eliminatedAt } from '../game/engine'
 import { PresenceFrame } from '../components'
 import type { PlayerId, StageVotes } from '../game/types'
 import { VoteCountdown } from './play/VoteCountdown'
@@ -20,6 +21,10 @@ export function Vote() {
   const [step, setStep] = useState<Step>('tally')
   const [accepted, setAccepted] = useState<ReadonlySet<PlayerId>>(() => new Set())
   const eyebrow = `Stage ${state.stageIndex + 1} · ${stage.species}`
+  const active = activePlayers(state)
+  const out = state.players
+    .filter((p) => !active.includes(p))
+    .map((p) => ({ ...p, since: (eliminatedAt(state, p.id) ?? 0) + 1 }))
 
   const toggle = (id: PlayerId) =>
     setAccepted((current) => {
@@ -30,7 +35,7 @@ export function Vote() {
 
   const submit = () => {
     const votes: StageVotes = Object.fromEntries(
-      state.players.map((p) => [p.id, accepted.has(p.id) ? 'accept' : 'cutoff']),
+      active.map((p) => [p.id, accepted.has(p.id) ? 'accept' : 'cutoff']),
     )
     dispatch({ type: 'submitVotes', votes })
   }
@@ -42,7 +47,8 @@ export function Vote() {
         {step === 'tally' && (
           <VoteTally
             eyebrow={eyebrow}
-            players={state.players}
+            players={active}
+            out={out}
             accepted={accepted}
             onToggle={toggle}
             onSubmit={submit}

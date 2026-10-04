@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { activePlayers, computeResults, stageOutcome } from './engine'
 import { clearState, loadState, saveState } from './persistence'
 import type { GameState } from './types'
 
@@ -79,6 +80,29 @@ describe('persistence', () => {
     const ended: GameState = { ...sample, screen: 'end', endReason: 'host-ended' }
     saveState(ended, storage)
     expect(loadState(storage)).toEqual(ended)
+  })
+
+  it('loads an older save that recorded votes for eliminated players', () => {
+    const old: GameState = {
+      ...sample,
+      screen: 'end',
+      stageIndex: 2,
+      votes: [
+        { p1: 'accept', p2: 'accept', p3: 'cutoff' },
+        { p1: 'accept', p2: 'cutoff', p3: 'accept' },
+        { p1: 'cutoff', p2: 'accept', p3: 'accept' },
+      ],
+      endReason: 'nobody-accepted',
+    }
+    const loaded = loadState(withPayload(old))!
+    expect(loaded).toEqual(old)
+    expect(activePlayers(loaded).map((p) => p.id)).toEqual(['p1'])
+    expect(stageOutcome(loaded, 3)).toMatchObject({ accepters: [], nobody: true })
+    expect(computeResults(loaded)).toMatchObject({
+      personalCutoff: { p1: 1, p2: 0, p3: null },
+      groupCutoff: 0,
+      lastStanding: ['p1'],
+    })
   })
 
   it('stores a versioned payload', () => {

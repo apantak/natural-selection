@@ -4,6 +4,7 @@ import type { EndReason, GameAction, GameResults, GameState, Player, PlayerId, S
 
 export interface StageOutcome {
   accepters: PlayerId[]
+  wentOut: PlayerId[]
   loneHoldout: boolean
   unanimous: boolean
   nobody: boolean
@@ -41,15 +42,26 @@ export function canStart(players: Player[]): boolean {
   )
 }
 
+export function eliminatedAt(state: GameState, playerId: PlayerId): number | null {
+  const index = state.votes.findIndex((v) => v[playerId] !== 'accept')
+  return index === -1 ? null : index
+}
+
+export function activePlayers(state: GameState, stageIndex = state.stageIndex): Player[] {
+  return state.players.filter((p) => (eliminatedAt(state, p.id) ?? Infinity) >= stageIndex)
+}
+
 export function stageOutcome(state: GameState, stageCount: number, stageIndex = state.stageIndex): StageOutcome {
   const votes = state.votes[stageIndex] ?? {}
-  const accepters = state.players.filter((p) => votes[p.id] === 'accept').map((p) => p.id)
+  const active = activePlayers(state, stageIndex).map((p) => p.id)
+  const accepters = active.filter((id) => votes[id] === 'accept')
   const nobody = accepters.length === 0
   const isLastStage = stageIndex >= stageCount - 1
   return {
     accepters,
+    wentOut: active.filter((id) => votes[id] !== 'accept'),
     loneHoldout: accepters.length === 1 && state.players.length >= 2,
-    unanimous: !nobody && accepters.length === state.players.length,
+    unanimous: active.length >= 2 && accepters.length === active.length,
     nobody,
     isLastStage,
     canContinue: !nobody && !isLastStage && isStageUnlocked(stageIndex + 1),
@@ -59,12 +71,14 @@ export function stageOutcome(state: GameState, stageCount: number, stageIndex = 
 export function computeResults(state: GameState): GameResults {
   const personalCutoff: Record<PlayerId, number | null> = {}
   for (const p of state.players) {
-    personalCutoff[p.id] = lastIndexWhere(state.votes, (v) => v[p.id] === 'accept')
+    const out = eliminatedAt(state, p.id) ?? state.votes.length
+    personalCutoff[p.id] = out === 0 ? null : out - 1
   }
-  const groupCutoff = lastIndexWhere(
-    state.votes,
-    (v) => state.players.filter((p) => v[p.id] === 'accept').length * 2 > state.players.length,
+  const majority = state.votes.findLastIndex(
+    (_v, stage) =>
+      state.players.filter((p) => (personalCutoff[p.id] ?? -1) >= stage).length * 2 > state.players.length,
   )
+  const groupCutoff = majority === -1 ? null : majority
   const cutoffs = Object.values(personalCutoff).filter((c): c is number => c !== null)
   const deepest = cutoffs.length ? Math.max(...cutoffs) : null
   return {
@@ -118,11 +132,6 @@ export function createReducer(stageCount: number): (state: GameState, action: Ga
   }
 }
 
-function lastIndexWhere(votes: StageVotes[], predicate: (v: StageVotes) => boolean): number | null {
-  const index = votes.findLastIndex(predicate)
-  return index === -1 ? null : index
-}
-
 function hasPlayer(state: GameState, id: PlayerId): boolean {
   return state.players.some((p) => p.id === id)
 }
@@ -159,7 +168,7 @@ function restart(state: GameState): GameState {
 
 function submitVotes(state: GameState, votes: StageVotes): GameState {
   const stageVotes: StageVotes = Object.fromEntries(
-    state.players.map((p) => [p.id, votes[p.id] === 'accept' ? 'accept' : 'cutoff']),
+    activePlayers(state).map((p) => [p.id, votes[p.id] === 'accept' ? 'accept' : 'cutoff']),
   )
   return { ...state, screen: 'ceremony', votes: [...state.votes.slice(0, state.stageIndex), stageVotes] }
 }

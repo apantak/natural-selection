@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
+  activePlayers,
   canStart,
   computeResults,
   createReducer,
+  eliminatedAt,
   initialState,
   stageOutcome,
   validatePlayerName,
@@ -267,10 +269,10 @@ describe('game flow actions', () => {
   })
 
   it('submitVotes stores votes for the current stage and opens the ceremony', () => {
-    const s = at('vote', { stageIndex: 1, votes: [votes(['p1'])] })
-    const next = reduce(s, { type: 'submitVotes', votes: votes(['p2']) })
+    const s = at('vote', { stageIndex: 1, votes: [votes(['p1', 'p2'])] })
+    const next = reduce(s, { type: 'submitVotes', votes: { p1: 'cutoff', p2: 'accept' } })
     expect(next.screen).toBe('ceremony')
-    expect(next.votes).toEqual([votes(['p1']), votes(['p2'])])
+    expect(next.votes).toEqual([votes(['p1', 'p2']), { p1: 'cutoff', p2: 'accept' }])
   })
 
   it('submitVotes counts missing players as cutoff and drops unknown ids', () => {
@@ -310,7 +312,7 @@ describe('game flow actions', () => {
   })
 
   it('endHere ends with out-of-stages on the last stage', () => {
-    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1']), votes(['p1']), votes(['p2'])] })
+    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1', 'p2']), votes(['p2'])] })
     expect(reduce(s, { type: 'endHere' })).toMatchObject({ screen: 'end', endReason: 'out-of-stages' })
   })
 
@@ -348,6 +350,40 @@ describe('game flow actions', () => {
     }
   })
 
+  it('submitVotes stores only active players and drops eliminated ones', () => {
+    const s = at('vote', { stageIndex: 1, votes: [votes(['p1', 'p2'])] })
+    const next = reduce(s, { type: 'submitVotes', votes: votes(['p1', 'p2', 'p3']) })
+    expect(next.votes[1]).toEqual({ p1: 'accept', p2: 'accept' })
+  })
+
+  it('submitVotes counts missing active players as cutoff', () => {
+    const s = at('vote', { stageIndex: 1, votes: [votes(['p1', 'p2'])] })
+    const next = reduce(s, { type: 'submitVotes', votes: { p2: 'accept', p3: 'accept' } })
+    expect(next.votes[1]).toEqual({ p1: 'cutoff', p2: 'accept' })
+  })
+
+  it('submitVotes stores an empty record when nobody is active', () => {
+    const s = at('vote', { stageIndex: 1, votes: [votes([])] })
+    expect(reduce(s, { type: 'submitVotes', votes: votes(['p1', 'p2', 'p3']) }).votes[1]).toEqual({})
+  })
+
+  it('an eliminated player stays out for the rest of the game', () => {
+    const end = run(
+      at('intro'),
+      { type: 'beginVote' },
+      { type: 'submitVotes', votes: votes(['p1', 'p2']) },
+      { type: 'continue' },
+      { type: 'beginVote' },
+      { type: 'submitVotes', votes: votes(['p1', 'p2', 'p3']) },
+      { type: 'continue' },
+      { type: 'beginVote' },
+      { type: 'submitVotes', votes: votes(['p1', 'p3']) },
+    )
+    expect(end.votes).toEqual([votes(['p1', 'p2']), { p1: 'accept', p2: 'accept' }, { p1: 'accept', p2: 'cutoff' }])
+    expect(activePlayers(end).map((p) => p.id)).toEqual(['p1', 'p2'])
+    expect(stageOutcome(end, STAGES)).toMatchObject({ accepters: ['p1'], wentOut: ['p2'], loneHoldout: true })
+  })
+
   it('a full game reaches the end', () => {
     const end = run(
       initialState(),
@@ -383,6 +419,48 @@ describe('game flow actions', () => {
   })
 })
 
+describe('activePlayers', () => {
+  it('everyone is active at stage 0', () => {
+    expect(activePlayers(at('vote')).map((p) => p.id)).toEqual(['p1', 'p2', 'p3'])
+  })
+
+  it('keeps only players who accepted every earlier stage', () => {
+    const s = at('vote', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1'])] })
+    expect(activePlayers(s).map((p) => p.id)).toEqual(['p1'])
+    expect(activePlayers(s, 1).map((p) => p.id)).toEqual(['p1', 'p2'])
+    expect(activePlayers(s, 0).map((p) => p.id)).toEqual(['p1', 'p2', 'p3'])
+  })
+
+  it('ignores accepts after a cutoff from older saves', () => {
+    const s = at('vote', { stageIndex: 2, votes: [votes(['p1']), votes(['p1', 'p2', 'p3'])] })
+    expect(activePlayers(s).map((p) => p.id)).toEqual(['p1'])
+  })
+
+  it('keeps player order', () => {
+    const s = at('vote', { stageIndex: 1, votes: [votes(['p3', 'p1'])] })
+    expect(activePlayers(s).map((p) => p.id)).toEqual(['p1', 'p3'])
+  })
+})
+
+describe('eliminatedAt', () => {
+  it('is the first stage the player cut off', () => {
+    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'accept' }] })
+    expect(eliminatedAt(s, 'p1')).toBeNull()
+    expect(eliminatedAt(s, 'p2')).toBe(1)
+    expect(eliminatedAt(s, 'p3')).toBe(0)
+  })
+
+  it('ignores later accepts from older saves', () => {
+    const s = at('end', { votes: [votes(['p2']), votes(['p1', 'p2']), votes(['p1'])] })
+    expect(eliminatedAt(s, 'p1')).toBe(0)
+    expect(eliminatedAt(s, 'p2')).toBe(2)
+  })
+
+  it('is null before any votes are recorded', () => {
+    expect(eliminatedAt(at('vote'), 'p1')).toBeNull()
+  })
+})
+
 describe('stageOutcome', () => {
   it('lists accepters in player order', () => {
     const s = at('ceremony', { votes: [votes(['p3', 'p1'])] })
@@ -396,7 +474,41 @@ describe('stageOutcome', () => {
 
   it('needs at least two players for a lone holdout', () => {
     const s = at('ceremony', { players: players('Solo'), votes: [{ p1: 'accept' }] })
-    expect(stageOutcome(s, STAGES)).toMatchObject({ loneHoldout: false, unanimous: true })
+    expect(stageOutcome(s, STAGES)).toMatchObject({ loneHoldout: false, unanimous: false })
+  })
+
+  it('keeps the lone holdout spotlight on the last player left every stage', () => {
+    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'accept' }] })
+    expect(stageOutcome(s, STAGES, 1)).toMatchObject({ accepters: ['p1'], loneHoldout: true, unanimous: false })
+    expect(stageOutcome(s, STAGES, 2)).toMatchObject({ accepters: ['p1'], loneHoldout: true, unanimous: false })
+  })
+
+  it('is unanimous when every active player accepts and at least two remain', () => {
+    const s = at('ceremony', { stageIndex: 1, votes: [votes(['p1', 'p2']), { p1: 'accept', p2: 'accept' }] })
+    expect(stageOutcome(s, STAGES)).toMatchObject({ unanimous: true, loneHoldout: false, wentOut: [] })
+  })
+
+  it('ignores accepts from eliminated players in older saves', () => {
+    const s = at('ceremony', { stageIndex: 1, votes: [votes(['p1', 'p2']), votes(['p1', 'p2', 'p3'])] })
+    expect(stageOutcome(s, STAGES)).toMatchObject({ accepters: ['p1', 'p2'], unanimous: true })
+  })
+
+  it('lists who went out this stage', () => {
+    const s = at('ceremony', { stageIndex: 1, votes: [votes(['p1', 'p2']), votes(['p2'])] })
+    expect(stageOutcome(s, STAGES)).toMatchObject({ accepters: ['p2'], wentOut: ['p1'] })
+  })
+
+  it('is nobody when the last active player cuts off', () => {
+    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'cutoff' }] })
+    expect(stageOutcome(s, 4)).toMatchObject({
+      accepters: [],
+      wentOut: ['p1'],
+      nobody: true,
+      loneHoldout: false,
+      unanimous: false,
+      canContinue: false,
+    })
+    expect(createReducer(4)(s, { type: 'endHere' }).endReason).toBe('nobody-accepted')
   })
 
   it('flags unanimous acceptance', () => {
@@ -407,6 +519,7 @@ describe('stageOutcome', () => {
   it('flags nobody accepting and blocks continue', () => {
     const o = stageOutcome(at('ceremony', { votes: [votes([])] }), STAGES)
     expect(o).toMatchObject({ nobody: true, unanimous: false, loneHoldout: false, canContinue: false })
+    expect(o.wentOut).toEqual(['p1', 'p2', 'p3'])
   })
 
   it('treats a stage without votes as nobody', () => {
@@ -425,14 +538,28 @@ describe('stageOutcome', () => {
 })
 
 describe('computeResults', () => {
-  it('personal cutoff is the last accepted stage, even after a gap', () => {
-    const s = at('end', { votes: [votes(['p1']), votes([]), votes(['p1', 'p2'])] })
-    expect(computeResults(s).personalCutoff).toEqual({ p1: 2, p2: 2, p3: null })
+  it('personal cutoff is the last stage accepted before going out', () => {
+    const s = at('end', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'accept' }] })
+    expect(computeResults(s).personalCutoff).toEqual({ p1: 2, p2: 0, p3: null })
   })
 
-  it('group cutoff is the last stage with a strict majority', () => {
+  it('accepts after a cutoff in older saves do not count', () => {
+    const s = at('end', { votes: [votes(['p1']), votes([]), votes(['p1', 'p2'])] })
+    expect(computeResults(s)).toMatchObject({
+      personalCutoff: { p1: 0, p2: null, p3: null },
+      groupCutoff: null,
+      lastStanding: ['p1'],
+    })
+  })
+
+  it('group cutoff is the last stage where a strict majority of all players accepted', () => {
+    const s = at('end', { votes: [votes(['p1', 'p2', 'p3']), votes(['p1', 'p2']), { p1: 'accept', p2: 'cutoff' }] })
+    expect(computeResults(s).groupCutoff).toBe(1)
+  })
+
+  it('group cutoff ignores accepts from eliminated players in older saves', () => {
     const s = at('end', { votes: [votes(['p1', 'p2']), votes(['p1']), votes(['p1', 'p3'])] })
-    expect(computeResults(s).groupCutoff).toBe(2)
+    expect(computeResults(s).groupCutoff).toBe(0)
   })
 
   it('half is not a majority', () => {
@@ -453,6 +580,29 @@ describe('computeResults', () => {
   it('last standing shares ties', () => {
     const s = at('end', { votes: [votes(['p1', 'p2', 'p3']), votes(['p1', 'p3'])] })
     expect(computeResults(s).lastStanding).toEqual(['p1', 'p3'])
+  })
+
+  it('last standing is the final survivor', () => {
+    const s = at('end', { stageIndex: 2, votes: [votes(['p1', 'p2']), { p1: 'accept', p2: 'cutoff' }, { p1: 'accept' }] })
+    expect(computeResults(s)).toEqual({
+      personalCutoff: { p1: 2, p2: 0, p3: null },
+      groupCutoff: 0,
+      lastStanding: ['p1'],
+      stagesPlayed: 3,
+    })
+  })
+
+  it('players who go out together on the deepest stage share last standing', () => {
+    const s = at('end', {
+      stageIndex: 2,
+      votes: [votes(['p1', 'p2', 'p3']), { p1: 'cutoff', p2: 'accept', p3: 'accept' }, { p2: 'cutoff', p3: 'cutoff' }],
+      endReason: 'nobody-accepted',
+    })
+    expect(computeResults(s)).toMatchObject({
+      personalCutoff: { p1: 0, p2: 1, p3: 1 },
+      groupCutoff: 1,
+      lastStanding: ['p2', 'p3'],
+    })
   })
 
   it('never-accepted gives null cutoffs and nobody standing', () => {

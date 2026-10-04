@@ -22,19 +22,20 @@ Screens: **Home → Setup → (Stage intro → Vote → Bone Ceremony) × stages
 1. **Home**: title, tagline, 18+ badge, one-tap "We're all adults" confirmation before Start. Link to Credits. One-time iOS "Share → Add to Home Screen" hint when not installed.
 2. **Setup**: 3–8 players. Add, remove, reorder. Names trimmed, non-empty, unique (case-insensitive), max 16 chars. Start enabled only when valid.
 3. **Stage intro** (host reads aloud): stage number, species, nickname, date range, description, 2–3 facts, female and male portraits. Tapping a portrait opens a fullscreen viewer for showing the room; swipe or tap toggles female/male.
-4. **Vote** (host collects): opens straight on a grid of large name tiles, all defaulting to cutoff. The group discusses out loud (copying and peer pressure are part of the fun); the host taps players who accepted (tap toggles), then confirms. Editable until confirmed. An optional **Blind vote on three** button runs an animated 3-2-1 countdown for groups who want simultaneous thumbs, then returns to the tiles.
-5. **Bone Ceremony** (reveal): player cards revealed one at a time, flying right (accepted, bone) or left (cutoff). Then a "Justify yourself" prompt naming the accepters, then the stage punchline if present. Exactly one accepter triggers the lone-holdout spotlight ("Dave, you're the last one holding a bone. Defend yourself."). Unanimous accept triggers a bone particle burst. Buttons: **Continue** (only if ≥1 accepted and a further unlocked stage exists) and **End here** (always).
+4. **Vote** (host collects): opens straight on a grid of large name tiles for the players still in, all defaulting to cutoff. Players who are out sit below in a faded, non-tappable "Out" list ("Out since stage N"); they can still heckle. The group discusses out loud (copying and peer pressure are part of the fun); the host taps players who accepted (tap toggles), then confirms. Editable until confirmed. An optional **Blind vote on three** button runs an animated 3-2-1 countdown for groups who want simultaneous thumbs, then returns to the tiles.
+5. **Bone Ceremony** (reveal): cards for the players still in revealed one at a time, flying right (accepted, bone) or left (cutoff). The verdict names who just went out ("Ana is out."). Then a "Justify yourself" prompt naming the accepters (or, if nobody accepted, the players who just went out), then the stage punchline if present. Exactly one accepter triggers the lone-holdout spotlight ("Dave, you're the last one holding a bone. Defend yourself."). Unanimous accept triggers a bone particle burst. Buttons: **Continue** (only if ≥1 accepted and a further unlocked stage exists) and **End here** (always).
 6. **End**: group cutoff species with portrait, each player's personal cutoff, "Last one standing" crown, share button with a "Hide names" toggle, Play again (same players) and New game.
 
 ## Rules
 
-- Every player votes at every stage, including those who voted cutoff before.
+- A cutoff is final. A player who votes cutoff is out for the rest of the game and no longer votes. The **active** players at a stage are those who accepted at every earlier stage (everyone at stage 1). Only active players' votes are stored; a missing vote counts as cutoff.
 - After votes are submitted for a stage, the game ends if nobody accepted, or if that was the last stage. Otherwise the host may Continue or End here.
 - Ending: `nobody-accepted`, `out-of-stages`, or `host-ended`.
-- **Personal cutoff**: the last stage index the player accepted, or `null` if they never accepted (label: "Rejected their own species").
-- **Group cutoff**: the last stage index where a strict majority (> half) of players accepted, or `null` if none.
+- **Personal cutoff**: the last stage index the player accepted before going out, or `null` if they cut off at stage 1 (label: "Rejected their own species").
+- **Group cutoff**: the last stage index where a strict majority (> half) of all players accepted, or `null` if none.
 - **Last one standing**: the player(s) with the deepest personal cutoff (ties share); empty if nobody ever accepted.
-- **Lone holdout**: exactly one player accepted at a stage, with ≥2 players.
+- **Lone holdout**: exactly one player accepted at a stage, in a game of ≥2 players. Once one player is left, the spotlight fires every stage they accept.
+- **Unanimous**: every active player accepted, with ≥2 still in.
 
 ## Architecture
 

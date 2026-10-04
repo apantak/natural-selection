@@ -16,6 +16,10 @@ function renderCeremony(accepters: string[], stageIndex = 0) {
   renderScreen(<Ceremony />, { screen: 'ceremony', stageIndex, votes })
 }
 
+function renderRounds(rounds: string[][]) {
+  renderScreen(<Ceremony />, { screen: 'ceremony', stageIndex: rounds.length - 1, votes: rounds.map(votesFor) })
+}
+
 function skipReveal() {
   fireEvent.click(screen.getByRole('button', { name: 'Skip the suspense' }))
 }
@@ -49,6 +53,7 @@ describe('Ceremony', () => {
     expect(screen.getByRole('button', { name: /^Cleo: cutoff/ })).toBeInTheDocument()
     act(() => vi.advanceTimersByTime(700))
     expect(screen.getByText('2 of 3 accepted the bone.')).toBeInTheDocument()
+    expect(screen.getByText('Cleo is out.')).toBeInTheDocument()
     expect(button('End here')).toBeInTheDocument()
   })
 
@@ -119,5 +124,49 @@ describe('Ceremony', () => {
     expect(screen.getByRole('dialog', { name: "Ben, you're the last one holding a bone. Defend yourself." })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Hear them out' }))
     expect(justify('Justify yourself')).toHaveTextContent('Ben, tell the room what you saw in them.')
+  })
+
+  it('reveals only the players still in and says who just went out', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    renderRounds([['p1', 'p2', 'p3'], ['p1', 'p2'], ['p1']])
+    expect(screen.getByRole('button', { name: /^Ana: accepts the bone/ })).toBeInTheDocument()
+    act(() => vi.advanceTimersByTime(1200))
+    expect(screen.getByRole('button', { name: /^Ben: cutoff/ })).toBeInTheDocument()
+    act(() => vi.advanceTimersByTime(700))
+    expect(screen.queryByRole('button', { name: /^Cleo/ })).toBeNull()
+    expect(screen.getByText('Only Ana accepted the bone.')).toBeInTheDocument()
+    expect(screen.getByText('Ben is out.')).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Cutoff' })).toHaveTextContent('Ben')
+    expect(screen.getByRole('region', { name: 'Cutoff' })).not.toHaveTextContent('Cleo')
+  })
+
+  it('names several players going out at once', () => {
+    renderRounds([['p2']])
+    skipReveal()
+    expect(screen.getByText('Ana and Cleo are out.')).toBeInTheDocument()
+  })
+
+  it('calls it unanimous when everyone still in accepts', () => {
+    renderRounds([['p1', 'p2'], ['p1', 'p2']])
+    skipReveal()
+    expect(screen.getByText('Everyone still in accepted the bone.')).toBeInTheDocument()
+    expect(screen.queryByText(/is out\.|are out\./)).toBeNull()
+    expect(fireBoneBurst).toHaveBeenCalledOnce()
+  })
+
+  it('asks only the players who just went out for the dealbreaker', () => {
+    renderRounds([['p1', 'p2'], []])
+    skipReveal()
+    expect(screen.getByText('Nobody accepted the bone.')).toBeInTheDocument()
+    expect(justify('Justify yourselves')).toHaveTextContent('Ana and Ben, what was the dealbreaker?')
+    expect(screen.queryByText(/are out\./)).toBeNull()
+  })
+
+  it('keeps the last player left in the spotlight', () => {
+    renderRounds([['p1', 'p2'], ['p1'], ['p1']])
+    skipReveal()
+    expect(screen.getByText('Only Ana accepted the bone.')).toBeInTheDocument()
+    expect(screen.queryByText(/is out\./)).toBeNull()
+    expect(screen.getByRole('dialog', { name: "Ana, you're the last one holding a bone. Defend yourself." })).toBeInTheDocument()
   })
 })

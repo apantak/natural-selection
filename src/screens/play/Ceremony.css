@@ -101,6 +101,11 @@
   text-shadow: var(--text-glow);
 }
 
+.verdict__out {
+  font-size: var(--text-md);
+  color: var(--color-rose);
+}
+
 .verdict-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -60,7 +60,7 @@ export function Home() {
           </p>
           <ol className="home__steps">
             <li>Meet one human relative per round, each further back in time.</li>
-            <li>Go round the room: 👍 accept or 👎 cutoff. Peer pressure is allowed.</li>
+            <li>Go round the room: 👍 accept or 👎 cutoff. Cutoff means you're out. Peer pressure is allowed.</li>
             <li>Then explain yourself. Out loud. To your friends.</li>
           </ol>
           <p className="faint small">The show ends when nobody accepts.</p>
