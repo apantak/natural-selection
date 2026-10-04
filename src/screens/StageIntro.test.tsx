@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { cleanup, fireEvent, screen } from '@testing-library/react'
+import { heightLabel } from '../components'
 import { stages } from '../content/loader'
 import { loadState } from '../game/persistence'
 import { renderScreen } from './play/renderScreen'
@@ -17,6 +18,17 @@ describe('StageIntro', () => {
     expect(screen.getByText(`“${stage.nickname}”`)).toBeInTheDocument()
     expect(screen.getByText(stage.lived.display)).toBeInTheDocument()
     expect(screen.getAllByRole('listitem')).toHaveLength(stage.facts.length)
+  })
+
+  it('shows each reconstruction height under its portrait', () => {
+    const stage = stages[3]
+    renderScreen(<StageIntro />, { screen: 'intro', stageIndex: 3 })
+    const female = screen.getByRole('button', { name: 'Show the female portrait fullscreen' })
+    const male = screen.getByRole('button', { name: 'Show the male portrait fullscreen' })
+    expect(female).toHaveAccessibleDescription(heightLabel(stage.heightMeters.female))
+    expect(male).toHaveAccessibleDescription(heightLabel(stage.heightMeters.male))
+    expect(screen.getByText(heightLabel(stage.heightMeters.female))).toBeInTheDocument()
+    expect(screen.getByText(heightLabel(stage.heightMeters.male))).toBeInTheDocument()
   })
 
   it('opens the fullscreen portrait viewer', () => {

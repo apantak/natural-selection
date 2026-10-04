@@ -4,6 +4,7 @@ import { AnimatePresence, motion, type PanInfo } from 'motion/react'
 import type { Stage } from '../content/types'
 import { portraitUrl } from '../content/loader'
 import { springUi } from '../theme/motion'
+import { heightLabel } from './heightLabel'
 import { useOverlay } from './useOverlay'
 import './PortraitViewer.css'
 
@@ -82,6 +83,8 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
             className="viewer__img"
             src={portraitUrl(stage.images[side])}
             alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
+            width={1024}
+            height={1536}
             draggable={false}
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -92,7 +95,12 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
       </motion.div>
 
       <div className="viewer__footer">
-        <p className="viewer__species display">{stage.species}</p>
+        <div className="viewer__caption">
+          <p className="viewer__species display">{stage.species}</p>
+          <p className="viewer__height display" aria-live="polite">
+            {LABEL[side]} · {heightLabel(stage.heightMeters[side])}
+          </p>
+        </div>
         <div className="viewer__toggle" role="group" aria-label="Portrait">
           {SIDES.map((value) => (
             <button
@@ -109,7 +117,9 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
             </button>
           ))}
         </div>
-        <p className="viewer__hint faint small">Swipe or tap to switch · AI-generated reconstruction</p>
+        <p className="viewer__hint faint small">
+          <span>Swipe or tap to switch ·</span> <span>AI-generated reconstruction</span>
+        </p>
       </div>
     </motion.div>
   )

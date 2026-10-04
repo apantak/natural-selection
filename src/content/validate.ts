@@ -9,6 +9,7 @@ const STAGE_KEYS = [
   'description',
   'facts',
   'punchline',
+  'heightMeters',
   'images',
   'anatomy',
   'sources',
@@ -16,6 +17,8 @@ const STAGE_KEYS = [
 ]
 const ID_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
+const MIN_HEIGHT = 0.5
+const MAX_HEIGHT = 2.2
 
 function isRecord(value: unknown): value is Rec {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -63,6 +66,19 @@ function checkSexPair(
   }
 }
 
+function checkHeights(value: unknown, path: string, errors: string[]): void {
+  if (!isRecord(value)) {
+    errors.push(`${path}: expected an object with female and male`)
+    return
+  }
+  for (const sex of ['female', 'male']) {
+    const height = value[sex]
+    if (typeof height !== 'number' || !Number.isFinite(height) || height < MIN_HEIGHT || height > MAX_HEIGHT) {
+      errors.push(`${path}.${sex}: expected a number of metres from ${MIN_HEIGHT} to ${MAX_HEIGHT}`)
+    }
+  }
+}
+
 function checkStage(stage: Rec, at: string, errors: string[], fileExists: (relPath: string) => boolean): void {
   for (const key of Object.keys(stage)) {
     if (!STAGE_KEYS.includes(key)) errors.push(`${at}: unknown field "${key}"`)
@@ -97,6 +113,7 @@ function checkStage(stage: Rec, at: string, errors: string[], fileExists: (relPa
     })
   }
 
+  checkHeights(stage.heightMeters, `${at}.heightMeters`, errors)
   checkSexPair(stage.images, `${at}.images`, errors, fileExists)
   checkSexPair(stage.anatomy, `${at}.anatomy`, errors)
 

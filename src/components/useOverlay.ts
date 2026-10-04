@@ -35,6 +35,7 @@ export function useOverlay(
   onClose: () => void,
 ) {
   const closeRef = useRef(onClose)
+  const pendingBack = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   useEffect(() => {
     closeRef.current = onClose
   })
@@ -42,7 +43,9 @@ export function useOverlay(
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
     initialFocusRef.current?.focus()
-    history.pushState({ [OVERLAY_KEY]: true }, '')
+    if (pendingBack.current === undefined) history.pushState({ [OVERLAY_KEY]: true }, '')
+    else clearTimeout(pendingBack.current)
+    pendingBack.current = undefined
     let popped = false
 
     const onPopState = () => {
@@ -60,7 +63,7 @@ export function useOverlay(
     return () => {
       window.removeEventListener('popstate', onPopState)
       window.removeEventListener('keydown', onKeyDown)
-      if (!popped && isOverlayEntry()) history.back()
+      if (!popped && isOverlayEntry()) pendingBack.current = setTimeout(() => history.back())
       previous?.focus?.()
     }
   }, [panelRef, initialFocusRef])

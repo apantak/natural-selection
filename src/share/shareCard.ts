@@ -234,20 +234,20 @@ function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement | nul
   ctx.save()
   archPath(ctx, x, y, w, h)
   ctx.clip()
-  const backdrop = ctx.createLinearGradient(0, y, 0, y + h)
-  backdrop.addColorStop(0, '#3d1a1f')
-  backdrop.addColorStop(1, '#26100f')
+  const backdrop = ctx.createRadialGradient(0, y + h * 0.32, 0, 0, y + h * 0.32, h * 0.75)
+  backdrop.addColorStop(0, '#3a2c22')
+  backdrop.addColorStop(1, '#120d0a')
   ctx.fillStyle = backdrop
   ctx.fillRect(x, y, w, h)
   if (img) {
     const iw = img.naturalWidth || w
     const ih = img.naturalHeight || h
-    const scale = Math.max(w / iw, h / ih)
-    ctx.drawImage(img, -iw * scale / 2, -ih * scale / 2, iw * scale, ih * scale)
+    const scale = Math.min(w / iw, h / ih)
+    ctx.drawImage(img, -iw * scale / 2, y + h - ih * scale, iw * scale, ih * scale)
   }
-  const shade = ctx.createLinearGradient(0, y + h * 0.55, 0, y + h)
+  const shade = ctx.createLinearGradient(0, y + h * 0.7, 0, y + h)
   shade.addColorStop(0, 'rgba(13, 9, 7, 0)')
-  shade.addColorStop(1, 'rgba(13, 9, 7, 0.45)')
+  shade.addColorStop(1, 'rgba(13, 9, 7, 0.3)')
   ctx.fillStyle = shade
   ctx.fillRect(x, y, w, h)
   ctx.restore()
@@ -275,9 +275,9 @@ function centeredFit(ctx: CanvasRenderingContext2D, text: string, y: number, max
 }
 
 function portraitHeight(playerCount: number): number {
-  if (playerCount <= 4) return 400
-  if (playerCount <= 6) return 370
-  return 338
+  if (playerCount <= 4) return 480
+  if (playerCount <= 6) return 440
+  return 400
 }
 
 function drawGroup(ctx: CanvasRenderingContext2D, summary: ResultsSummary, stageCount: number, images: (HTMLImageElement | null)[], ph: number): number {
@@ -306,7 +306,7 @@ function drawGroup(ctx: CanvasRenderingContext2D, summary: ResultsSummary, stage
     return first + (lines.length - 1) * 84 + 30
   }
 
-  const pw = ph * 0.8
+  const pw = (ph * 2) / 3
   drawPortrait(ctx, images[0], CX - pw / 2 - 20, top + ph / 2, pw, ph, -0.035)
   drawPortrait(ctx, images[1], CX + pw / 2 + 20, top + ph / 2, pw, ph, 0.035)
 

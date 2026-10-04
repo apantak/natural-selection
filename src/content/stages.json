@@ -14,6 +14,10 @@
       "Their faces already fall within the range of people alive today, but their braincases were longer and lower than ours."
     ],
     "punchline": "Cutting this one means breaking up with your own species. Bold opener.",
+    "heightMeters": {
+      "female": 1.6,
+      "male": 1.72
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -34,6 +38,10 @@
       {
         "claim": "Jebel Irhoud faces are modern while the braincase is archaic and elongated.",
         "url": "https://www.eva.mpg.de/press/news/2017/2017-06-07-the-first-of-our-kind/"
+      },
+      {
+        "claim": "Pleistocene Homo sapiens averaged about 170 cm tall across both sexes (Will, Pablos and Stock 2017).",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5717693/"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -54,6 +62,10 @@
       "The oldest known evidence of anyone making fire, about 400,000 years old, comes from Barnham in England, and researchers think early Neanderthals lit it."
     ],
     "punchline": "Some of your ancestors already said yes. You inherited the receipts.",
+    "heightMeters": {
+      "female": 1.55,
+      "male": 1.64
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -74,6 +86,10 @@
       {
         "claim": "Barnham, UK: earliest evidence of fire-making, about 400,000 years old, probably by early Neanderthals.",
         "url": "https://www.nhm.ac.uk/discover/news/2025/december/earliest-fire-making-dating-back-400-000-years-unearthed-in-suffolk-england.html"
+      },
+      {
+        "claim": "Neanderthal height: males average 164 cm, females average 155 cm.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-neanderthalensis"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -95,6 +111,10 @@
       "Many Tibetans carry a Denisovan version of the EPAS1 gene, which helps people cope with life at high altitude."
     ],
     "punchline": "Neanderthal mom, Denisovan dad. Holidays were tense.",
+    "heightMeters": {
+      "female": 1.6,
+      "male": 1.7
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -131,6 +151,10 @@
       {
         "claim": "A Denisovan rib from Baishiya Karst Cave dates to about 48,000-32,000 years ago.",
         "url": "https://www.nature.com/articles/s41586-024-07612-9"
+      },
+      {
+        "claim": "Very few Denisovan fossils are known and no skeleton gives a height; heights here are estimates assuming a Neanderthal-like body, their closest relatives.",
+        "url": "https://australian.museum/learn/science/human-evolution/the-denisovans/"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -150,6 +174,10 @@
       "A 2021 proposal wanted to drop the name and call the African fossils Homo bodoensis instead."
     ],
     "punchline": "Scientists can't agree what to call this one. Sounds like a few of your situationships.",
+    "heightMeters": {
+      "female": 1.57,
+      "male": 1.75
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -174,6 +202,10 @@
       {
         "claim": "Roksandic et al. propose Homo bodoensis and suppressing Homo heidelbergensis.",
         "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9297855/"
+      },
+      {
+        "claim": "Homo heidelbergensis height: males average 175 cm, females average 157 cm.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-heidelbergensis"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -194,6 +226,10 @@
       "The species lasted nearly 2 million years, about six times longer than Homo sapiens has been around."
     ],
     "punchline": "Went nearly two million years. Can you say the same?",
+    "heightMeters": {
+      "female": 1.55,
+      "male": 1.78
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -222,6 +258,10 @@
       {
         "claim": "Wonderwerk Cave fire use 1.07-1.79 million years ago; fire was collected from natural sources, not made.",
         "url": "https://www.sciencedaily.com/releases/2026/06/260623083123.htm"
+      },
+      {
+        "claim": "Homo erectus averaged about 163 cm tall, with wide variation between individuals (Will, Pablos and Stock 2017).",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5717693/"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -241,6 +281,10 @@
       "Their brains were about a third the size of ours, and they still made and used stone tools."
     ],
     "punchline": "Dodged Komodo dragons, sized up mini elephants. Your last date complained about parking.",
+    "heightMeters": {
+      "female": 1.06,
+      "male": 1.1
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -256,6 +300,10 @@
       },
       {
         "claim": "Stegodon butchery at Liang Bua was first credited to H. floresiensis but is now linked to later Homo sapiens; floresiensis may still have eaten Stegodon meat.",
+        "url": "https://www.nhm.ac.uk/discover/homo-floresiensis-hobbit.html"
+      },
+      {
+        "claim": "Homo floresiensis stood about 1.05-1.10 m; the LB1 female was about 1.05 m tall.",
         "url": "https://www.nhm.ac.uk/discover/homo-floresiensis-hobbit.html"
       }
     ],
@@ -278,6 +326,10 @@
       "The most complete habilis skeleton found so far, about 2 million years old, belonged to someone weighing only 31 to 33 kilograms."
     ],
     "punchline": "Took credit for someone else's tools. We've all dated one.",
+    "heightMeters": {
+      "female": 1.05,
+      "male": 1.3
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -306,6 +358,10 @@
       {
         "claim": "Domínguez-Rodrigo and Alcalá question whether the Lomekwi 3 tools come from the 3.3-million-year-old layers.",
         "url": "https://www.researchgate.net/publication/337862801_Pliocene_Archaeology_at_Lomekwi_3_New_Evidence_Fuels_More_Skepticism"
+      },
+      {
+        "claim": "Homo habilis stood about 100-135 cm tall; male-female size difference is uncertain.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/homo-habilis"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -327,6 +383,10 @@
       "One 2016 study suggests Lucy died after falling from a tall tree, though other scientists dispute it."
     ],
     "punchline": "Lucy may have fallen hard for someone. Out of a tree, if one study is right.",
+    "heightMeters": {
+      "female": 1.05,
+      "male": 1.51
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -347,6 +407,10 @@
       {
         "claim": "Lucy's fractures may come from a fall out of a tall tree (Kappelman et al. 2016).",
         "url": "https://www.nature.com/articles/nature19332"
+      },
+      {
+        "claim": "Australopithecus afarensis height: males average 151 cm, females average 105 cm.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/australopithecus-afarensis"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -368,6 +432,10 @@
       "Males had small canine teeth, which some scientists read as a sign of less fighting between males."
     ],
     "punchline": "Fifteen years before going public. Still faster than some of your exes.",
+    "heightMeters": {
+      "female": 1.2,
+      "male": 1.25
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -384,6 +452,10 @@
       {
         "claim": "Cerling et al. argue Ardi's habitat was tree or bush savanna with 5-25% tree cover, not woodland.",
         "url": "https://www.sciencedaily.com/releases/2010/05/100527141955.htm"
+      },
+      {
+        "claim": "Ardipithecus ramidus females averaged 120 cm; males were probably similar in size, judging by their small canines.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/ardipithecus-ramidus"
       }
     ],
     "lastChecked": "2026-10-04"
@@ -405,6 +477,10 @@
       "Its brain was about the size of a chimpanzee's, but it had small canine teeth, a trait it shares with later members of the human family."
     ],
     "punchline": "\"Hope of life.\" Which is exactly what got this group to stage ten.",
+    "heightMeters": {
+      "female": 1.1,
+      "male": 1.2
+    },
     "images": {
       "female": "portraits/placeholder-female.svg",
       "male": "portraits/placeholder-male.svg"
@@ -425,6 +501,10 @@
       {
         "claim": "January 2026 Science Advances study argues the femur shows bipedalism; critics call the evidence weak, citing poor preservation and features also seen in nonbipedal primates.",
         "url": "https://www.scientificamerican.com/article/earliest-human-ancestor-may-have-walked-on-two-legs/"
+      },
+      {
+        "claim": "No Sahelanthropus body bones give a height; from the skull size it was probably about chimpanzee-sized.",
+        "url": "https://humanorigins.si.edu/evidence/human-fossils/species/sahelanthropus-tchadensis"
       }
     ],
     "lastChecked": "2026-10-04"

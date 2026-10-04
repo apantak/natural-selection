@@ -17,6 +17,7 @@ function makeStage(order: number, overrides: Record<string, unknown> = {}) {
     lived: { fromYearsAgo: 300000, toYearsAgo: 100000, display: 'About 300,000 to 100,000 years ago' },
     description: 'A short description.',
     facts: ['Fact one.', 'Fact two.'],
+    heightMeters: { female: 1.5, male: 1.6 },
     images: { female: 'portraits/f.svg', male: 'portraits/m.svg' },
     anatomy: { female: 'Notes.', male: 'Notes.' },
     sources: [{ claim: 'A claim.', url: 'https://example.org/a' }],
@@ -76,6 +77,16 @@ describe('validateStages', () => {
   it('rejects ranges that run forwards in time', () => {
     const errors = errorsFor({ lived: { fromYearsAgo: 100, toYearsAgo: 200, display: 'x' } })
     expect(errors).toContain('stages[0] (stage-1).lived: fromYearsAgo must be >= toYearsAgo')
+  })
+
+  it('requires heightMeters with both sexes from 0.5 to 2.2 metres', () => {
+    const at = 'stages[0] (stage-1).heightMeters'
+    expect(errorsFor({ heightMeters: undefined })).toEqual([`${at}: expected an object with female and male`])
+    expect(errorsFor({ heightMeters: { female: 1.1 } })).toEqual([`${at}.male: expected a number of metres from 0.5 to 2.2`])
+    expect(errorsFor({ heightMeters: { female: '1.1', male: 1.2 } })).toHaveLength(1)
+    expect(errorsFor({ heightMeters: { female: 0.4, male: 2.3 } })).toHaveLength(2)
+    expect(errorsFor({ heightMeters: { female: Number.NaN, male: 1.2 } })).toHaveLength(1)
+    expect(errorsFor({ heightMeters: { female: 0.5, male: 2.2 } })).toEqual([])
   })
 
   it('rejects impossible ISO dates', () => {

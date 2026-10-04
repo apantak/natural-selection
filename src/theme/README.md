@@ -11,7 +11,7 @@
 | Gold accent | `--color-gold`, `--color-gold-bright`, `--color-gold-deep`, `--color-gold-line` (hairlines), `--color-gold-wash` |
 | Dusty rose | `--color-rose`, `--color-rose-deep`, `--color-rose-wash` |
 | Semantic | `--color-accept` (gold), `--color-cutoff` (rose), `--color-danger` |
-| Gradients / texture | `--gradient-gold`, `--gradient-velvet`, `--gradient-vignette`, `--gradient-fade-up`, `--texture-grain`, `--texture-wood` |
+| Gradients / texture | `--gradient-gold`, `--gradient-velvet`, `--gradient-vignette`, `--gradient-fade-up`, `--texture-grain`, `--texture-wood`, `--backdrop-studio` (dark mottled fill behind portraits, matches the photo backdrop) |
 | Type | `--font-display` ('Fraunces Variable', opsz axis + italic loaded), `--font-body` ('Inter Variable'); sizes `--text-xs` 15px, `--text-sm` 17px, `--text-md` 20px (body), `--text-lg` 24px, `--text-xl` 32px, `--text-2xl`, `--text-hero` (fluid); `--leading-tight/snug/body`, `--tracking-eyebrow` |
 | Space | `--space-1`..`--space-8` (4, 8, 12, 16, 24, 32, 48, 64px), `--gutter` 20px, `--content-max` 34rem |
 | Tap targets | `--tap-min` 56px, `--tap-lg` 64px |
@@ -43,10 +43,11 @@ Canvas code (share card) can use the same font family names: `'Fraunces Variable
 | `ScreenLayout` | `header`, `actions`, `children`, `centered`, `className` | Safe-area padding; `actions` is a sticky bottom bar with a fade. Every screen should use it. |
 | `ConfirmDialog` | `open`, `title`, `message`, `confirmLabel`, `cancelLabel`, `destructive`, `onConfirm`, `onCancel` | In-app modal (portal). Focuses cancel, Escape and backdrop cancel. Never use `window.confirm`. |
 | `PlayerTile` | `name`, `selected`, `onToggle`, `disabled`, `acceptLabel`, `cutoffLabel` | Vote grid tile, `aria-pressed`. Use in a 2-column grid. |
-| `PortraitViewer` | `open`, `stage`, `initialSide` 'female' / 'male', `onClose` | Fullscreen overlay. Swipe or tap toggles side, segmented control, close button, Escape / arrow keys. Uses `portraitUrl`. |
+| `PortraitViewer` | `open`, `stage`, `initialSide` 'female' / 'male', `onClose` | Fullscreen overlay. Swipe or tap toggles side, segmented control, height line, close button, Escape / arrow keys. Uses `portraitUrl`. Shows the whole 2:3 full-length figure. |
 | `Countdown` | `onDone`, `from` (3), `stepMs` (900), `finalLabel` ('Vote!') | Animated 3-2-1, then final label, then `onDone` once. |
 | `BoneBurst` | `variant` 'bone' / 'dust', `play` | Fires on mount (or when `play` turns true). Imperative versions: `fireBoneBurst()`, `fireDustBurst()`. Disabled under reduced motion. |
 | `Badge` | `children` ('18+'), `tone` gold / rose, `label` | |
+| `heightLabel(meters)` | | Formats a height as "About 1.1 m". |
 | `InstallHint` | none | One-time iOS Safari "Add to Home Screen" tip (Home screen). |
 
 ## App plumbing (`src/app`)

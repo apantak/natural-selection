@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { stages } from '../content/loader'
+import { heightLabel } from './heightLabel'
 import { PortraitViewer } from './PortraitViewer'
 
 function Harness({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -25,6 +26,16 @@ describe('PortraitViewer', () => {
   afterEach(() => {
     cleanup()
     vi.restoreAllMocks()
+  })
+
+  it('shows the height of the portrait on screen and updates it on switch', () => {
+    const { female, male } = stages[0].heightMeters
+    render(<Harness open onClose={vi.fn()} />)
+    expect(screen.getByText(`Female · ${heightLabel(female)}`)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Male' }))
+    expect(screen.getByText(`Male · ${heightLabel(male)}`)).toBeInTheDocument()
+    fireEvent.keyDown(window, { key: 'ArrowLeft' })
+    expect(screen.getByText(`Female · ${heightLabel(female)}`)).toBeInTheDocument()
   })
 
   it('closes on the system back button instead of leaving the page', () => {

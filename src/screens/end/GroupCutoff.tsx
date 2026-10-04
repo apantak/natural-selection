@@ -62,7 +62,7 @@ export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
             whileTap={{ scale: 0.97 }}
             transition={{ ...springPop, delay: 0.12 + i * 0.08 }}
           >
-            <img src={portraitUrl(stage.images[side])} alt="" width={400} height={500} decoding="async" />
+            <img src={portraitUrl(stage.images[side])} alt="" width={1024} height={1536} decoding="async" />
           </motion.button>
         ))}
       </div>

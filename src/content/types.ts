@@ -16,6 +16,10 @@ export interface Stage {
   description: string
   facts: string[]
   punchline?: string
+  heightMeters: {
+    female: number
+    male: number
+  }
   images: {
     female: string
     male: string
