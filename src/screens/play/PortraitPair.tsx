@@ -3,6 +3,7 @@ import { motion, type Variants } from 'motion/react'
 import type { Stage } from '../../content/types'
 import { portraitUrl } from '../../content/loader'
 import { figureStyle, heightLabel, type PortraitSide } from '../../components'
+import { ZoomBadge } from '../../components/PortraitViewer'
 import { fadeUp, springSoft } from '../../theme/motion'
 
 const SIDES: PortraitSide[] = ['female', 'male']
@@ -26,7 +27,7 @@ export function PortraitPair({ stage, onOpen }: { stage: Stage; onOpen: (side: P
             variants={frame}
             whileTap={{ scale: 0.96 }}
             onClick={() => onOpen(side)}
-            aria-label={`Show the ${LABEL[side].toLowerCase()} portrait fullscreen`}
+            aria-label={`Enlarge ${side} ${stage.species}`}
             aria-describedby={`${id}-${side}`}
           >
             <span className="figure-frame portraits__figure">
@@ -41,6 +42,7 @@ export function PortraitPair({ stage, onOpen }: { stage: Stage; onOpen: (side: P
                 decoding="async"
               />
             </span>
+            <ZoomBadge />
             <span className="portraits__label">{LABEL[side]}</span>
           </motion.button>
           <motion.p id={`${id}-${side}`} variants={fadeUp} className="portraits__height display">

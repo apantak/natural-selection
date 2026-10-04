@@ -41,7 +41,7 @@ export function StageIntro() {
       <motion.div className="intro__body" variants={stagger(0.3, 0.08)} initial="hidden" animate="show">
         <PortraitPair stage={stage} onOpen={setViewer} />
         <motion.p variants={fadeUp} className="faint small center intro__hint">
-          Tap a portrait to show the room
+          Tap a photo to zoom in
         </motion.p>
         <motion.p variants={fadeUp} className="lede intro__description">
           {stage.description}

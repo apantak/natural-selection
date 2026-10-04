@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FIGURE_FLOOR, FIGURE_HEAD, REFERENCE_HEIGHT_M, figureBox, figureScale, figureStyle, heightMarkTop } from './figureScale'
+import { FIGURE_FLOOR, REFERENCE_HEIGHT_M, figureBox, figureScale, figureStyle } from './figureScale'
 
 describe('figureScale', () => {
   it('scales linearly against the reference height', () => {
@@ -36,17 +36,5 @@ describe('figureBox', () => {
 describe('figureStyle', () => {
   it('turns the box into percentages', () => {
     expect(figureStyle(REFERENCE_HEIGHT_M / 2)).toEqual({ left: '25%', top: '47.75%', width: '50%', height: '50%' })
-  })
-})
-
-describe('heightMarkTop', () => {
-  it('lines up with the head of a figure of that height', () => {
-    const box = figureBox(1.5)
-    expect(heightMarkTop(1.5)).toBeCloseTo(box.top + FIGURE_HEAD * box.height)
-  })
-
-  it('puts taller marks higher up', () => {
-    expect(heightMarkTop(1.5)).toBeLessThan(heightMarkTop(1))
-    expect(heightMarkTop(0)).toBeCloseTo(FIGURE_FLOOR)
   })
 })

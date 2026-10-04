@@ -23,8 +23,8 @@ describe('StageIntro', () => {
   it('shows each reconstruction height under its portrait', () => {
     const stage = stages[3]
     renderScreen(<StageIntro />, { screen: 'intro', stageIndex: 3 })
-    const female = screen.getByRole('button', { name: 'Show the female portrait fullscreen' })
-    const male = screen.getByRole('button', { name: 'Show the male portrait fullscreen' })
+    const female = screen.getByRole('button', { name: `Enlarge female ${stage.species}` })
+    const male = screen.getByRole('button', { name: `Enlarge male ${stage.species}` })
     expect(female).toHaveAccessibleDescription(heightLabel(stage.heightMeters.female))
     expect(male).toHaveAccessibleDescription(heightLabel(stage.heightMeters.male))
     expect(screen.getByText(heightLabel(stage.heightMeters.female))).toBeInTheDocument()
@@ -33,7 +33,7 @@ describe('StageIntro', () => {
 
   it('opens the fullscreen portrait viewer', () => {
     renderScreen(<StageIntro />, { screen: 'intro' })
-    fireEvent.click(screen.getByRole('button', { name: 'Show the male portrait fullscreen' }))
+    fireEvent.click(screen.getByRole('button', { name: `Enlarge male ${stages[0].species}` }))
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Male' })).toHaveAttribute('aria-pressed', 'true')
   })

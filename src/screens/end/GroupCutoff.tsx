@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { figureStyle, PortraitViewer, type PortraitSide } from '../../components'
+import { ZoomBadge } from '../../components/PortraitViewer'
 import { portraitUrl } from '../../content/loader'
 import type { Stage } from '../../content/types'
 import { NO_GROUP_CUTOFF } from '../../share/summary'
@@ -12,9 +13,9 @@ interface GroupCutoffProps {
   stageCount: number
 }
 
-const SIDES: { side: PortraitSide; label: string; tilt: number; from: number }[] = [
-  { side: 'female', label: 'Female', tilt: -3, from: -40 },
-  { side: 'male', label: 'Male', tilt: 3, from: 40 },
+const SIDES: { side: PortraitSide; tilt: number; from: number }[] = [
+  { side: 'female', tilt: -3, from: -40 },
+  { side: 'male', tilt: 3, from: 40 },
 ]
 
 export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
@@ -50,12 +51,12 @@ export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
     <section className="end-group" aria-labelledby="end-group-title">
       <span className="eyebrow">The group drew the line at</span>
       <div className="end-group__portraits">
-        {SIDES.map(({ side, label, tilt, from }, i) => (
+        {SIDES.map(({ side, tilt, from }, i) => (
           <motion.button
             key={side}
             type="button"
             className="end-group__frame"
-            aria-label={`View ${label.toLowerCase()} ${stage.species} portrait`}
+            aria-label={`Enlarge ${side} ${stage.species}`}
             onClick={() => setViewer(side)}
             initial={{ opacity: 0, x: from, y: 24, rotate: tilt * 4, scale: 0.86 }}
             animate={{ opacity: 1, x: 0, y: 0, rotate: tilt, scale: 1 }}
@@ -74,6 +75,7 @@ export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
                 decoding="async"
               />
             </span>
+            <ZoomBadge />
           </motion.button>
         ))}
       </div>

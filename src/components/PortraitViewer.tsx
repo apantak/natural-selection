@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AnimatePresence, motion, type PanInfo } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import type { Stage } from '../content/types'
 import { portraitUrl } from '../content/loader'
 import { springUi } from '../theme/motion'
-import { figureStyle, heightMarkTop } from './figureScale'
 import { heightLabel } from './heightLabel'
 import { useOverlay } from './useOverlay'
+import { MAX_SCALE, useZoomPan } from './useZoomPan'
 import './PortraitViewer.css'
 
 export type PortraitSide = 'female' | 'male'
@@ -20,9 +20,7 @@ export interface PortraitViewerProps {
 
 const SIDES: PortraitSide[] = ['female', 'male']
 const LABEL: Record<PortraitSide, string> = { female: 'Female', male: 'Male' }
-const SWIPE_DISTANCE = 60
-const SWIPE_VELOCITY = 400
-const MARKS = [1, 1.5]
+const ASPECT = 1024 / 1536
 
 export function PortraitViewer({ open, stage, initialSide = 'female', onClose }: PortraitViewerProps) {
   return createPortal(
@@ -33,24 +31,55 @@ export function PortraitViewer({ open, stage, initialSide = 'female', onClose }:
   )
 }
 
+export function ZoomBadge() {
+  return (
+    <span className="zoom-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <circle cx="10.5" cy="10.5" r="6.5" />
+        <path d="M15.5 15.5 20 20M10.5 8v5M8 10.5h5" />
+      </svg>
+    </span>
+  )
+}
+
 function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 'open'> & { initialSide: PortraitSide }) {
   const [side, setSide] = useState<PortraitSide>(initialSide)
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
-  const toggle = () => setSide((current) => (current === 'female' ? 'male' : 'female'))
+  const surfaceRef = useRef<HTMLDivElement>(null)
+  const fitRef = useRef<HTMLDivElement>(null)
+  const frameRef = useRef<HTMLDivElement>(null)
   useOverlay(panelRef, closeRef, onClose)
+
+  const switchSide = useCallback(() => setSide((current) => (current === 'female' ? 'male' : 'female')), [])
+  const { view, phase, zoomIn, zoomOut, reset } = useZoomPan(surfaceRef, fitRef, frameRef, { aspect: ASPECT, onSwipe: switchSide })
+  const zoomed = view.scale > 1
+  const choose = (value: PortraitSide) => {
+    setSide(value)
+    reset()
+  }
+
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!panel) return
+    const block = (event: WheelEvent) => event.preventDefault()
+    panel.addEventListener('wheel', block, { passive: false })
+    return () => panel.removeEventListener('wheel', block)
+  }, [])
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') toggle()
+      if (event.ctrlKey || event.metaKey || event.altKey) return
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        switchSide()
+        reset()
+      } else if (event.key === '+' || event.key === '=') zoomIn()
+      else if (event.key === '-' || event.key === '_') zoomOut()
+      else if (event.key === '0') reset()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [])
-
-  const onDragEnd = (_: unknown, info: PanInfo) => {
-    if (Math.abs(info.offset.x) > SWIPE_DISTANCE || Math.abs(info.velocity.x) > SWIPE_VELOCITY) toggle()
-  }
+  }, [switchSide, zoomIn, zoomOut, reset])
 
   return (
     <motion.div
@@ -64,47 +93,61 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <button ref={closeRef} type="button" className="viewer__close" aria-label="Close portraits" onClick={onClose}>
-        <span aria-hidden="true">×</span>
-      </button>
-
-      <motion.div
-        className="viewer__stage"
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.35}
-        onDragEnd={onDragEnd}
-        onTap={toggle}
-        initial={{ scale: 0.94, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        transition={springUi}
-      >
-        <div className="figure-frame viewer__frame">
-          <AnimatePresence initial={false}>
-            <motion.img
-              key={side}
-              className="figure-img"
-              style={figureStyle(stage.heightMeters[side])}
-              src={portraitUrl(stage.images[side])}
-              alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
-              width={1024}
-              height={1536}
-              draggable={false}
-              initial={{ opacity: 0, scale: 1.03 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.22 }}
-            />
-          </AnimatePresence>
-          <div className="viewer__marks" aria-hidden="true">
-            {MARKS.map((meters) => (
-              <span key={meters} className="viewer__mark" style={{ top: `${heightMarkTop(meters) * 100}%` }}>
-                {meters} m
-              </span>
-            ))}
+      <div ref={surfaceRef} className="viewer__surface" data-zoomed={zoomed}>
+        <motion.div
+          ref={fitRef}
+          className="viewer__fit"
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={springUi}
+        >
+          <div
+            ref={frameRef}
+            className="figure-frame viewer__frame"
+            data-phase={phase}
+            style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})` }}
+          >
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={side}
+                className="figure-img viewer__img"
+                src={portraitUrl(stage.images[side])}
+                alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
+                width={1024}
+                height={1536}
+                draggable={false}
+                initial={{ opacity: 0, scale: 1.03 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.22 }}
+              />
+            </AnimatePresence>
           </div>
+        </motion.div>
+      </div>
+
+      <div className="viewer__bar">
+        <div className="viewer__zoom" role="group" aria-label="Zoom">
+          <button type="button" className="viewer__zoom-btn" aria-label="Zoom out" aria-disabled={!zoomed} onClick={zoomOut}>
+            <span aria-hidden="true">−</span>
+          </button>
+          <button type="button" className="viewer__zoom-btn viewer__zoom-fit" aria-label="Fit to screen" aria-disabled={!zoomed} onClick={reset}>
+            Fit
+          </button>
+          <button
+            type="button"
+            className="viewer__zoom-btn"
+            aria-label="Zoom in"
+            aria-disabled={view.scale >= MAX_SCALE}
+            onClick={zoomIn}
+          >
+            <span aria-hidden="true">+</span>
+          </button>
         </div>
-      </motion.div>
+        <button ref={closeRef} type="button" className="viewer__close" aria-label="Close portraits" onClick={onClose}>
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
 
       <div className="viewer__footer">
         <div className="viewer__caption">
@@ -120,17 +163,17 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
               type="button"
               className="viewer__toggle-btn"
               aria-pressed={side === value}
-              onClick={() => setSide(value)}
+              onClick={() => choose(value)}
             >
               {side === value && (
-                <motion.span layoutId="viewer-toggle-pill" className="viewer__toggle-pill" transition={springUi} />
+                <motion.span layoutId="viewer-toggle-pill" layoutDependency={side} className="viewer__toggle-pill" transition={springUi} />
               )}
               <span className="viewer__toggle-label">{LABEL[value]}</span>
             </button>
           ))}
         </div>
         <p className="viewer__hint faint small">
-          <span>Swipe or tap to switch ·</span> <span>AI-generated reconstruction</span>
+          <span>{zoomed ? 'Drag to look around ·' : 'Pinch or double-tap to zoom ·'}</span> <span>AI-generated reconstruction</span>
         </p>
       </div>
     </motion.div>

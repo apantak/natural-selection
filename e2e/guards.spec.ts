@@ -46,7 +46,7 @@ test('back closes the portrait viewer before asking to quit', async ({ page }) =
   await setupPlayers(page, ['Ana', 'Ben', 'Cleo'])
   await startShow(page)
   await settled(page)
-  await page.getByRole('button', { name: 'Show the female portrait fullscreen' }).click()
+  await page.getByRole('button', { name: /^Enlarge female / }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
 
   await page.goBack()

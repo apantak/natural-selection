@@ -12,7 +12,7 @@ import { VerdictColumns } from './play/VerdictColumns'
 import './play/Ceremony.css'
 
 const ACTIONS_DELAY = 0.5
-export const ACTIONS_LOCK_MS = (ACTIONS_DELAY + 0.2) * 1000
+export const ACTIONS_LOCK_MS = (ACTIONS_DELAY + 0.5) * 1000
 
 export function Ceremony() {
   const { state, stage, outcome, dispatch } = useGame()

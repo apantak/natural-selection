@@ -49,7 +49,7 @@ Canvas code (share card) can use the same font family names: `'Fraunces Variable
 | `BoneBurst` | `variant` 'bone' / 'dust', `play` | Fires on mount (or when `play` turns true). Imperative versions: `fireBoneBurst()`, `fireDustBurst()`. Disabled under reduced motion. |
 | `Badge` | `children` ('18+'), `tone` gold / rose, `label` | |
 | `heightLabel(meters)` | | Formats a height as "About 1.1 m". |
-| `figureStyle(meters)`, `heightMarkTop(meters)` | | From `figureScale.ts`. Scales a portrait against a 1.85 m reference with the feet on a fixed floor line, so short species look short. The share card uses `figureBox` from the same file. |
+| `figureStyle(meters)` | | From `figureScale.ts`. Scales a portrait against a 1.85 m reference with the feet on a fixed floor line, so short species look short. The share card uses `figureBox` from the same file. |
 | `InstallHint` | none | One-time iOS Safari "Add to Home Screen" tip (Home screen). |
 
 ## App plumbing (`src/app`)

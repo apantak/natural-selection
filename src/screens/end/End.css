@@ -36,6 +36,7 @@
 }
 
 .end-group__frame {
+  position: relative;
   display: block;
   padding: 4px;
   border: 0;

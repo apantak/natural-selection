@@ -44,6 +44,25 @@ describe('PortraitViewer', () => {
     expect(screen.getByText(`Female · ${heightLabel(female)}`)).toBeInTheDocument()
   })
 
+  it('zooms with the buttons and keys and resets when switching portrait', () => {
+    render(<Harness open onClose={vi.fn()} />)
+    const scale = () => Number(/scale\(([\d.]+)\)/.exec(screen.getAllByRole('img')[0].parentElement!.style.transform)![1])
+    const zoomOut = screen.getByRole('button', { name: 'Zoom out' })
+    expect(zoomOut).toHaveAttribute('aria-disabled', 'true')
+    fireEvent.click(screen.getByRole('button', { name: 'Zoom in' }))
+    expect(scale()).toBeCloseTo(1.6)
+    expect(zoomOut).toHaveAttribute('aria-disabled', 'false')
+    fireEvent.keyDown(window, { key: '+' })
+    expect(scale()).toBeCloseTo(2.56)
+    fireEvent.keyDown(window, { key: '-' })
+    expect(scale()).toBeCloseTo(1.6)
+    fireEvent.click(screen.getByRole('button', { name: 'Male' }))
+    expect(scale()).toBeCloseTo(1)
+    fireEvent.keyDown(window, { key: '+' })
+    fireEvent.click(screen.getByRole('button', { name: 'Fit to screen' }))
+    expect(scale()).toBeCloseTo(1)
+  })
+
   it('closes on the system back button instead of leaving the page', () => {
     const onClose = vi.fn()
     render(<Harness open onClose={onClose} />)

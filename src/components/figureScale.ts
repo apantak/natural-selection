@@ -22,8 +22,3 @@ export function figureStyle(meters: number): CSSProperties {
   const box = figureBox(meters)
   return { left: pct(box.left), top: pct(box.top), width: pct(box.width), height: pct(box.height) }
 }
-
-/** Distance from the top of a frame to a standing height of `meters`, as a fraction of the frame height. */
-export function heightMarkTop(meters: number): number {
-  return FIGURE_FLOOR - (FIGURE_FLOOR - FIGURE_HEAD) * figureScale(meters)
-}
