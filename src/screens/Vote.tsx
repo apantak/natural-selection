@@ -3,11 +3,11 @@ import { AnimatePresence, type Variants } from 'motion/react'
 import { useGame } from '../app/useGame'
 import { PresenceFrame } from '../components'
 import type { PlayerId, StageVotes } from '../game/types'
-import { VoteCountdown, VotePrompt } from './play/VotePrompt'
+import { VoteCountdown } from './play/VoteCountdown'
 import { VoteTally } from './play/VoteTally'
 import './play/Vote.css'
 
-type Step = 'prompt' | 'countdown' | 'tally'
+type Step = 'tally' | 'countdown'
 
 const stepVariants: Variants = {
   initial: { opacity: 0, scale: 0.97 },
@@ -17,7 +17,7 @@ const stepVariants: Variants = {
 
 export function Vote() {
   const { state, stage, dispatch } = useGame()
-  const [step, setStep] = useState<Step>('prompt')
+  const [step, setStep] = useState<Step>('tally')
   const [accepted, setAccepted] = useState<ReadonlySet<PlayerId>>(() => new Set())
   const eyebrow = `Stage ${state.stageIndex + 1} · ${stage.species}`
 
@@ -38,12 +38,16 @@ export function Vote() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <PresenceFrame key={step} variants={stepVariants} initial="initial" animate="enter" exit="exit">
-        {step === 'prompt' && (
-          <VotePrompt eyebrow={eyebrow} onCount={() => setStep('countdown')} onSkip={() => setStep('tally')} />
-        )}
         {step === 'countdown' && <VoteCountdown eyebrow={eyebrow} onDone={() => setStep('tally')} />}
         {step === 'tally' && (
-          <VoteTally eyebrow={eyebrow} players={state.players} accepted={accepted} onToggle={toggle} onSubmit={submit} />
+          <VoteTally
+            eyebrow={eyebrow}
+            players={state.players}
+            accepted={accepted}
+            onToggle={toggle}
+            onSubmit={submit}
+            onBlindVote={() => setStep('countdown')}
+          />
         )}
       </PresenceFrame>
     </AnimatePresence>

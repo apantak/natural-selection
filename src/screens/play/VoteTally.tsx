@@ -9,9 +9,10 @@ interface TallyProps {
   accepted: ReadonlySet<PlayerId>
   onToggle: (id: PlayerId) => void
   onSubmit: () => void
+  onBlindVote: () => void
 }
 
-export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit }: TallyProps) {
+export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit, onBlindVote }: TallyProps) {
   const count = players.filter((p) => accepted.has(p.id)).length
 
   return (
@@ -20,7 +21,7 @@ export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit }: Ta
         <>
           <span className="eyebrow">{eyebrow}</span>
           <h1 className="title">Who accepted the bone?</h1>
-          <p className="muted">Tap everyone showing a thumbs up. Everyone else is a cutoff.</p>
+          <p className="muted">Go round the room and argue it out. Tap everyone who accepts. The rest are cutoffs.</p>
         </>
       }
       actions={
@@ -58,6 +59,9 @@ export function VoteTally({ eyebrow, players, accepted, onToggle, onSubmit }: Ta
           </div>
           <Button block onClick={onSubmit}>
             Lock in votes
+          </Button>
+          <Button variant="ghost" size="md" onClick={onBlindVote}>
+            Blind vote on three
           </Button>
         </>
       }

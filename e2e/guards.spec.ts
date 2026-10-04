@@ -18,7 +18,6 @@ async function reachCeremony(page: Page) {
   await setupPlayers(page, ['Ana', 'Ben', 'Cleo'])
   await startShow(page)
   await page.getByRole('button', { name: 'Collect the votes' }).click()
-  await page.getByRole('button', { name: 'Skip countdown' }).click()
   for (const name of ['Ana', 'Ben']) await page.getByRole('button', { name: new RegExp(`^${name}`) }).click()
   await page.getByRole('button', { name: 'Lock in votes' }).click()
   await expect(page.getByRole('heading', { name: 'The Bone Ceremony' })).toBeVisible()

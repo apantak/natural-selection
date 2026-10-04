@@ -19,7 +19,6 @@ export async function startShow(page: Page) {
 
 export async function playStage(page: Page, accepters: string[]) {
   await page.getByRole('button', { name: 'Collect the votes' }).click()
-  await page.getByRole('button', { name: 'Skip countdown' }).click()
   for (const name of accepters) {
     const tile = page.getByRole('button', { name: new RegExp(`^${name}`) })
     await tile.click()

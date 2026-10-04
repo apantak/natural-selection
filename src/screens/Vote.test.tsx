@@ -10,7 +10,6 @@ function tile(name: string) {
 
 async function openTally() {
   renderScreen(<Vote />, { screen: 'vote' })
-  fireEvent.click(screen.getByRole('button', { name: 'Skip countdown' }))
   await screen.findByRole('heading', { name: 'Who accepted the bone?' })
 }
 
@@ -18,16 +17,17 @@ describe('Vote', () => {
   beforeEach(() => sessionStorage.clear())
   afterEach(cleanup)
 
-  it('opens with the on-three prompt', () => {
+  it('opens straight on the player tiles', () => {
     renderScreen(<Vote />, { screen: 'vote' })
-    expect(screen.getByRole('heading', { name: 'On three' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Count us in' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Who accepted the bone?' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Blind vote on three' })).toBeInTheDocument()
   })
 
-  it('runs the 3-2-1 countdown when counted in', async () => {
+  it('runs the 3-2-1 countdown for a blind vote and returns to the tiles', async () => {
     renderScreen(<Vote />, { screen: 'vote' })
-    fireEvent.click(screen.getByRole('button', { name: 'Count us in' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Blind vote on three' }))
     expect(await screen.findByRole('timer')).toHaveTextContent('3')
+    expect(await screen.findByRole('heading', { name: 'Who accepted the bone?' }, { timeout: 6000 })).toBeInTheDocument()
   })
 
   it('starts everyone on cutoff and toggles accept with a live tally', async () => {

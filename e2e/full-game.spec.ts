@@ -48,13 +48,11 @@ test('a reload mid-game keeps the game', async ({ page }) => {
   await page.getByRole('button', { name: 'Hear them out' }).click()
   await page.getByRole('button', { name: 'Continue to stage 2' }).click()
   await page.getByRole('button', { name: 'Collect the votes' }).click()
-  await page.getByRole('button', { name: 'Skip countdown' }).click()
   await expect(page.getByRole('heading', { name: 'Who accepted the bone?' })).toBeVisible()
 
   await page.reload()
 
   await expect(page.getByText('Stage 2 · Neanderthal')).toBeVisible()
-  await page.getByRole('button', { name: 'Skip countdown' }).click()
   for (const name of ['Ana', 'Ben', 'Cleo']) await expect(page.getByRole('button', { name: new RegExp(`^${name}`) })).toBeVisible()
   const saved = await page.evaluate(() => Object.values(sessionStorage).map((value) => JSON.parse(value)))
   expect(saved).toHaveLength(1)
