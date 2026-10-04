@@ -103,7 +103,7 @@ CLOTHING = {
     ),
 }
 
-REF_LABELS = ("The first reference image", "The second reference image")
+REF_LABELS = ("The first reference image", "The second reference image", "The third reference image")
 
 REF_STYLE = (
     "{label} shows a different individual of a different species. Use it only as the reference for "
@@ -115,7 +115,17 @@ REF_SAME_SPECIES = (
     "{label} shows another individual of the same species as the new portrait.{style} Use it as the "
     "reference for species anatomy: give the new individual the same skull, forehead, brow ridge, midface, "
     "nose, jaw and chin shapes, the same limb proportions and the same amount of body hair, adapted to a "
-    "{sex}, as a clearly different person. Do not copy its skin colour, hair colour, clothing or pose. "
+    "{sex}, as a clearly different person. Do not copy its skin colour, skin texture, hair colour, facial hair, "
+    "clothing or pose. "
+)
+
+REF_FACE = (
+    "{label} shows an individual of a related extinct species, {donor}.{style} Use it as the reference "
+    "for the shape of the face and head only: take its low sloping forehead, long low skull, brow ridge, low flat "
+    "nose, forward-pushed jaws and chinless jaw line, so the new face is at least as archaic as this one "
+    "and reads as an extinct species, never as a living person. Keep the new individual's own build, "
+    "height, limb proportions, skin colour, hair and body hair exactly as described below. Do not copy its "
+    "skin colour, skin texture, facial hair, body hair, clothing or pose. "
 )
 
 REF_STYLE_ALSO = (
@@ -169,14 +179,14 @@ EXTRA = {
     "denisovan": ARCHAIC_LEAD + (
         "A huge, long, low skull with a flat forehead that slopes straight back from the brow; a massive, "
         "thick bar of brow ridge jutting far out over large square eye sockets, casting the eyes into shadow; "
-        "a very broad, tall, flat face with wide cheekbones; a very large, wide nose; a long upper lip over a "
+        "a very broad, tall, flat face with wide cheekbones; a very wide, low, flat nose; a long upper lip over a "
         "wide mouth; a huge, deep jaw pushed forward with very large teeth and a receding chin with no chin "
         "point. "
     ),
     "homo-heidelbergensis": ARCHAIC_LEAD + (
         "A long, low skull with a low forehead sloping straight back from the brow; a very large, thick, "
         "double-arched brow ridge forming a heavy bony bar jutting out over deep-set eyes; a long, broad face "
-        "with the midface pushed forward around a very large, wide nose; a long upper lip; a massive, deep "
+        "with the midface pushed forward around a very wide, low, flat nose; a long upper lip; a massive, deep "
         "jaw with a receding chin and no chin point. "
     ),
     "homo-erectus": ARCHAIC_LEAD + (
@@ -206,6 +216,65 @@ ARCHAIC_TAIL = (
     "the face must not look like any living person. "
 )
 
+HEAD_HAIR = {
+    "male": "Head hair cropped very short, close to the scalp",
+    "female": "Head hair cropped very short, close to the scalp like the male's, with no knot, bun or ponytail",
+}
+
+YOUNG_FEMALE = "About 30, smooth skin, no wrinkles, no facial hair. "
+
+ARCHAIC_NEUTRAL = (
+    "A neutral face with the mouth closed, no smile. A smooth forehead with no horizontal wrinkles and no "
+    "crow's feet. "
+)
+
+BARE_FEMALE_FACE = (
+    "Completely hairless face below the brow: no stubble, no whiskers, no bristles on chin, jaw, cheeks or "
+    "upper lip, and no beard shadow: jaw, cheeks and upper lip are bare skin the same colour as the forehead. "
+    "Smooth, natural, even skin texture, no cracked or crazed pattern. Body "
+    "hair stops at the neck. "
+)
+
+ARCHAIC_HAIR = (
+    "Short, thick, dark, untidy hair swept straight back off the forehead and temples, not a buzz cut or any "
+    "modern hairstyle"
+)
+
+YOUNG_SKIN = (
+    "All bare skin on the face, neck, shoulders, chest, arms and legs is soft, smooth and even like a "
+    "healthy young adult's, matte rather than shiny, with fine natural pores only and no pattern of lines "
+    "on it. "
+)
+
+ARCHAIC_SHADE = (
+    "The softbox key light sits high above the face, so the jutting brow bar throws both eye sockets into "
+    "solid shadow and only a glint of each eye shows. The nose is short, broad and flat, low between the "
+    "cheeks, nostrils facing forward, no rounded fleshy tip; in profile it barely sticks out past the upper "
+    "lip, and the mouth sticks out further than the nose. "
+)
+
+
+def smooth_skin(areas):
+    return (
+        f"Skin on the {areas} is smooth, even and supple like a young person's, with fine pores only: no "
+        "crackle, crazing, scales, cell pattern, polygon lines or dry-clay texture, and no grid of creases. "
+        "Body hair is fine, short and lies flat on the skin, with no fuzzy halo around the outline. "
+    )
+
+
+def archaic_head(fossil, sex, turn="about 45 degrees", hair=None):
+    return (
+        f"Head check, most important: the head looks like a museum reconstruction built on the {fossil}, an "
+        f"extinct species, not any living person. {hair or HEAD_HAIR[sex]}, so the low sloping forehead, the long low "
+        "skull and the whole brow ridge are fully visible, with no hair on the forehead or temples. The whole "
+        f"head is turned {turn} to the side, the face in three-quarter profile with the nose pointing "
+        "past the camera, not facing it, so the forward projection of the brow, midface and jaws shows in "
+        "silhouette against the backdrop. The brow ridge juts out far enough to "
+        "cast a band of shadow over the eyes. The nose is low and flat with no tall bridge, and the area "
+        "between the eyes is flat. No chin: the jaw line slopes straight back from the lower lip. "
+    )
+
+
 EXTRA_SEX = {
     ("denisovan", "male"): (
         "Head turned well into three-quarter view, almost profile, so the forward projection of the face is "
@@ -216,35 +285,6 @@ EXTRA_SEX = {
         "mouth and almost no bridge. The upper and lower jaws push forward in front of the eyes. A long, convex "
         "upper lip bulges over very large teeth. The beard is trimmed short so the receding chinless jaw line "
         "shows. "
-    ) + ARCHAIC_TAIL,
-    ("denisovan", "female"): (
-        "Hair tied back tightly behind the head so the whole low, flat, sloping forehead and the long low skull "
-        "show. Head turned well into three-quarter view, almost profile. A thick continuous bony brow shelf "
-        "sticks out past the eye sockets like a roof, with a groove above it. A very broad, flat face with wide "
-        "flat cheekbones. A very wide, flat nose with almost no bridge. The jaws push forward in front of the "
-        "eyes, with a long convex upper lip over very large teeth. The jaw line slopes straight back from the "
-        "lower lip with no chin. About 30 years old, smooth skin, no deep wrinkles, no facial hair. The same "
-        "massive skull as the male, only slightly smaller. "
-    ) + ARCHAIC_TAIL,
-    ("homo-heidelbergensis", "male"): (
-        "Head turned well into three-quarter view, almost profile. Short hair swept back so the low forehead "
-        "shows, sloping straight back. A huge double-arched brow ridge, two thick bony arches each bulging out "
-        "over one eye and joined over the nose, sticking out past the eyes like the Kabwe skull. Deep hollow "
-        "shadows under it. The whole midface pushes forward so the nose sits well in front of the cheeks. A very "
-        "large, broad nose with flaring nostrils and a low bridge. A long upper lip and a massive deep jaw. The "
-        "beard is cut short so the chinless jaw slopes back visibly. Make the face clearly more archaic than the "
-        "Neanderthal male. The brow ridge is the first thing anyone notices: so thick and far forward that the "
-        "eyes sit in black shadow beneath it and only a glint of each eye shows. It must not look like the face "
-        "in the reference image. "
-    ) + ARCHAIC_TAIL,
-    ("homo-heidelbergensis", "female"): (
-        "No facial hair at all: smooth, hairless chin, jaw and upper lip. About 30 years old, no deep wrinkles. "
-        "Hair tied back behind the head so the low sloping forehead shows. Head turned almost to profile. A huge "
-        "double-arched bony brow ridge juts out past the eyes with deep shadow under it. The midface pushes "
-        "forward so the broad, low-bridged nose sits well in front of the cheeks. A long upper lip, a massive "
-        "deep jaw and no chin, the jaw line sloping straight back. The same heavy skull as the male, only "
-        "slightly smaller. The brow ridge is the first thing anyone notices: so thick and far forward that the "
-        "eyes sit in shadow beneath it. Young, firm, smooth skin with no sagging. "
     ) + ARCHAIC_TAIL,
     ("homo-erectus", "male"): (
         "The head looks like a Turkana Boy / Sangiran 17 museum reconstruction, not a person. A very long, "
@@ -262,42 +302,68 @@ EXTRA_SEX = {
         "out in a short muzzle. A long upper lip, and no chin: the jaw slopes back. Head turned to "
         "three-quarter view. The same skull as the male of her species, only slightly smaller. "
     ),
-    ("homo-floresiensis", "male"): (
-        "Head turned well into three-quarter view, almost profile. Very short cropped hair so the tiny, low, "
-        "grapefruit-sized braincase and the sharply sloping forehead are obvious, the skull small for the face. "
-        "A rounded bony brow ridge juts out over the eyes. The jaws and teeth push forward into a short muzzle "
-        "well in front of a very flat, broad nose with no bridge. A long upper lip, and the jaw slopes back with "
-        "no chin. Short sparse beard. About 30, not elderly. Shoulders rolled forward, arms long with "
-        "fingertips near the knees, legs visibly short, and very long flat feet, each about as long as the "
-        "shin. "
-    ) + ARCHAIC_TAIL,
-    ("homo-floresiensis", "female"): (
-        "No facial hair: smooth hairless chin and upper lip. About 30, few wrinkles. Hair tied back tight so "
-        "the tiny low braincase and sharply sloping forehead show. Head turned almost to profile. A rounded "
-        "bony brow ridge juts out. The jaws push forward into a short muzzle in front of a very flat, "
-        "bridgeless, broad nose. A long upper lip and no chin. Shoulders rolled forward, fingertips near the "
-        "knees, visibly short legs, very long flat feet. The same skull and body as the male, slightly "
-        "smaller. "
-    ) + ARCHAIC_TAIL,
-    ("homo-habilis", "male"): (
-        "Very short cropped hair so the small rounded braincase, clearly smaller than a modern head relative "
-        "to the face, and the low forehead show. A flat nose with no bridge at all, nostrils facing forward. "
-        "The jaws push forward into a short muzzle in front of the nose. Proportions check: legs short, no "
-        "longer than the torso; arms long so the fingertips hang level with the knees. A light covering of "
-        "short dark hair over chest, back, arms and legs. Head in three-quarter view. The face is closer to an "
-        "australopith's than to a human's: the area between the eyes is flat and wide with no raised ridge "
-        "running down to the nose, and in three-quarter view the mouth and jaws stick out further than the "
-        "nose. "
-    ) + ARCHAIC_TAIL,
-    ("homo-habilis", "female"): (
-        "Hair short or tied back tight so the small rounded braincase and low sloping forehead show. Head in "
-        "three-quarter view. The jaws push well forward into a short muzzle in front of a flat, bridgeless "
-        "nose with forward-facing nostrils. A long upper lip and no chin. Legs short, no longer than the "
-        "torso; arms long with fingertips level with the knees. A visible light coat of short dark hair on "
-        "arms, legs, shoulders and back. As archaic as the male: same skull, muzzle and nose, only slightly "
-        "smaller. The face is closer to an australopith's than to a human's: the area between the eyes is flat "
-        "and wide with no raised ridge running down to the nose. No facial hair, young smooth skin. "
-    ) + ARCHAIC_TAIL,
+    ("denisovan", "female"): archaic_head("Harbin skull", "female", hair=ARCHAIC_HAIR) + (
+        "A woman of about 30, smaller and finer-boned than the Denisovan male, clearly female in face shape, "
+        "and younger than the male reference. Completely hairless face: jaw, chin, cheeks and upper lip are "
+        "bare skin the same tone as the forehead, no stubble or shadow; no forehead lines, eye bags or "
+        "nasolabial folds. Museum reconstruction from the Harbin skull: a very wide face with a long low skull; "
+        "a thick, straight brow bar with both eyes deep in its shadow; the forehead slopes straight back from "
+        "the brow at 45 degrees; the nose root is flat and sunk level with the inner eye corners, no bridge, "
+        "very wide flat nostrils; the upper jaw and thin lips push forward past the nose base; very large "
+        "molars widen the lower face; no chin bump. "
+    ) + ARCHAIC_SHADE + ARCHAIC_NEUTRAL + YOUNG_SKIN + ARCHAIC_TAIL,
+    ("homo-heidelbergensis", "male"): archaic_head(
+        "Kabwe 1 skull", "male", hair=ARCHAIC_HAIR + ", and a short trimmed dark beard with no grey",
+    ) + (
+        "A museum bust of the Kabwe 1 skull, not a living man: a thick bony brow bar sticking out 2 cm past "
+        "the eyes, both eye sockets in solid shadow with only a glint of each eye; behind the brow the forehead "
+        "runs straight back at 45 degrees with no vertical part; the nose root sits sunk level with the inner "
+        "eye corners, no raised bridge, nostrils wide and flat with no rounded tip; the upper jaw and lips "
+        "bulge forward a full finger-width past the nose base, like a Neanderthal's midface but longer. About "
+        "35, no crow's feet, no forehead lines. "
+    ) + ARCHAIC_SHADE + ARCHAIC_NEUTRAL + YOUNG_SKIN + ARCHAIC_TAIL,
+    ("homo-heidelbergensis", "female"): archaic_head("Kabwe 1 skull", "female", hair=ARCHAIC_HAIR) + (
+        "Clearly a woman of about 30, softer and smaller than the male, with a narrower face and smaller jaw, "
+        "and younger than the male reference. Completely hairless face: the jaw, chin, cheeks and upper lip "
+        "are bare smooth skin the same colour as her forehead, no stubble or shadow; no forehead lines, no "
+        "crow's feet, no nasolabial folds. Archaic museum reconstruction of a female Kabwe/Petralona skull: a "
+        "thick brow bar that puts both eyes in shadow, forehead ramping back at 45 degrees, nose root sunk flat "
+        "between the eyes with no raised bridge, the mouth and upper jaw bulging forward past the nose, no "
+        "chin. The hide top is thick, stiff leather-backed hide lying flat over the chest with no outline of "
+        "the body showing through. "
+    ) + ARCHAIC_SHADE + ARCHAIC_NEUTRAL + YOUNG_SKIN + ARCHAIC_TAIL,
+    ("homo-floresiensis", "male"): archaic_head("LB1 skull from Liang Bua", "male") + (
+        "A tiny, low, grapefruit-sized braincase, small for the face. A rounded bony brow ridge. The jaws "
+        "and teeth push forward into a short muzzle well in front of the nose, like an australopith's. A long "
+        "upper lip. Short sparse beard trimmed close. About 30, with only light lines around the eyes. "
+        "Shoulders rolled forward, arms long with fingertips near the knees, legs visibly short, and very long "
+        "flat feet. "
+    ) + smooth_skin("chest, belly, arms and legs") + ARCHAIC_TAIL,
+    ("homo-floresiensis", "female"): archaic_head("LB1 skull from Liang Bua", "female") + (
+        "A tiny, low, grapefruit-sized braincase, small for the face. A rounded bony brow ridge. The jaws "
+        "and teeth push forward into a short muzzle well in front of the nose, like an australopith's. A long "
+        "upper lip. Shoulders rolled forward, arms long with fingertips near the knees, legs visibly short, "
+        "and very long flat feet. The same skull and body as the male, slightly smaller. Keep this face shape "
+        "and skull exactly. "
+    ) + BARE_FEMALE_FACE + smooth_skin("shoulders, arms, neck and legs") + YOUNG_FEMALE + ARCHAIC_TAIL,
+    ("homo-habilis", "male"): archaic_head("KNM-ER 1813 skull", "male") + (
+        "The braincase is visibly small and rounded, clearly smaller than Homo erectus's, so the face looks "
+        "large for the head. The face is closer to an australopith's than to a human's: the jaws push well "
+        "forward into a short muzzle in front of the nose, the nostrils face forward, and the area between the "
+        "eyes is flat and wide. A long upper lip. Legs short, no longer than the torso; arms long so the "
+        "fingertips hang level with the knees. A light coat of fine, short dark hair over chest, back, arms "
+        "and legs. "
+    ) + smooth_skin("chest, belly, arms and legs") + ARCHAIC_TAIL,
+    ("homo-habilis", "female"): archaic_head("KNM-ER 1813 skull", "female") + (
+        "The braincase is visibly small and rounded, clearly smaller than Homo erectus's, so the face looks "
+        "large for the head. The face is closer to an australopith's than to a human's: the jaws push well "
+        "forward into a short muzzle in front of the nose, the nostrils face forward, and the area between the "
+        "eyes is flat and wide. A long upper lip. Legs short, no longer than the torso; arms long so the "
+        "fingertips hang level with the knees. Body hair is fine, short and sparse on arms, legs, shoulders "
+        "and back only, stopping at the neck. As archaic as the male, only slightly smaller: keep the "
+        "australopith-like muzzle of the reference images, the mouth and jaws sticking out well past the nose "
+        "in profile. Only the skin is young and smooth; the face shape stays archaic. "
+    ) + BARE_FEMALE_FACE + smooth_skin("neck, chest, shoulders, arms and legs") + YOUNG_FEMALE + ARCHAIC_TAIL,
     ("sahelanthropus-tchadensis", "male"): (
         "Head in three-quarter view. The brow ridge is a huge, continuous horizontal bony bar, as thick as two "
         "fingers, running straight across from temple to temple and jutting out so far that it forms a roof "
@@ -315,6 +381,43 @@ EXTRA_SEX = {
     ),
 }
 
+FACE_DONOR = {
+    ("homo-heidelbergensis", "male"): "homo-erectus-male",
+    ("homo-heidelbergensis", "female"): "homo-erectus-male",
+    ("denisovan", "female"): "homo-erectus-male",
+    ("homo-floresiensis", "male"): "australopithecus-afarensis-male",
+    ("homo-habilis", "male"): "australopithecus-afarensis-male",
+    ("homo-habilis", "female"): "australopithecus-afarensis-female",
+}
+
+KEY_MODEL = {
+    "homo-heidelbergensis-male": "gpt-image-2.5-flare",
+    "homo-heidelbergensis-female": "gpt-image-2.5-flare",
+    "denisovan-female": "gpt-image-2.5-flare",
+}
+
+RETOUCH_PROMPT = (
+    "Retouch this exact photograph. Keep the figure, pose, face shape, skull, muzzle, brow, nose, jaw, head "
+    "hair, clothing, body proportions, backdrop and its brightness, lighting, framing and colour exactly as "
+    "they are, and change only what is described here: "
+)
+
+RETOUCH = {
+    "homo-floresiensis-female": (
+        "Make her about 30: a smooth, unlined face with no crow's feet, no under-eye wrinkles, no forehead or "
+        "cheek lines. The chin, jaw, cheeks and upper lip are bare smooth skin the same colour as her "
+        "forehead, with no whiskers, no bristles, no stubble dots. No stray hairs standing out along the "
+        "outline of the face, neck, shoulders or arms. Smooth away every fine drawn line on the forehead, "
+        "cheeks, neck, shoulders and arms. "
+    ) + YOUNG_SKIN,
+    "homo-habilis-female": (
+        "Make her about 30 with a smooth, unlined face: no crow's feet, no under-eye or cheek wrinkles. The "
+        "upper lip, chin, jaw and cheeks are completely hairless bare skin the same tone as the forehead, with "
+        "no whiskers, bristles or stubble. No stray hairs standing out along the outline of the face, neck, "
+        "shoulders or arms. Make the brow ridge a little heavier so the upper eyelids sit in shadow. "
+    ) + YOUNG_SKIN,
+}
+
 EXTRA_SKIN = {
     ("neanderthal", "female"): "Pale, freckled skin, not tanned. ",
     ("neanderthal", "male"): "Light olive, weathered skin, not deeply tanned. ",
@@ -325,7 +428,13 @@ FEMALE_MATCH = (
     "and chin, only slightly smaller and without a beard; her face must not look like a modern woman's. "
 )
 
-EXPRESSIONS = {"female": "calm and patient", "male": "calm, mildly amused"}
+EXPRESSIONS = {
+    "female": "calm and patient",
+    "male": "calm, mildly amused",
+    ("homo-heidelbergensis", "male"): "neutral, no smile",
+    ("homo-heidelbergensis", "female"): "neutral, no smile",
+    ("denisovan", "female"): "neutral, no smile",
+}
 
 
 def api_key():
@@ -349,7 +458,7 @@ def request(req, timeout=300):
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="replace")
-            if e.code != 429 and e.code < 500:
+            if (e.code != 429 and e.code < 500) or "insufficient_quota" in body:
                 raise RuntimeError(f"HTTP {e.code}: {body}") from None
             err = f"HTTP {e.code}"
         except (urllib.error.URLError, TimeoutError) as e:
@@ -430,18 +539,20 @@ def fix_text(stage_id, sex):
     )
 
 
-def reference_text(same_species, sex):
-    labels = ("The reference image",) if len(same_species) == 1 else REF_LABELS
+def reference_text(roles, sex):
+    labels = ("The reference image",) if len(roles) == 1 else REF_LABELS
     parts = []
-    for i, (label, same) in enumerate(zip(labels, same_species)):
-        if same:
+    for i, (label, role) in enumerate(zip(labels, roles)):
+        if role == "same":
             parts.append(REF_SAME_SPECIES.format(label=label, sex=sex, style=REF_STYLE_ALSO if i == 0 else ""))
-        else:
+        elif role == "style":
             parts.append(REF_STYLE.format(label=label))
+        else:
+            parts.append(REF_FACE.format(label=label, donor=role, style=REF_STYLE_ALSO if i == 0 else ""))
     return "".join(parts) + REFERENCE_INTRO
 
 
-def build_prompt(style, subj, sex, same_species, extra):
+def build_prompt(style, subj, sex, roles, extra):
     block, template = STYLES[style]
     anatomy = re.split(r"\s(?:Wears|Bare-chested)\b", subj["anatomy"][sex])[0]
     text = template.format(
@@ -450,13 +561,17 @@ def build_prompt(style, subj, sex, same_species, extra):
         species=subj["species"],
         anatomy=anatomy.rstrip("."),
         clothing=CLOTHING[sex],
-        expression=EXPRESSIONS[sex],
+        expression=EXPRESSIONS.get((subj["id"], sex), EXPRESSIONS[sex]),
         fix=fix_text(subj["id"], sex) if style == "photo" else "",
     )
-    if same_species:
-        text = reference_text(same_species, sex) + text + REFERENCE_SUFFIX
+    if roles:
+        text = reference_text(roles, sex) + text + REFERENCE_SUFFIX
     if extra:
         text += " " + extra
+    return check_banned(text)
+
+
+def check_banned(text):
     hits = [w for w in BANNED if f" {w}" in f" {text.lower()}"]
     if hits:
         sys.exit(f"banned words in prompt: {hits}")
@@ -479,12 +594,20 @@ def log_prompt(path, key, prompt):
     path.write_text(json.dumps(log, indent=2), encoding="utf-8")
 
 
-def references(anchor, anchor_stage, stage_id, sex, pair):
-    refs, same = [anchor], [anchor_stage == stage_id]
+def references(anchor, anchor_stage, stage_id, sex, pair, stages=()):
+    refs, roles = [anchor], ["same" if anchor_stage == stage_id else "style"]
+    donor = FACE_DONOR.get((stage_id, sex))
+    if donor:
+        species = subject(stages, donor.rsplit("-", 1)[0])["species"]
+        if donor == anchor.stem:
+            roles[0] = species
+        else:
+            refs.append(pair.parent / f"{donor}.png")
+            roles.append(species)
     if sex == "female" and pair.exists() and pair.stem != anchor.stem:
         refs.append(pair)
-        same.append(True)
-    return refs, tuple(same)
+        roles.append("same")
+    return refs, tuple(roles)
 
 
 def anchored_set(api, style, out_dir, prefix, subjects, only, extra):
@@ -502,9 +625,9 @@ def anchored_set(api, style, out_dir, prefix, subjects, only, extra):
             if key == anchor_key or not wanted(key, only):
                 continue
             pair = out_dir / f"{prefix}{subj['id']}-male.png"
-            refs, same = references(anchor, subjects[0]["id"], subj["id"], sex, pair)
+            refs, roles = references(anchor, subjects[0]["id"], subj["id"], sex, pair)
             print(f"[{key}] edits with {len(refs)} reference(s)", flush=True)
-            prompt = build_prompt(style, subj, sex, same, extra)
+            prompt = build_prompt(style, subj, sex, roles, extra)
             generate(api, prompt, out_dir / f"{key}.png", refs)
             log_prompt(log, key, prompt)
 
@@ -575,12 +698,13 @@ def full_sheet(stages):
     print(f"contact sheet {out.relative_to(ROOT)}")
 
 
-def generate_all(api, style, anchor, only, extra):
+def generate_all(api, style, anchor, only, extra, key_model):
     stages = load_stages()
     anchor_stage = anchor.stem.rsplit("-", 1)[0]
     log = ALL_RAW_DIR / "prompts.json"
     ALL_RAW_DIR.mkdir(parents=True, exist_ok=True)
-    for stage in stages:
+    donor_users = {stage_id for stage_id, _ in FACE_DONOR}
+    for stage in sorted(stages, key=lambda s: s["id"] in donor_users):
         for sex in SEXES:
             key = f"{stage['id']}-{sex}"
             if not wanted(key, only):
@@ -591,13 +715,31 @@ def generate_all(api, style, anchor, only, extra):
                 to_webp(raw, PORTRAITS_DIR / f"{key}.webp")
                 print(f"[{key}] copied from anchor", flush=True)
                 continue
-            refs, same = references(anchor, anchor_stage, stage["id"], sex, ALL_RAW_DIR / f"{stage['id']}-male.png")
-            print(f"[{key}] edits with {len(refs)} reference(s)", flush=True)
-            prompt = build_prompt(style, stage, sex, same, extra)
-            generate(api, prompt, raw, refs)
+            refs, roles = references(
+                anchor, anchor_stage, stage["id"], sex, ALL_RAW_DIR / f"{stage['id']}-male.png", stages
+            )
+            model = key_model.get(key, api[1])
+            print(f"[{key}] edits with {len(refs)} reference(s), {model}", flush=True)
+            prompt = build_prompt(style, stage, sex, roles, extra)
+            generate((api[0], model), prompt, raw, refs)
             log_prompt(log, key, prompt)
             to_webp(raw, PORTRAITS_DIR / f"{key}.webp")
     full_sheet(stages)
+
+
+def retouch_all(api, only, key_model):
+    log = ALL_RAW_DIR / "prompts.json"
+    for key in sorted(only):
+        if key not in RETOUCH:
+            sys.exit(f"no RETOUCH entry for {key}")
+        raw = ALL_RAW_DIR / f"{key}.png"
+        model = key_model.get(key, api[1])
+        print(f"[{key}] retouch, {model}", flush=True)
+        prompt = check_banned(RETOUCH_PROMPT + RETOUCH[key])
+        generate((api[0], model), prompt, raw, [raw])
+        log_prompt(log, key, prompt)
+        to_webp(raw, PORTRAITS_DIR / f"{key}.webp")
+    full_sheet(load_stages())
 
 
 def main():
@@ -608,6 +750,7 @@ def main():
     mode.add_argument("--photo-test", action="store_true")
     mode.add_argument("--all", action="store_true")
     mode.add_argument("--contact-sheet", action="store_true")
+    mode.add_argument("--retouch", action="store_true", help="edit the --only keys' own images with RETOUCH")
     p.add_argument("--style", choices=sorted(STYLES))
     p.add_argument("--anchor", type=Path, default=PHOTO_DIR / "neanderthal-male.png")
     p.add_argument("--only", default="", help="comma-separated keys, e.g. neanderthal-female or B-neanderthal-male")
@@ -640,8 +783,10 @@ def main():
     elif args.photo_test:
         anchored_set(api, "photo", PHOTO_DIR, "", subjects, only, args.extra)
         photo_sheet(stages)
+    elif args.retouch:
+        retouch_all(api, only, {} if args.model else KEY_MODEL)
     else:
-        generate_all(api, args.style or "photo", args.anchor, only, args.extra)
+        generate_all(api, args.style or "photo", args.anchor, only, args.extra, {} if args.model else KEY_MODEL)
 
 
 if __name__ == "__main__":
