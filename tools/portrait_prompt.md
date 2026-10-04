@@ -269,3 +269,75 @@ Results:
 - Backdrop corners: Denisovan female 19/17/15 and 32/29/26, floresiensis female 19/18/16 and 30/25/21. The pre-11 floresiensis was 8/7/4 and 19/16/12, so the new one matches the set better.
 - The kept floresiensis female is again a retouch. A fresh `--all` for that key must be followed by `--retouch`.
 - `contact-sheet.png` rebuilt. `compare-archaic.png` has the new Denisovan female tile (crop 220,20 to 740,540).
+
+## Body pass (`--body`, `--from-male`)
+
+Playtest: "the AI images only changed the face, the man is still ripped". These modes redraw the body below the neck and keep the passed head. Output goes to `tools/out/body-pass/`, never over the masters. Every image call is appended to `tools/out/body-pass/calls.txt` (`key, purpose`) and the tool refuses once it holds `CALL_CAP` (22) lines.
+
+`--body --only KEY[,KEY]` (default model `gpt-image-2`):
+
+- `head_box()` finds the crown against the backdrop colour and keeps a box 0.34 of the image wide, from the top down to `--mask-top` (fraction of image height, default 0.235). `--keep-box x0,y0,x1,y1` (fractions, repeatable) keeps extra regions, such as the hip wrap. The mask (`<key>-mask.png`, opaque = keep) goes with the master to `/v1/images/edits`.
+- The prompt is `BODY_PROMPT` (keep head, hair, backdrop, light, framing, stance, skin colour; redraw only the body below the neck) plus `body_text()`: the height/weight sentence of the anatomy note with "muscled"/"muscular" cut out, `BODY[stage]` (species build from the evidence brief), `UNIDEALISED[sex]` (no six-pack, sculpted chest or veins, not fat either, slight slouch, dust, scars, calluses, untrimmed body hair; females: chest fully covered, no shape showing, natural belly and hips), the clothing slot and `BODY_COVER` (hip wrap stays as large and opaque, sober museum figure study). No face words. Early apes have no `BODY` entry.
+- gpt-image-2 accepts the mask but treats it only as a hint: it redraws the whole frame (new head, darker backdrop). So `paste_head()` relights the raw output to the master's local backdrop light (`relight()`, see Try 12) and pastes the master's head box back with a 24 px feather. The face is pixel-identical to the master. The raw API image is kept as `<key>-raw.png`.
+- If the API ever refuses the mask, the tool falls back to a full-image edit with `KEEP_HEAD` in front of the prompt (one more call) and still pastes the head back.
+- Tune `--mask-top` per image: too high and the model's own chin shows under the pasted mouth; too low and the master's shoulder ghosts over the backdrop. Check a crop of the neck.
+
+`--from-male --only denisovan-female` (model from `KEY_MODEL`, flare): edits `tools/out/full/denisovan-male.png` with `FROM_MALE[key]` (same skull, brow shelf, face width, nose and skin tone; no beard or stubble; features only slightly finer; long straight jet-black hair) plus `body_text()` for the female and the closed fur cloak. No mask. Not run yet.
+
+Pilot, Neanderthal male (2 calls):
+
+- Call 1 (head box only, everything else editable): `moderation_blocked` (output, sexual). Probably the redrawn hip wrap came out smaller.
+- Call 2 (`--keep-box 0.327,0.445,0.61,0.654` over the hip wrap, plus `BODY_COVER`): passed. The wrap was still redrawn (mask is only a hint) but stayed large. Body no longer ripped: barrel chest, thick waist, short shins, hairy, slight slouch. But it overshot into obese with a beer belly, and legs and feet show the set's crackle texture. Face unchanged and no visible seam after the gain match and `--mask-top 0.235`. Not accepted.
+- After call 2 (untested): Neanderthal `BODY` says "a thick waist, solid rather than fat" instead of "muscle hidden under a solid layer of fat"; `UNIDEALISED` adds "not fat or obese", "a thin, even layer of body fat", "a belly flat to slightly rounded", and swaps "rough, lived-in skin with dirt and grime" for "smooth, even, matte skin with fine pores, some dust and dirt".
+
+```bash
+python tools/generate_portraits.py --body --only neanderthal-male --keep-box 0.327,0.445,0.61,0.654
+python tools/generate_portraits.py --from-male --only denisovan-female
+```
+
+Body pass run (calls 3 to 18 of 22; nothing published). Per-key flags used:
+
+| key | `--mask-top` | `--keep-box` |
+| --- | --- | --- |
+| homo-sapiens-male | 0.195 | 0.31,0.41,0.64,0.61 |
+| homo-sapiens-female | 0.19 | 0.30,0.19,0.62,0.62 |
+| neanderthal-male | 0.235 | 0.327,0.445,0.61,0.654 |
+| neanderthal-female | 0.20 | 0.26,0.24,0.63,0.645 |
+| denisovan-male | 0.21 | 0.31,0.42,0.63,0.65 |
+| homo-heidelbergensis-male | 0.21 (recomposited at 0.185) | 0.33,0.42,0.65,0.65 |
+| homo-heidelbergensis-female | 0.20 | 0.29,0.16,0.64,0.64 |
+| homo-erectus-male | 0.20 (recomposited at 0.185) | 0.30,0.39,0.64,0.62 |
+| homo-erectus-female | 0.195 | 0.31,0.18,0.68,0.64 |
+| homo-floresiensis-male | 0.225 | 0.34,0.44,0.63,0.67 |
+| homo-floresiensis-female | 0.21 | 0.29,0.27,0.63,0.67 |
+| homo-habilis-male | 0.215 | 0.31,0.44,0.645,0.68 |
+| homo-habilis-female | 0.20 | 0.27,0.18,0.67,0.66 |
+
+- Recompositing is free: `paste_head(master, raw, head_box(master, top))` on the saved `<key>-raw.png`. Keep line about 0.015 below the chin. Higher shows the model's own lip under the mouth (floresiensis male at 0.21); lower ghosts the master's trapezius behind the neck (heidelbergensis and erectus males at 0.20 to 0.21). A wider feather (48, 80) blends the model's face into the master's: keep 24.
+- Sapiens female and erectus female came back letterboxed on the first call (the figure in a narrow strip between black bars), so the gain match blew the frame to white. One retry each. `BODY_PROMPT` now says the backdrop fills the frame edge to edge with no black bars; both retries were full frame.
+- Results: no six-packs anywhere. Neanderthal male barrel-chested, thick waist, slightly rounded belly (no longer obese). Floresiensis and habilis males pot-bellied with long arms. Sapiens and erectus lean and narrow. Faces pixel-identical (mean head diff under 5 on 0-255).
+- Faults: Denisovan male came out average-sized with a pot belly (not robust), the cloak got narrower and the body skin is lighter and more orange than the face. Heidelbergensis male is ordinary-sized, not very big. Erectus female has a lighter rectangle of the master's backdrop around the head (the master had a spot glow behind the head). The hide tops show the set's scale-like crackle texture.
+- Denisovan female `--from-male` (1 call, flare): archaic face kept (brow shelf, sloping forehead, wide flat face), beard gone, long straight black hair, cloak closed, heavy-set body and thick legs. It does not read as a living woman, but it reads as the male with long hair: frown, nasolabial folds, heavy jaw. Not clearly a woman.
+- `body-pass/contact-sheet.png` shows all 14.
+
+## Try 12 (bodies)
+
+The independent review failed all 10 body-pass keys it listed. Most failures were a lighter or darker rectangle around the pasted head. The others were the Denisovan female (she read as the male with long hair), the Denisovan and heidelbergensis males (average build, not robust or big), and the heidelbergensis female (orange neck and shoulders, hide crackle). Calls 19 to 21 of 22 were used, and call 22 was left unspent.
+
+Tool changes:
+
+- `paste_head()` no longer applies one global gain from the frame edges. `relight()` instead finds the backdrop in both images (`figure_mask()` at 1/8 scale, dilated) and estimates the low-frequency backdrop light of each (`backdrop_light()`: normalised Gaussian at sigma 4 and 16 cells, filled in behind the figure). It then multiplies the raw image by the master/raw ratio, so the raw takes on the master's local spot glow and the pasted head box no longer shows as a rectangle. Edge steps (inside minus outside, levels) now match the master's own gradient. Examples: sapiens male 2/6 (master 0/5, old 12/12), erectus female 8/7 (master 7/6, old 13/16), floresiensis male 0/0 (master 1/1, old 8/11).
+- New `--recomposite --only KEY --mask-top X`: re-pastes the master head onto the saved `<key>-raw.png` (no API call). The composites made before the relight are in `body-pass/pre-relight/`.
+- `BODY["homo-heidelbergensis"]` now asks for "clearly bigger and broader than an ordinary man", a thick neck, a barrel chest, "upper arms as thick as an ordinary man's calves" and a smooth layer of body fat.
+- `BODY_PROMPT`: the skin of the neck, shoulders, arms and legs is the same brown as the face, not lighter, pinker or more orange. `BODY_COVER`: every hide garment is soft, matte suede with an even, fine nap and no crackle, scale or net pattern.
+- `FROM_MALE["denisovan-female"]` rewritten. She is about 25 and "reads at a glance as a woman": no forehead, frown or nasolabial lines, relaxed brows, fuller cheeks and lips, a smaller and rounder lower jaw, a slender neck, narrower shoulders, and two long plaits. The brow shelf stays "exactly as heavy", along with the sloping forehead, face width, flat nose and skin tone.
+
+Results:
+
+- Recomposited with no API call: sapiens male and female, Neanderthal male and female, erectus male and female, floresiensis male and female, habilis male and female. No rectangle shows at full or contact-sheet size.
+- Denisovan female (call 19, flare, `--from-male`): kept. Plaits, a smooth hairless face, softer lips and a slender neck, with the male's heavy brow shelf, sloping forehead, wide flat face and flat nose. Closed cloak and robust body. The try before this is `body-pass/denisovan-female-try1.png`.
+- Heidelbergensis male (call 20, gpt-image-2, recomposited at 0.185): kept. Big and broad, with thick arms, a barrel chest and a rounded belly. No six-pack, and the neck join is continuous. Try 1 is `body-pass/homo-heidelbergensis-male-try1.png`.
+- Heidelbergensis female (call 21, gpt-image-2): not kept. The hide top still has a strong net or crackle pattern despite the new `BODY_COVER` wording, a side slit shows the flank, and the shoulders are still more orange than the face. The try-1 composite (relit, `-try1.png`) fixed the box edge but has the same crackle. Her published image is unchanged.
+- Denisovan male: the body pass is not used. The new master (fur cloak, Harbin face, already robust and hairy) is published as is.
+- Published to `public/portraits/` (and copied over `tools/out/full/`, old masters in `rejected/<key>-prebody.png`): sapiens male and female, Neanderthal male and female, erectus male and female, floresiensis male and female, habilis male and female, heidelbergensis male, and the Denisovan male and female together. Only the heidelbergensis female keeps her old image.
+- The new masters for these keys are body-pass composites or a from-male edit. `--all` will not recreate them.

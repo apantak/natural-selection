@@ -13,7 +13,8 @@ import urllib.request
 import uuid
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 STAGES_JSON = ROOT / "src" / "content" / "stages.json"
@@ -23,6 +24,9 @@ STYLE_TEST_DIR = OUT_DIR / "style-test"
 FULL_BODY_DIR = OUT_DIR / "full-body-test"
 PHOTO_DIR = OUT_DIR / "photo-test"
 ALL_RAW_DIR = OUT_DIR / "full"
+BODY_DIR = OUT_DIR / "body-pass"
+CALL_LOG = BODY_DIR / "calls.txt"
+CALL_CAP = 22
 API = "https://api.openai.com/v1"
 SIZE = "1024x1536"
 QUALITY = "medium"
@@ -486,6 +490,93 @@ EXPRESSIONS = {
     ("denisovan", "female"): "calm and relaxed, not frowning, no smile",
 }
 
+BODY = {
+    "homo-sapiens": (
+        "tall, lean, long-limbed and narrow: long legs, a narrow trunk and narrow hips, slim rather than "
+        "defined; little body hair"
+    ),
+    "neanderthal": (
+        "short and very stocky: a deep, wide barrel chest, wide hips, short forearms and short shins, thick "
+        "wrists and knees, large hands; heavy and thick-set, powerful but not defined, a thick waist, "
+        "solid rather than fat; plenty of body hair on the chest, belly, back, arms and legs"
+    ),
+    "denisovan": (
+        "robust and heavy-set like a Neanderthal: broad and thick-boned, a deep wide trunk, thick arms and "
+        "legs, heavy and solid but not defined; moderate body hair. The fur cloak "
+        "stays exactly as it is"
+    ),
+    "homo-heidelbergensis": (
+        "very big, tall and heavy, clearly bigger and broader than an ordinary man: thick-boned, very broad "
+        "shoulders and wide hips, a thick neck, a big deep barrel chest and a thick waist, upper arms as thick "
+        "as an ordinary man's calves, thick heavy thighs and legs, heavy and solid rather than defined, a "
+        "smooth layer of body fat over everything; moderate body hair"
+    ),
+    "homo-erectus": (
+        "tall and long-legged with narrow hips and a lean, narrow trunk, modern-like proportions, wiry rather "
+        "than defined; little body hair"
+    ),
+    "homo-floresiensis": (
+        "tiny: long arms, short legs, very large, long, flat feet, a slight pot belly, narrow sloping "
+        "shoulders rolled forward; modest body hair"
+    ),
+    "homo-habilis": (
+        "small: long, strong arms with the fingertips reaching mid-thigh, short legs, a pot belly, an "
+        "ape-like stooped posture with the shoulders forward; a light covering of short dark body hair"
+    ),
+}
+
+UNIDEALISED = {
+    "male": (
+        "An ordinary, unidealised working body, not a fitness or bodybuilder body: no six-pack and no defined "
+        "abdominal muscles, no sculpted chest, no visible veins, no sharp muscle lines, and not fat or obese "
+        "either; everyday muscle from hard daily work under a thin, even layer of body fat, a belly that is "
+        "flat to slightly rounded, a slight slouch with the shoulders a little forward. Smooth, even, matte "
+        "skin with fine pores, some dust and dirt on the hands, knees and feet, a few small old scars, "
+        "calluses on the hands and soles, untrimmed body hair."
+    ),
+    "female": (
+        "An ordinary, unidealised woman's working body, no glamour or fashion figure: a natural chest fully "
+        "covered by the garment with no shape showing through, a natural soft belly and hips, everyday muscle "
+        "from hard daily work under a thin, even layer of body fat, no defined muscles, no visible veins, not "
+        "fat or obese, a slight slouch with the shoulders a little forward. Smooth, even, matte skin with fine "
+        "pores, some dust and dirt on the hands, knees and feet, a few small old scars, calluses on the hands "
+        "and soles, untrimmed body hair."
+    ),
+}
+
+BODY_PROMPT = (
+    "Edit this exact studio photograph. Keep the whole head and the hair, the backdrop, floor, lighting, "
+    "colour grade, framing, camera angle, stance and skin colour exactly as they are, and redraw only the "
+    "body below the neck so it joins the unchanged head naturally. The backdrop fills the whole frame edge "
+    "to edge, with no black bars or borders. The skin of the neck, shoulders, arms and legs is the same "
+    "brown as the face, in the same soft light, not lighter, pinker or more orange. "
+)
+
+BODY_COVER = (
+    "The hip wrap stays exactly as large, thick and opaque as in the photograph, hanging loose, never smaller "
+    "or tighter. Every hide garment is soft, matte suede with an even fine nap, with no crackle, scale or net "
+    "pattern. A sober, non-sexual museum figure study. "
+)
+
+KEEP_HEAD = (
+    "The head must stay pixel-identical to the input photograph: do not change it in any way. "
+)
+
+FROM_MALE = {
+    "denisovan-female": (
+        "Edit this exact studio photograph of a Denisovan man and turn him into a Denisovan woman of the same "
+        "species, about 25, who reads at a glance as a woman. Keep the skull shape, the thick level brow shelf "
+        "exactly as heavy, the low sloping forehead, the face width, the broad flat nose and the dark brown skin "
+        "tone. Make her face a woman's: smooth unlined skin with no forehead lines, no frown lines and no folds "
+        "beside the nose or mouth, relaxed brows, fuller rounded cheeks, softer fuller lips, a smaller, rounder "
+        "and lighter lower jaw, a slender neck and narrower shoulders. Remove all beard and stubble: the chin, "
+        "jaw, cheeks and upper lip are bare smooth skin the same colour as the forehead. Long, straight, "
+        "jet-black hair parted in the middle, combed back off the forehead, in two long plaits hanging in front "
+        "of the shoulders. Calm, gentle expression, mouth closed. Keep the backdrop, floor, lighting, colour "
+        "grade, framing and stance. "
+    ),
+}
+
 
 def api_key():
     key = os.environ.get("OPENAI_API_KEY")
@@ -544,11 +635,11 @@ def multipart(fields, files):
     return buf.getvalue(), f"multipart/form-data; boundary={boundary}"
 
 
-def generate(api, prompt, out_path, refs=()):
+def generate(api, prompt, out_path, refs=(), mask=None):
     key, model = api
     fields = {"model": model, "prompt": prompt, "size": SIZE, "quality": QUALITY, "n": 1}
     if refs:
-        body, ctype = multipart(fields, [("image[]", r) for r in refs])
+        body, ctype = multipart(fields, [("image[]", r) for r in refs] + ([("mask", mask)] if mask else []))
         url = f"{API}/images/edits"
     else:
         body, ctype = json.dumps({**fields, "output_format": "png"}).encode(), "application/json"
@@ -792,6 +883,152 @@ def retouch_all(api, only, key_model):
     full_sheet(load_stages())
 
 
+def spend(key, purpose):
+    lines = [ln for ln in CALL_LOG.read_text(encoding="utf-8").splitlines() if ln.strip()] if CALL_LOG.exists() else []
+    if len(lines) >= CALL_CAP:
+        sys.exit(f"call cap {CALL_CAP} reached, see {CALL_LOG.relative_to(ROOT)}")
+    CALL_LOG.parent.mkdir(parents=True, exist_ok=True)
+    with CALL_LOG.open("a", encoding="utf-8") as f:
+        f.write(f"{key}, {purpose}\n")
+    print(f"  image call {len(lines) + 1}/{CALL_CAP}", flush=True)
+
+
+def body_text(subj, sex):
+    if subj["id"] not in BODY:
+        sys.exit(f"no BODY entry for {subj['id']}")
+    sentences = re.split(r"(?<=\.)\s+", subj["anatomy"][sex])
+    build = next(s for s in sentences if re.search(r"\d\.\d+ m\b", s))
+    build = re.sub(r"(,| and)? (heavily )?(muscled|muscular)\b", "", build).rstrip(".")
+    clothing = CLOTHING.get((subj["id"], sex), CLOTHING[sex])
+    return (
+        f"Body: an adult {sex} {subj['species']}. {build}. Build: {BODY[subj['id']]}. {UNIDEALISED[sex]} "
+        f"Clothing, unchanged in material and colour: {clothing}. {BODY_COVER}"
+    )
+
+
+def head_box(img, top_frac, half_width=0.17):
+    """Keep-box (x0, y0, x1, y1) around the head: full height down to top_frac of the image, centred on the
+    figure's crown found against the backdrop colour."""
+    a = np.asarray(img.convert("RGB").filter(ImageFilter.GaussianBlur(3))).astype(float)
+    border = np.concatenate([a[:, :40].reshape(-1, 3), a[:, -40:].reshape(-1, 3)])
+    bg = np.median(border, 0)
+    dist = np.sqrt(((a - bg) ** 2).sum(2))
+    fg = dist > np.percentile(np.sqrt(((border - bg) ** 2).sum(1)), 99) + 10
+    rows = np.where(fg.sum(1) > 8)[0]
+    top = rows[0] if len(rows) else 0
+    xs = np.where(fg[top:top + 120])[1]
+    w, h = img.size
+    cx = int(np.median(xs)) if len(xs) else w // 2
+    hw = int(w * half_width)
+    return max(0, cx - hw), 0, min(w, cx + hw), int(h * top_frac)
+
+
+def blur(a, sigma):
+    r = int(3 * sigma)
+    k = np.exp(-0.5 * (np.arange(-r, r + 1) / sigma) ** 2)
+    k /= k.sum()
+    a = np.pad(a, ((r, r), (r, r)) + ((0, 0),) * (a.ndim - 2), mode="edge")
+    a = np.apply_along_axis(lambda v: np.convolve(v, k, "valid"), 0, a)
+    return np.apply_along_axis(lambda v: np.convolve(v, k, "valid"), 1, a)
+
+
+def figure_mask(small):
+    border = np.concatenate([small[:, :5].reshape(-1, 3), small[:, -5:].reshape(-1, 3)])
+    bg = np.median(border, 0)
+    fg = np.sqrt(((small - bg) ** 2).sum(2)) > np.percentile(np.sqrt(((border - bg) ** 2).sum(1)), 95) + 6
+    for _ in range(4):
+        fg = fg | np.roll(fg, 1, 0) | np.roll(fg, -1, 0) | np.roll(fg, 1, 1) | np.roll(fg, -1, 1)
+    return fg
+
+
+def backdrop_light(small, bg):
+    """Low-frequency backdrop colour, filled in behind the figure from the surrounding backdrop."""
+    fields = []
+    for sigma in (4, 16):
+        den = blur(bg.astype(float), sigma)
+        fields.append((blur(small * bg[..., None], sigma) / np.maximum(den, 1e-6)[..., None], den))
+    (near, den), (far, _) = fields
+    a = np.clip(den / 0.3, 0, 1)[..., None]
+    return a * near + (1 - a) * far
+
+
+def relight(master, result, scale=8):
+    """Relights result so its backdrop matches the master's local backdrop light (spot glow included)."""
+    w, h = master.size
+    small = [np.asarray(im.resize((w // scale, h // scale), Image.BOX)).astype(float) for im in (master, result)]
+    bg = ~(figure_mask(small[0]) | figure_mask(small[1]))
+    ratio = np.clip(backdrop_light(small[0], bg) / np.maximum(backdrop_light(small[1], bg), 1), 0.5, 2)
+    up = np.stack(
+        [np.asarray(Image.fromarray(ratio[..., c].astype(np.float32), "F").resize((w, h), Image.BILINEAR)) for c in range(3)],
+        2,
+    )
+    return Image.fromarray(np.clip(np.asarray(result).astype(float) * up, 0, 255).astype(np.uint8))
+
+
+def paste_head(master, result, box, feather=24):
+    result = relight(master, result.convert("RGB").resize(master.size, Image.LANCZOS))
+    keep = Image.new("L", master.size, 0)
+    x0, y0, x1, y1 = box
+    ImageDraw.Draw(keep).rectangle((x0 + feather, y0, x1 - feather, y1 - feather), fill=255)
+    keep = keep.filter(ImageFilter.GaussianBlur(feather / 2))
+    return Image.composite(master, result, keep)
+
+
+def recomposite(only, mask_top):
+    for key in sorted(only):
+        master = Image.open(ALL_RAW_DIR / f"{key}.png").convert("RGB")
+        box = head_box(master, mask_top)
+        paste_head(master, Image.open(BODY_DIR / f"{key}-raw.png"), box).save(BODY_DIR / f"{key}.png")
+        print(f"[{key}] recomposited, keep box {box}")
+
+
+def body_pass(api, only, mask_top, keep_boxes):
+    stages = load_stages()
+    for key in sorted(only):
+        stage_id, sex = key.rsplit("-", 1)
+        master_path = ALL_RAW_DIR / f"{key}.png"
+        master = Image.open(master_path).convert("RGB")
+        box = head_box(master, mask_top)
+        mask = Image.new("RGBA", master.size, (0, 0, 0, 0))
+        ImageDraw.Draw(mask).rectangle(box, fill=(0, 0, 0, 255))
+        w, h = master.size
+        for fx0, fy0, fx1, fy1 in keep_boxes:
+            ImageDraw.Draw(mask).rectangle((fx0 * w, fy0 * h, fx1 * w, fy1 * h), fill=(0, 0, 0, 255))
+        BODY_DIR.mkdir(parents=True, exist_ok=True)
+        mask_path = BODY_DIR / f"{key}-mask.png"
+        mask.save(mask_path)
+        raw = BODY_DIR / f"{key}-raw.png"
+        prompt = check_banned(BODY_PROMPT + body_text(subject(stages, stage_id), sex))
+        print(f"[{key}] body pass, {api[1]}, keep box {box}", flush=True)
+        spend(key, f"body pass, mask keep box {box} + {keep_boxes}")
+        try:
+            generate(api, prompt, raw, [master_path], mask_path)
+        except RuntimeError as e:
+            if "HTTP 400" not in str(e) or "mask" not in str(e).lower():
+                raise
+            print(f"  mask refused ({e}); full-image edit, head pasted back", flush=True)
+            prompt = check_banned(KEEP_HEAD + prompt)
+            spend(key, "body pass, full-image fallback (mask refused)")
+            generate(api, prompt, raw, [master_path])
+        paste_head(master, Image.open(raw), box).save(BODY_DIR / f"{key}.png")
+        log_prompt(BODY_DIR / "prompts.json", key, prompt)
+        print(f"  saved {(BODY_DIR / f'{key}.png').relative_to(ROOT)} (head pasted back from the master)")
+
+
+def from_male(api, only):
+    stages = load_stages()
+    for key in sorted(only):
+        if key not in FROM_MALE:
+            sys.exit(f"no FROM_MALE entry for {key}")
+        stage_id = key.rsplit("-", 1)[0]
+        male = ALL_RAW_DIR / f"{stage_id}-male.png"
+        prompt = check_banned(FROM_MALE[key] + body_text(subject(stages, stage_id), "female"))
+        print(f"[{key}] from {male.name}, {api[1]}", flush=True)
+        spend(key, f"from-male edit of {male.name}")
+        generate(api, prompt, BODY_DIR / f"{key}.png", [male])
+        log_prompt(BODY_DIR / "prompts.json", key, prompt)
+
+
 def main():
     p = argparse.ArgumentParser(description="Generate hominin portraits with the OpenAI Images API")
     mode = p.add_mutually_exclusive_group(required=True)
@@ -801,11 +1038,16 @@ def main():
     mode.add_argument("--all", action="store_true")
     mode.add_argument("--contact-sheet", action="store_true")
     mode.add_argument("--retouch", action="store_true", help="edit the --only keys' own images with RETOUCH")
+    mode.add_argument("--body", action="store_true", help="masked body-only edit of the --only keys' masters")
+    mode.add_argument("--from-male", action="store_true", help="edit the species male into the --only female key")
+    mode.add_argument("--recomposite", action="store_true", help="re-paste the master head onto the saved body-pass raw")
     p.add_argument("--style", choices=sorted(STYLES))
     p.add_argument("--anchor", type=Path, default=PHOTO_DIR / "neanderthal-male.png")
     p.add_argument("--only", default="", help="comma-separated keys, e.g. neanderthal-female or B-neanderthal-male")
     p.add_argument("--extra", default="", help="text appended to every prompt in this run")
     p.add_argument("--model", help="override the auto-picked model")
+    p.add_argument("--mask-top", type=float, default=0.235, help="--body: keep-box bottom as a fraction of image height")
+    p.add_argument("--keep-box", action="append", default=[], help="--body: extra kept region x0,y0,x1,y1 as fractions")
     args = p.parse_args()
     only = {k.strip() for k in args.only.split(",") if k.strip()}
     stages = load_stages()
@@ -815,6 +1057,20 @@ def main():
         full_body_sheet(stages)
         photo_sheet(stages)
         full_sheet(stages)
+        return
+
+    if (args.body or args.from_male or args.recomposite) and not only:
+        sys.exit("--body, --from-male and --recomposite need --only")
+    if args.recomposite:
+        recomposite(only, args.mask_top)
+        return
+    if args.body or args.from_male:
+        key = api_key()
+        if args.body:
+            keep = [tuple(float(v) for v in b.split(",")) for b in args.keep_box]
+            body_pass((key, args.model or "gpt-image-2"), only, args.mask_top, keep)
+        else:
+            from_male((key, args.model or KEY_MODEL.get(next(iter(only)), "gpt-image-2")), only)
         return
 
     if args.all and not args.anchor.exists():
