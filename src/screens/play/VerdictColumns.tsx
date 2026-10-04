@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { nameFit } from '../../components'
 import type { Player } from '../../game/types'
 import { springPop } from '../../theme/motion'
 
@@ -34,6 +35,7 @@ function Column({ title, tone, players }: { title: string; tone: 'accept' | 'cut
           <motion.li
             key={p.id}
             className="verdict-column__chip"
+            style={nameFit(p.name)}
             initial={{ opacity: 0, x: from, scale: 0.8 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ ...springPop, delay: 0.12 }}

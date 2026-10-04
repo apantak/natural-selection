@@ -1,19 +1,20 @@
 import { motion } from 'motion/react'
 import { useGame } from '../app/useGame'
-import { Badge, Button, InstallHint, ScreenLayout } from '../components'
+import { Badge, Button, InstallHint, ScreenLayout, useInputLock } from '../components'
 import { fadeUp, stagger } from '../theme/motion'
 import './Home.css'
 
 export function Home() {
   const { state, dispatch } = useGame()
   const confirmed = state.adultConfirmed
+  const gateLocked = useInputLock(confirmed)
 
   return (
     <ScreenLayout
       className="home"
       actions={
         <>
-          <motion.div layout className="home__gate">
+          <motion.div layout className="home__gate" data-locked={gateLocked || undefined}>
             {confirmed ? (
               <Button block onClick={() => dispatch({ type: 'openSetup' })}>
                 Start the show

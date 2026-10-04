@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useGame } from '../app/useGame'
-import { BoneBurst, Button, ScreenLayout } from '../components'
+import { BoneBurst, Button, ScreenLayout, useInputLock } from '../components'
 import { fadeUp, stagger } from '../theme/motion'
 import { FinalePrompts, VerdictHeadline } from './play/Finale'
 import { PodiumCard } from './play/PodiumCard'
@@ -10,6 +10,9 @@ import { useReveal } from './play/useReveal'
 import { VerdictColumns } from './play/VerdictColumns'
 import './play/Ceremony.css'
 
+const ACTIONS_DELAY = 0.5
+export const ACTIONS_LOCK_MS = (ACTIONS_DELAY + 0.2) * 1000
+
 export function Ceremony() {
   const { state, stage, outcome, dispatch } = useGame()
   const { players, stageIndex } = state
@@ -17,6 +20,7 @@ export function Ceremony() {
   const { revealed, done, next, skip } = useReveal(players.length)
   const [spotlightSeen, setSpotlightSeen] = useState(false)
   const closeSpotlight = useCallback(() => setSpotlightSeen(true), [])
+  const actionsLocked = useInputLock(done, ACTIONS_LOCK_MS)
 
   const shown = players.slice(0, revealed)
   const current = done ? null : players[revealed]
@@ -35,7 +39,13 @@ export function Ceremony() {
       }
       actions={
         done ? (
-          <motion.div className="ceremony__actions" variants={stagger(0.5, 0.08)} initial="hidden" animate="show">
+          <motion.div
+            className="ceremony__actions"
+            data-locked={actionsLocked || undefined}
+            variants={stagger(ACTIONS_DELAY, 0.08)}
+            initial="hidden"
+            animate="show"
+          >
             {outcome.canContinue ? (
               <>
                 <motion.div variants={fadeUp}>

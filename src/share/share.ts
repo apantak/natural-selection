@@ -33,8 +33,9 @@ export function downloadBlob(blob: Blob, filename: string): void {
   setTimeout(() => URL.revokeObjectURL(url), 30_000)
 }
 
-function isAbort(error: unknown): boolean {
-  return (error as { name?: string } | null)?.name === 'AbortError'
+function isCancel(error: unknown): boolean {
+  const name = (error as { name?: string } | null)?.name
+  return name === 'AbortError' || name === 'InvalidStateError'
 }
 
 function fallback(blob: Blob, filename: string, env: ShareEnv): ShareResult {
@@ -58,6 +59,6 @@ export function shareImage(
   if (!canShareFiles) return Promise.resolve(fallback(blob, filename, env))
   return env.nav.share!({ files, title: SHARE_TITLE, text: SHARE_TEXT }).then(
     (): ShareResult => 'shared',
-    (error: unknown): ShareResult => (isAbort(error) ? 'cancelled' : fallback(blob, filename, env)),
+    (error: unknown): ShareResult => (isCancel(error) ? 'cancelled' : fallback(blob, filename, env)),
   )
 }

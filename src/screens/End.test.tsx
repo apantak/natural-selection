@@ -127,6 +127,22 @@ describe('End', () => {
     expect(await shareImage.mock.calls[0][0].text()).toBe('true')
   })
 
+  it('ignores a second share tap while the first share is still open', async () => {
+    let finish: (result: string) => void = () => {}
+    shareImage.mockReturnValue(new Promise((resolve) => (finish = resolve)))
+    renderEnd(played)
+    await act(() => vi.runAllTimersAsync())
+
+    const share = screen.getByRole('button', { name: /Share the results/ })
+    fireEvent.click(share)
+    fireEvent.click(share)
+    expect(shareImage).toHaveBeenCalledTimes(1)
+    expect(share).toBeDisabled()
+
+    await act(async () => finish('shared'))
+    expect(share).toBeEnabled()
+  })
+
   it('tells the host when the file was downloaded instead', async () => {
     shareImage.mockResolvedValue('downloaded')
     renderEnd(played)

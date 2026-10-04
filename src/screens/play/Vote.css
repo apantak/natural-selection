@@ -74,7 +74,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   color: var(--color-ivory-muted);
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
 }
 
 .tally__pips {

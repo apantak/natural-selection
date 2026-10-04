@@ -3,7 +3,7 @@ import { act, cleanup, fireEvent, screen } from '@testing-library/react'
 import { fireBoneBurst, fireDustBurst } from '../components/bursts'
 import { stages } from '../content/loader'
 import { loadState } from '../game/persistence'
-import { Ceremony } from './Ceremony'
+import { ACTIONS_LOCK_MS, Ceremony } from './Ceremony'
 import { renderScreen, votesFor } from './play/renderScreen'
 
 vi.mock('../components/bursts', () => ({ fireBoneBurst: vi.fn(), fireDustBurst: vi.fn() }))
@@ -50,6 +50,16 @@ describe('Ceremony', () => {
     act(() => vi.advanceTimersByTime(700))
     expect(screen.getByText('2 of 3 accepted the bone.')).toBeInTheDocument()
     expect(button('End here')).toBeInTheDocument()
+  })
+
+  it('keeps the new buttons untappable while they fade into the spot Skip just left', () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    renderCeremony(['p1', 'p2'])
+    skipReveal()
+    const actions = button('End here')!.closest('.ceremony__actions')
+    expect(actions).toHaveAttribute('data-locked')
+    act(() => vi.advanceTimersByTime(ACTIONS_LOCK_MS))
+    expect(actions).not.toHaveAttribute('data-locked')
   })
 
   it('tapping the card reveals the next player', () => {

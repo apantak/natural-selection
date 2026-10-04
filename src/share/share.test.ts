@@ -41,6 +41,14 @@ describe('shareImage', () => {
     expect(e.download).not.toHaveBeenCalled()
   })
 
+  it('does not download when a second share starts before the first one finished', async () => {
+    const share = vi.fn().mockRejectedValue(new DOMException('An earlier share has not yet completed.', 'InvalidStateError'))
+    const e = env({ userAgent: ANDROID, canShare: () => true, share })
+
+    await expect(shareImage(blob, 'bone.png', e)).resolves.toBe('cancelled')
+    expect(e.download).not.toHaveBeenCalled()
+  })
+
   it('downloads the PNG when file sharing is not supported', async () => {
     const e = env({ userAgent: FIREFOX })
 

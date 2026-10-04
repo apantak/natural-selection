@@ -1,11 +1,13 @@
 const STORAGE_KEY = 'wyatb.installHintDismissed'
 
+const NOT_SAFARI = /CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|FBIOS|Instagram|Line\/|Twitter|LinkedInApp|Snapchat|MicroMessenger/
+
 type NavigatorLike = Pick<Navigator, 'userAgent' | 'platform' | 'maxTouchPoints'> & { standalone?: boolean }
 
 export function isIosSafari(nav: NavigatorLike = navigator): boolean {
   const ua = nav.userAgent
   const ios = /iPad|iPhone|iPod/.test(ua) || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1)
-  return ios && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(ua)
+  return ios && /Safari\//.test(ua) && !NOT_SAFARI.test(ua)
 }
 
 export function isStandalone(nav: NavigatorLike = navigator): boolean {

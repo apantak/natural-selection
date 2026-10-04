@@ -6,6 +6,7 @@
   gap: var(--space-2);
   min-height: 7.5rem;
   padding: var(--space-4) var(--space-3);
+  container-type: inline-size;
   border: 1px solid rgba(217, 160, 163, 0.28);
   border-radius: var(--radius-lg);
   color: var(--color-ivory-muted);
@@ -40,7 +41,7 @@
 .player-tile__name {
   max-width: 100%;
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: clamp(1.125rem, 100cqi / var(--name-chars, 1) * 1.8, var(--text-lg));
   font-weight: 600;
   line-height: var(--leading-snug);
   overflow-wrap: anywhere;

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { AnimatePresence, motion, type Variants } from 'motion/react'
+import { AnimatePresence, type Variants } from 'motion/react'
 import { useGame } from '../app/useGame'
+import { PresenceFrame } from '../components'
 import type { PlayerId, StageVotes } from '../game/types'
 import { VoteCountdown, VotePrompt } from './play/VotePrompt'
 import { VoteTally } from './play/VoteTally'
@@ -36,7 +37,7 @@ export function Vote() {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div key={step} variants={stepVariants} initial="initial" animate="enter" exit="exit">
+      <PresenceFrame key={step} variants={stepVariants} initial="initial" animate="enter" exit="exit">
         {step === 'prompt' && (
           <VotePrompt eyebrow={eyebrow} onCount={() => setStep('countdown')} onSkip={() => setStep('tally')} />
         )}
@@ -44,7 +45,7 @@ export function Vote() {
         {step === 'tally' && (
           <VoteTally eyebrow={eyebrow} players={state.players} accepted={accepted} onToggle={toggle} onSubmit={submit} />
         )}
-      </motion.div>
+      </PresenceFrame>
     </AnimatePresence>
   )
 }

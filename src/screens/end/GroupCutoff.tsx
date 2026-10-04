@@ -76,7 +76,7 @@ export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
           {stage.species}
         </h2>
         {stage.nickname && <p className="end-group__nickname accent display">“{stage.nickname}”</p>}
-        <p className="faint small">
+        <p className="faint">
           Stage {index + 1} of {stageCount} · {stage.lived.display}
         </p>
       </motion.div>

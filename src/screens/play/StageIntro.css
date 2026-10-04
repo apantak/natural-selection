@@ -20,7 +20,7 @@
 .intro__dates {
   align-self: stretch;
   margin-top: var(--space-2);
-  font-size: var(--text-sm);
+  font-size: var(--text-md);
   font-weight: 550;
   letter-spacing: 0.02em;
   color: var(--color-ivory-muted);

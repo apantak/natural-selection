@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, type PanInfo } from 'motion/react'
 import type { Stage } from '../content/types'
 import { portraitUrl } from '../content/loader'
 import { springUi } from '../theme/motion'
+import { useOverlay } from './useOverlay'
 import './PortraitViewer.css'
 
 export type PortraitSide = 'female' | 'male'
@@ -31,16 +32,18 @@ export function PortraitViewer({ open, stage, initialSide = 'female', onClose }:
 
 function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 'open'> & { initialSide: PortraitSide }) {
   const [side, setSide] = useState<PortraitSide>(initialSide)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
   const toggle = () => setSide((current) => (current === 'female' ? 'male' : 'female'))
+  useOverlay(panelRef, closeRef, onClose)
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') toggle()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [])
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
     if (Math.abs(info.offset.x) > SWIPE_DISTANCE || Math.abs(info.velocity.x) > SWIPE_VELOCITY) toggle()
@@ -48,6 +51,7 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
 
   return (
     <motion.div
+      ref={panelRef}
       className="viewer"
       role="dialog"
       aria-modal="true"
@@ -57,7 +61,7 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
     >
-      <button type="button" className="viewer__close" aria-label="Close portraits" onClick={onClose}>
+      <button ref={closeRef} type="button" className="viewer__close" aria-label="Close portraits" onClick={onClose}>
         <span aria-hidden="true">×</span>
       </button>
 

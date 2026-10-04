@@ -44,6 +44,17 @@ describe('useBackGuard', () => {
     expect(hook.result.current.quitOpen).toBe(false)
   })
 
+  it('ignores a back press that only closed an overlay', () => {
+    const { dispatch, hook } = setup('intro')
+    history.pushState({ wyatbOverlay: true }, '')
+    act(() => {
+      history.replaceState({ wyatbGuard: true }, '')
+      window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }))
+    })
+    expect(hook.result.current.quitOpen).toBe(false)
+    expect(dispatch).not.toHaveBeenCalled()
+  })
+
   it('keeps playing when the quit prompt is cancelled', () => {
     const { dispatch, hook } = setup('ceremony')
     pressBack()

@@ -1,7 +1,7 @@
-import { useEffect, useId, useRef } from 'react'
+import { useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'motion/react'
-import { Button } from '../../components'
+import { Button, useOverlay } from '../../components'
 import { springSoft } from '../../theme/motion'
 
 interface SpotlightProps {
@@ -18,17 +18,10 @@ export function Spotlight({ open, name, onClose }: SpotlightProps) {
 }
 
 function SpotlightPanel({ name, onClose }: Omit<SpotlightProps, 'open'>) {
+  const panelRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const id = useId()
-
-  useEffect(() => {
-    buttonRef.current?.focus()
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+  useOverlay(panelRef, buttonRef, onClose)
 
   const reveal = (delay: number) => ({
     initial: { opacity: 0, y: 16 },
@@ -37,6 +30,7 @@ function SpotlightPanel({ name, onClose }: Omit<SpotlightProps, 'open'>) {
 
   return (
     <motion.div
+      ref={panelRef}
       className="spotlight"
       role="dialog"
       aria-modal="true"

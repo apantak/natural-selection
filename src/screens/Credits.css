@@ -52,7 +52,7 @@
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: var(--tap-min);
   font-size: var(--text-sm);
   font-weight: 600;
   overflow-wrap: anywhere;

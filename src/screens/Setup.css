@@ -161,7 +161,7 @@
 .setup__icon-btn {
   display: grid;
   place-items: center;
-  width: 48px;
+  width: var(--tap-min);
   height: var(--tap-min);
   border: 0;
   border-radius: var(--radius-sm);
@@ -187,7 +187,7 @@
 }
 
 .setup__icon-btn--danger {
-  width: var(--tap-min);
+  margin-left: var(--space-2);
   color: var(--color-rose);
 }
 

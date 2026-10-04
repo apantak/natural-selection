@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
+import { nameFit } from './nameFit'
 import { springPop, springUi } from '../theme/motion'
 import './PlayerTile.css'
 
@@ -22,7 +23,9 @@ export function PlayerTile({ name, selected, onToggle, disabled, acceptLabel = '
       whileTap={disabled ? undefined : { scale: 0.95 }}
       transition={springUi}
     >
-      <span className="player-tile__name">{name}</span>
+      <span className="player-tile__name" style={nameFit(name)}>
+        {name}
+      </span>
       <span className="player-tile__status">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span

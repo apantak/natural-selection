@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Button } from '../../components'
 import { shareImage, type ShareResult } from '../../share/share'
@@ -20,11 +20,20 @@ const NOTES: Partial<Record<ShareResult, string>> = {
 
 export function SharePanel({ blob, previewUrl, failed, hideNames, onHideNamesChange }: SharePanelProps) {
   const [note, setNote] = useState<string | null>(null)
+  const [sharing, setSharing] = useState(false)
+  const inFlight = useRef(false)
 
   const share = () => {
-    if (!blob) return
+    if (!blob || inFlight.current) return
+    inFlight.current = true
+    setSharing(true)
     setNote(null)
-    void shareImage(blob, SHARE_FILENAME).then((result) => setNote(NOTES[result] ?? null))
+    void shareImage(blob, SHARE_FILENAME)
+      .then((result) => setNote(NOTES[result] ?? null))
+      .finally(() => {
+        inFlight.current = false
+        setSharing(false)
+      })
   }
 
   const label = failed ? 'Card unavailable' : blob ? 'Share the results' : 'Preparing the card…'
@@ -70,7 +79,7 @@ export function SharePanel({ blob, previewUrl, failed, hideNames, onHideNamesCha
           </button>
         </div>
       </div>
-      <Button variant="secondary" block disabled={!blob} onClick={share}>
+      <Button variant="secondary" block disabled={!blob || sharing} onClick={share}>
         <span aria-hidden="true">📤</span> {label}
       </Button>
       <p className="end-share__note small center" aria-live="polite">

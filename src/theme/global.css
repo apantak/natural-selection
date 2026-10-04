@@ -247,6 +247,10 @@ a {
   border: 0;
 }
 
+[data-locked] {
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

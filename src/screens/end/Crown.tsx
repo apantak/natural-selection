@@ -27,7 +27,7 @@ export function Crown({ names, delay }: CrownProps) {
       </motion.span>
       <span className="eyebrow">Last one standing</span>
       <p className="end-crown__names display">{joinNames(names)}</p>
-      <p className="faint small">{names.length > 1 ? 'A shared crown. Nobody blinked first.' : 'Still holding a bone when everyone else let go.'}</p>
+      <p className="faint">{names.length > 1 ? 'A shared crown. Nobody blinked first.' : 'Still holding a bone when everyone else let go.'}</p>
     </motion.section>
   )
 }

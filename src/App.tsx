@@ -1,9 +1,10 @@
-import type { ComponentType } from 'react'
-import { AnimatePresence, MotionConfig, motion } from 'motion/react'
+import { useEffect, useState, type ComponentType, type ReactNode } from 'react'
+import { AnimatePresence, MotionConfig, useIsPresent } from 'motion/react'
 import { GameProvider } from './app/GameProvider'
+import { GameContext } from './app/gameContext'
 import { useBackGuard } from './app/useBackGuard'
 import { useGame } from './app/useGame'
-import { ConfirmDialog } from './components'
+import { ConfirmDialog, PresenceFrame } from './components'
 import type { Screen } from './game/types'
 import { Ceremony } from './screens/Ceremony'
 import { Credits } from './screens/Credits'
@@ -24,27 +25,30 @@ const SCREENS: Record<Screen, ComponentType> = {
   end: End,
 }
 
-export default function App() {
+export default function App({ onUpdateSafe }: { onUpdateSafe?: (safe: boolean) => void }) {
   return (
     <MotionConfig reducedMotion="user">
       <GameProvider>
-        <Shell />
+        <Shell onUpdateSafe={onUpdateSafe} />
       </GameProvider>
     </MotionConfig>
   )
 }
 
-function Shell() {
+function Shell({ onUpdateSafe }: { onUpdateSafe?: (safe: boolean) => void }) {
   const { state, dispatch } = useGame()
   const guard = useBackGuard(state.screen, dispatch)
+  useEffect(() => onUpdateSafe?.(state.screen === 'home'), [onUpdateSafe, state.screen])
   const Current = SCREENS[state.screen]
 
   return (
     <>
       <AnimatePresence mode="wait" initial={false} onExitComplete={() => window.scrollTo(0, 0)}>
-        <motion.div key={state.screen} variants={screenVariants} initial="initial" animate="enter" exit="exit">
-          <Current />
-        </motion.div>
+        <PresenceFrame key={state.screen} variants={screenVariants} initial="initial" animate="enter" exit="exit">
+          <FrozenWhileExiting>
+            <Current />
+          </FrozenWhileExiting>
+        </PresenceFrame>
       </AnimatePresence>
       <ConfirmDialog
         open={guard.quitOpen}
@@ -58,4 +62,12 @@ function Shell() {
       />
     </>
   )
+}
+
+function FrozenWhileExiting({ children }: { children: ReactNode }) {
+  const api = useGame()
+  const isPresent = useIsPresent()
+  const [held, setHeld] = useState(api)
+  if (isPresent && held !== api) setHeld(api)
+  return <GameContext value={isPresent ? api : held}>{children}</GameContext>
 }

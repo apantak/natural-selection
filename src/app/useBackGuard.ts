@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type Dispatch } from 'react'
+import { isOverlayEntry } from '../components/useOverlay'
 import type { GameAction, Screen } from '../game/types'
 
 const GUARD_KEY = 'wyatbGuard'
@@ -37,7 +38,7 @@ export function useBackGuard(screen: Screen, dispatch: Dispatch<GameAction>) {
         if (current !== 'home') pushGuard()
         return
       }
-      if (current === 'home') return
+      if (current === 'home' || onGuardEntry() || isOverlayEntry()) return
       if (QUIT_SCREENS.includes(current)) {
         pushGuard()
         setQuitOpen(true)

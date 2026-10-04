@@ -8,6 +8,17 @@ const iphoneSafari = {
   maxTouchPoints: 5,
 }
 const iphoneChrome = { ...iphoneSafari, userAgent: iphoneSafari.userAgent.replace('Version/18.0', 'CriOS/130.0') }
+const instagram = {
+  ...iphoneSafari,
+  userAgent:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Instagram 350.0.0.0',
+}
+const facebook = {
+  ...iphoneSafari,
+  userAgent:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBAV/480.0.0]',
+}
+const lineWithSafari = { ...iphoneSafari, userAgent: `${iphoneSafari.userAgent} Line/14.0.0` }
 const ipadDesktopMode = {
   userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Safari/605.1.15',
   platform: 'MacIntel',
@@ -25,6 +36,12 @@ describe('install hint', () => {
     expect(isIosSafari(ipadDesktopMode)).toBe(true)
     expect(isIosSafari(iphoneChrome)).toBe(false)
     expect(isIosSafari(android)).toBe(false)
+  })
+
+  it('skips in-app browsers that cannot add to the home screen', () => {
+    expect(isIosSafari(instagram)).toBe(false)
+    expect(isIosSafari(facebook)).toBe(false)
+    expect(isIosSafari(lineWithSafari)).toBe(false)
   })
 
   it('shows once until dismissed and never when installed', () => {
