@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test'
+import { joinNames } from '../src/screens/play/names.ts'
 
 export async function setupPlayers(page: Page, names: string[]) {
   await page.goto('./')
@@ -17,18 +18,37 @@ export async function startShow(page: Page) {
   await expect(page.getByText('Stage 1 of 10')).toBeVisible()
 }
 
-export function voteTiles(page: Page) {
-  return page.locator('.vote-grid').getByRole('button')
+export function voteRows(page: Page) {
+  return page.locator('.vote-list').getByRole('radiogroup')
+}
+
+function tallyText(cut: string[], total: number): string {
+  if (cut.length === 0) return 'Everyone stays in'
+  if (cut.length === total && total > 1) return 'Everyone goes out'
+  return `${joinNames(cut)} ${cut.length === 1 ? 'goes' : 'go'} out`
+}
+
+export async function castVotes(page: Page, accepters: string[]) {
+  await expect(page.getByRole('heading', { name: 'Who accepted the bone?' })).toBeVisible()
+  const lockIn = page.getByRole('button', { name: 'Lock in votes' })
+  await expect(lockIn).toBeDisabled()
+  const rows = voteRows(page)
+  await expect(rows.first()).toBeVisible()
+  const all = await rows.all()
+  const cut: string[] = []
+  for (const row of all) {
+    const name = await row.locator('.vote-choice__name').innerText()
+    if (!accepters.includes(name)) cut.push(name)
+    const option = row.getByRole('radio', { name: accepters.includes(name) ? 'Accept' : 'Cut off' })
+    await option.check()
+    await expect(option).toBeChecked()
+  }
+  await expect(page.getByRole('status')).toHaveText(tallyText(cut, all.length))
+  await lockIn.click()
 }
 
 export async function playStage(page: Page, accepters: string[]) {
   await page.getByRole('button', { name: 'Collect the votes' }).click()
-  await expect(page.getByRole('heading', { name: 'Who accepted the bone?' })).toBeVisible()
-  for (const name of accepters) {
-    const tile = page.getByRole('button', { name: new RegExp(`^${name}`) })
-    await tile.click()
-    await expect(tile).toHaveAttribute('aria-pressed', 'true')
-  }
-  await page.getByRole('button', { name: 'Lock in votes' }).click()
+  await castVotes(page, accepters)
   await page.getByRole('button', { name: 'Skip the suspense' }).click()
 }

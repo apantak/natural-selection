@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { playStage, setupPlayers, startShow, voteTiles } from './game.ts'
+import { playStage, setupPlayers, startShow, voteRows } from './game.ts'
 
 test('a 3-player game runs from Home to End', async ({ page }) => {
   await setupPlayers(page, ['Ana', 'Ben', 'Cleo'])
@@ -53,8 +53,8 @@ test('a reload mid-game keeps the game', async ({ page }) => {
   await page.reload()
 
   await expect(page.getByText('Stage 2 · Neanderthal')).toBeVisible()
-  await expect(voteTiles(page)).toHaveCount(1)
-  await expect(voteTiles(page)).toContainText('Ben')
+  await expect(voteRows(page)).toHaveCount(1)
+  await expect(voteRows(page)).toContainText('Ben')
   await expect(page.getByRole('region', { name: 'Out' })).toContainText('Ana')
   await expect(page.getByRole('region', { name: 'Out' })).toContainText('Cleo')
   const saved = await page.evaluate(() => Object.values(sessionStorage).map((value) => JSON.parse(value)))

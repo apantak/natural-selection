@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { setupPlayers, startShow } from './game.ts'
+import { castVotes, setupPlayers, startShow } from './game.ts'
 
 async function settled(page: Page) {
   await expect(page.locator('[data-locked]')).toHaveCount(0)
@@ -18,8 +18,7 @@ async function reachCeremony(page: Page) {
   await setupPlayers(page, ['Ana', 'Ben', 'Cleo'])
   await startShow(page)
   await page.getByRole('button', { name: 'Collect the votes' }).click()
-  for (const name of ['Ana', 'Ben']) await page.getByRole('button', { name: new RegExp(`^${name}`) }).click()
-  await page.getByRole('button', { name: 'Lock in votes' }).click()
+  await castVotes(page, ['Ana', 'Ben'])
   await expect(page.getByRole('heading', { name: 'The Bone Ceremony' })).toBeVisible()
   await settled(page)
 }

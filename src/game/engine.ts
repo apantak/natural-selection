@@ -6,6 +6,8 @@ export interface StageOutcome {
   accepters: PlayerId[]
   wentOut: PlayerId[]
   loneHoldout: boolean
+  solo: boolean
+  soloRepeat: boolean
   unanimous: boolean
   nobody: boolean
   isLastStage: boolean
@@ -51,16 +53,34 @@ export function activePlayers(state: GameState, stageIndex = state.stageIndex): 
   return state.players.filter((p) => (eliminatedAt(state, p.id) ?? Infinity) >= stageIndex)
 }
 
-export function stageOutcome(state: GameState, stageCount: number, stageIndex = state.stageIndex): StageOutcome {
+function stageAccepters(state: GameState, stageIndex: number): PlayerId[] {
   const votes = state.votes[stageIndex] ?? {}
+  return activePlayers(state, stageIndex)
+    .filter((p) => votes[p.id] === 'accept')
+    .map((p) => p.id)
+}
+
+function soloAt(state: GameState, stageIndex: number): boolean {
+  return (
+    stageIndex >= 0 &&
+    state.players.length >= 2 &&
+    activePlayers(state, stageIndex).length === 1 &&
+    stageAccepters(state, stageIndex).length === 1
+  )
+}
+
+export function stageOutcome(state: GameState, stageCount: number, stageIndex = state.stageIndex): StageOutcome {
   const active = activePlayers(state, stageIndex).map((p) => p.id)
-  const accepters = active.filter((id) => votes[id] === 'accept')
+  const accepters = stageAccepters(state, stageIndex)
+  const solo = soloAt(state, stageIndex)
   const nobody = accepters.length === 0
   const isLastStage = stageIndex >= stageCount - 1
   return {
     accepters,
-    wentOut: active.filter((id) => votes[id] !== 'accept'),
-    loneHoldout: accepters.length === 1 && state.players.length >= 2,
+    wentOut: active.filter((id) => !accepters.includes(id)),
+    loneHoldout: accepters.length === 1 && active.length >= 2,
+    solo,
+    soloRepeat: solo && soloAt(state, stageIndex - 1),
     unanimous: active.length >= 2 && accepters.length === active.length,
     nobody,
     isLastStage,

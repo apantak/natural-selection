@@ -11,7 +11,7 @@
 | Gold accent | `--color-gold`, `--color-gold-bright`, `--color-gold-deep`, `--color-gold-line` (hairlines), `--color-gold-wash` |
 | Dusty rose | `--color-rose`, `--color-rose-deep`, `--color-rose-wash` |
 | Semantic | `--color-accept` (gold), `--color-cutoff` (rose), `--color-danger` |
-| Gradients / texture | `--gradient-gold`, `--gradient-velvet`, `--gradient-vignette`, `--gradient-fade-up`, `--texture-grain`, `--texture-wood`, `--backdrop-studio` (dark mottled fill behind portraits, matches the photo backdrop) |
+| Gradients / texture | `--gradient-gold`, `--gradient-velvet`, `--gradient-vignette`, `--gradient-fade-up`, `--texture-grain`, `--texture-wood`, `--backdrop-studio` (dark mottled studio fill with a floor band, matched to the photo backdrop so scaled portraits blend in) |
 | Type | `--font-display` ('Fraunces Variable', opsz axis + italic loaded), `--font-body` ('Inter Variable'); sizes `--text-xs` 15px, `--text-sm` 17px, `--text-md` 20px (body), `--text-lg` 24px, `--text-xl` 32px, `--text-2xl`, `--text-hero` (fluid); `--leading-tight/snug/body`, `--tracking-eyebrow` |
 | Space | `--space-1`..`--space-8` (4, 8, 12, 16, 24, 32, 48, 64px), `--gutter` 20px, `--content-max` 34rem |
 | Tap targets | `--tap-min` 56px, `--tap-lg` 64px |
@@ -28,6 +28,7 @@ Canvas code (share card) can use the same font family names: `'Fraunces Variable
 - Type: `.title-hero`, `.title` (h1 size), `.subtitle`, `.display` (Fraunces on any element), `.eyebrow` (gold small caps label), `.lede`, `.accent` (gold italic), `.rose`, `.muted`, `.faint`, `.small`, `.center`
 - Layout: `.stack`, `.stack-sm`, `.stack-lg` (flex column gaps), `.row`
 - Decoration: `.card` (velvet panel, gold hairline), `.card-rose`, `.rule` (gold hairline divider; put an ornament like `✦` inside, or leave it empty)
+- Portraits: `.figure-frame` (2:3 box on `--backdrop-studio`) holding an `img.figure-img` placed by `figureStyle(meters)`; the image edges are feathered so no photo rectangle shows
 - A11y: `.visually-hidden`
 - `prefers-reduced-motion` kills CSS transitions; Motion animations obey `MotionConfig reducedMotion="user"` set in `App.tsx`.
 
@@ -43,11 +44,12 @@ Canvas code (share card) can use the same font family names: `'Fraunces Variable
 | `ScreenLayout` | `header`, `actions`, `children`, `centered`, `className` | Safe-area padding; `actions` is a sticky bottom bar with a fade. Every screen should use it. |
 | `ConfirmDialog` | `open`, `title`, `message`, `confirmLabel`, `cancelLabel`, `destructive`, `onConfirm`, `onCancel` | In-app modal (portal). Focuses cancel, Escape and backdrop cancel. Never use `window.confirm`. |
 | `PlayerTile` | `name`, `selected`, `onToggle`, `disabled`, `acceptLabel`, `cutoffLabel` | Vote grid tile, `aria-pressed`. Use in a 2-column grid. |
-| `PortraitViewer` | `open`, `stage`, `initialSide` 'female' / 'male', `onClose` | Fullscreen overlay. Swipe or tap toggles side, segmented control, height line, close button, Escape / arrow keys. Uses `portraitUrl`. Shows the whole 2:3 full-length figure. |
+| `PortraitViewer` | `open`, `stage`, `initialSide` 'female' / 'male', `onClose` | Fullscreen overlay. Swipe or tap toggles side, segmented control, height line, close button, Escape / arrow keys. Uses `portraitUrl`. Shows the full-length figure at true scale with subtle 1 m and 1.5 m marks. |
 | `Countdown` | `onDone`, `from` (3), `stepMs` (900), `finalLabel` ('Vote!') | Animated 3-2-1, then final label, then `onDone` once. |
 | `BoneBurst` | `variant` 'bone' / 'dust', `play` | Fires on mount (or when `play` turns true). Imperative versions: `fireBoneBurst()`, `fireDustBurst()`. Disabled under reduced motion. |
 | `Badge` | `children` ('18+'), `tone` gold / rose, `label` | |
 | `heightLabel(meters)` | | Formats a height as "About 1.1 m". |
+| `figureStyle(meters)`, `heightMarkTop(meters)` | | From `figureScale.ts`. Scales a portrait against a 1.85 m reference with the feet on a fixed floor line, so short species look short. The share card uses `figureBox` from the same file. |
 | `InstallHint` | none | One-time iOS Safari "Add to Home Screen" tip (Home screen). |
 
 ## App plumbing (`src/app`)

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
-import { PortraitViewer, type PortraitSide } from '../../components'
+import { figureStyle, PortraitViewer, type PortraitSide } from '../../components'
 import { portraitUrl } from '../../content/loader'
 import type { Stage } from '../../content/types'
 import { NO_GROUP_CUTOFF } from '../../share/summary'
@@ -62,7 +62,18 @@ export function GroupCutoff({ stage, index, stageCount }: GroupCutoffProps) {
             whileTap={{ scale: 0.97 }}
             transition={{ ...springPop, delay: 0.12 + i * 0.08 }}
           >
-            <img src={portraitUrl(stage.images[side])} alt="" width={1024} height={1536} decoding="async" />
+            <span className="figure-frame end-group__figure">
+              <img
+                className="figure-img"
+                style={figureStyle(stage.heightMeters[side])}
+                src={portraitUrl(stage.images[side])}
+                alt=""
+                width={1024}
+                height={1536}
+                draggable={false}
+                decoding="async"
+              />
+            </span>
           </motion.button>
         ))}
       </div>

@@ -11,6 +11,7 @@ interface VerdictProps {
   wentOut: Player[]
   total: number
   allIn: boolean
+  species: string
 }
 
 function verdictCopy({ outcome, accepted, total, allIn }: VerdictProps): { eyebrow: string; headline: string } {
@@ -18,8 +19,15 @@ function verdictCopy({ outcome, accepted, total, allIn }: VerdictProps): { eyebr
   if (outcome.unanimous) {
     return { eyebrow: 'Unanimous', headline: allIn ? 'Everyone accepted the bone.' : 'Everyone still in accepted the bone.' }
   }
+  if (outcome.solo) return { eyebrow: 'Solo run', headline: `${accepted[0].name} accepted the bone.` }
   if (outcome.loneHoldout) return { eyebrow: 'Lone holdout', headline: `Only ${accepted[0].name} accepted the bone.` }
   return { eyebrow: 'The verdict', headline: `${accepted.length} of ${total} accepted the bone.` }
+}
+
+function soloAside({ outcome, accepted, species }: VerdictProps): string | null {
+  if (!outcome.solo) return null
+  const name = accepted[0].name
+  return outcome.soloRepeat ? `${name} is still going at ${species}.` : `Still ${name}. Still holding a bone.`
 }
 
 function outCopy(wentOut: Player[]): string {
@@ -28,6 +36,7 @@ function outCopy(wentOut: Player[]): string {
 
 export function VerdictHeadline(props: VerdictProps) {
   const { eyebrow, headline } = verdictCopy(props)
+  const aside = soloAside(props)
   const showOut = !props.outcome.nobody && props.wentOut.length > 0
   return (
     <motion.div
@@ -41,6 +50,7 @@ export function VerdictHeadline(props: VerdictProps) {
         {headline}
       </p>
       {showOut && <p className="verdict__out">{outCopy(props.wentOut)}</p>}
+      {aside && <p className="verdict__aside display">{aside}</p>}
     </motion.div>
   )
 }

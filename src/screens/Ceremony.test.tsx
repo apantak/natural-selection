@@ -162,11 +162,31 @@ describe('Ceremony', () => {
     expect(screen.queryByText(/are out\./)).toBeNull()
   })
 
-  it('keeps the last player left in the spotlight', () => {
+  it('calls the last player left a solo run, not a lone holdout, and skips the spotlight', () => {
     renderRounds([['p1', 'p2'], ['p1'], ['p1']])
     skipReveal()
-    expect(screen.getByText('Only Ana accepted the bone.')).toBeInTheDocument()
+    expect(screen.getByText('Solo run')).toBeInTheDocument()
+    expect(screen.getByText('Ana accepted the bone.')).toBeInTheDocument()
+    expect(screen.queryByText(/Only Ana|Lone holdout/)).toBeNull()
+    expect(screen.getByText('Still Ana. Still holding a bone.')).toBeInTheDocument()
     expect(screen.queryByText(/is out\./)).toBeNull()
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(justify('Justify yourself')).toHaveTextContent('Ana, tell the room what you saw in them.')
+  })
+
+  it('moves the solo line on after the first solo stage', () => {
+    renderRounds([['p1', 'p2'], ['p1'], ['p1'], ['p1']])
+    skipReveal()
+    expect(screen.getByText('Solo run')).toBeInTheDocument()
+    expect(screen.getByText(`Ana is still going at ${stages[3].species}.`)).toBeInTheDocument()
+    expect(screen.queryByText(/^Still Ana/)).toBeNull()
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  it('spotlights a lone holdout the first time without the repeat line', () => {
+    renderRounds([['p1', 'p2'], ['p1']])
+    skipReveal()
     expect(screen.getByRole('dialog', { name: "Ana, you're the last one holding a bone. Defend yourself." })).toBeInTheDocument()
+    expect(screen.queryByText(/^Still Ana/)).toBeNull()
   })
 })

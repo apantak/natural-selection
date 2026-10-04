@@ -1,8 +1,9 @@
 import { useId } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Button, nameFit, PlayerTile, ScreenLayout } from '../../components'
-import type { Player, PlayerId } from '../../game/types'
+import { Button, nameFit, ScreenLayout, VoteChoice } from '../../components'
+import type { Player, PlayerId, StageVotes } from '../../game/types'
 import { fadeUp, springPop, springUi, stagger } from '../../theme/motion'
+import { joinNames } from './names'
 
 export interface OutPlayer extends Player {
   since: number
@@ -12,14 +13,27 @@ interface TallyProps {
   eyebrow: string
   players: Player[]
   out: OutPlayer[]
-  accepted: ReadonlySet<PlayerId>
-  onToggle: (id: PlayerId) => void
+  choices: StageVotes
+  onChoose: (id: PlayerId, vote: StageVotes[PlayerId]) => void
   onSubmit: () => void
   onBlindVote: () => void
 }
 
-export function VoteTally({ eyebrow, players, out, accepted, onToggle, onSubmit, onBlindVote }: TallyProps) {
-  const count = players.filter((p) => accepted.has(p.id)).length
+function tallyStatus(players: Player[], choices: StageVotes): { text: string; tone: string } {
+  const undecided = players.filter((p) => !choices[p.id]).length
+  if (undecided > 0) return { text: `${undecided} still to decide`, tone: '' }
+  const cut = players.filter((p) => choices[p.id] === 'cutoff')
+  if (cut.length === 0) return { text: 'Everyone stays in', tone: ' tally__text--done' }
+  const text =
+    cut.length === players.length && players.length > 1
+      ? 'Everyone goes out'
+      : `${joinNames(cut.map((p) => p.name))} ${cut.length === 1 ? 'goes' : 'go'} out`
+  return { text, tone: ' tally__text--cut' }
+}
+
+export function VoteTally({ eyebrow, players, out, choices, onChoose, onSubmit, onBlindVote }: TallyProps) {
+  const undecided = players.filter((p) => !choices[p.id]).length
+  const status = tallyStatus(players, choices)
 
   return (
     <ScreenLayout
@@ -27,7 +41,10 @@ export function VoteTally({ eyebrow, players, out, accepted, onToggle, onSubmit,
         <>
           <span className="eyebrow">{eyebrow}</span>
           <h1 className="title">Who accepted the bone?</h1>
-          <p className="muted">Go round the room and argue it out. Tap everyone who accepts. The rest are cutoffs.</p>
+          <p className="muted">Go round the room and argue it out. Mark each player Accept or Cut off.</p>
+          <p className="vote-hint">
+            <span aria-hidden="true">✂️ </span>Cut off is final. That player sits out the rest of the game.
+          </p>
         </>
       }
       actions={
@@ -37,33 +54,27 @@ export function VoteTally({ eyebrow, players, out, accepted, onToggle, onSubmit,
               {players.map((p) => (
                 <motion.span
                   key={p.id}
-                  className={`tally__pip${accepted.has(p.id) ? ' tally__pip--on' : ''}`}
-                  animate={{ scale: accepted.has(p.id) ? 1.3 : 1 }}
+                  className={`tally__pip${choices[p.id] ? ` tally__pip--${choices[p.id]}` : ''}`}
+                  animate={{ scale: choices[p.id] ? 1.3 : 1 }}
                   transition={springPop}
                 />
               ))}
             </div>
-            <p className="tally__text" aria-hidden="true">
-              <span className="tally__count">
-                <AnimatePresence mode="popLayout" initial={false}>
-                  <motion.span
-                    key={count}
-                    initial={{ y: 14, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -14, opacity: 0 }}
-                    transition={springPop}
-                  >
-                    {count}
-                  </motion.span>
-                </AnimatePresence>
-              </span>{' '}
-              of {players.length} accept the bone
+            <p className={`tally__text${status.tone}`}>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={status.text}
+                  initial={{ y: 14, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -14, opacity: 0 }}
+                  transition={springPop}
+                >
+                  {status.text}
+                </motion.span>
+              </AnimatePresence>
             </p>
-            <span className="visually-hidden">
-              {count} of {players.length} accept the bone
-            </span>
           </div>
-          <Button block onClick={onSubmit}>
+          <Button block disabled={undecided > 0} onClick={onSubmit}>
             Lock in votes
           </Button>
           <Button variant="ghost" size="md" onClick={onBlindVote}>
@@ -72,10 +83,10 @@ export function VoteTally({ eyebrow, players, out, accepted, onToggle, onSubmit,
         </>
       }
     >
-      <motion.div className="vote-grid" variants={stagger(0.04, 0.04)} initial="hidden" animate="show">
+      <motion.div className="vote-list" variants={stagger(0.04, 0.04)} initial="hidden" animate="show">
         {players.map((p) => (
-          <motion.div key={p.id} className="vote-grid__cell" variants={fadeUp}>
-            <PlayerTile name={p.name} selected={accepted.has(p.id)} onToggle={() => onToggle(p.id)} />
+          <motion.div key={p.id} variants={fadeUp}>
+            <VoteChoice name={p.name} value={choices[p.id]} onChange={(vote) => onChoose(p.id, vote)} />
           </motion.div>
         ))}
       </motion.div>

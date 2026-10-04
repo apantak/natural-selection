@@ -235,6 +235,35 @@ a {
     var(--color-surface);
 }
 
+.figure-frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--backdrop-studio);
+  isolation: isolate;
+}
+
+.figure-img {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  -webkit-mask-image:
+    radial-gradient(80% 108% at 50% 100%, #000 88%, transparent),
+    linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
+    linear-gradient(to top, transparent, #000 3%),
+    linear-gradient(to bottom, transparent, #000 4%);
+  -webkit-mask-composite: source-in, source-in, source-in;
+  mask-image:
+    radial-gradient(80% 108% at 50% 100%, #000 88%, transparent),
+    linear-gradient(to right, transparent, #000 18%, #000 82%, transparent),
+    linear-gradient(to top, transparent, #000 3%),
+    linear-gradient(to bottom, transparent, #000 4%);
+  mask-composite: intersect;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;

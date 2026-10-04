@@ -477,10 +477,28 @@ describe('stageOutcome', () => {
     expect(stageOutcome(s, STAGES)).toMatchObject({ loneHoldout: false, unanimous: false })
   })
 
-  it('keeps the lone holdout spotlight on the last player left every stage', () => {
+  it('stops calling the last player left a lone holdout once nobody else is voting', () => {
     const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'accept' }] })
-    expect(stageOutcome(s, STAGES, 1)).toMatchObject({ accepters: ['p1'], loneHoldout: true, unanimous: false })
-    expect(stageOutcome(s, STAGES, 2)).toMatchObject({ accepters: ['p1'], loneHoldout: true, unanimous: false })
+    expect(stageOutcome(s, STAGES, 1)).toMatchObject({ accepters: ['p1'], loneHoldout: true, solo: false })
+    expect(stageOutcome(s, STAGES, 2)).toMatchObject({ accepters: ['p1'], loneHoldout: false, solo: true, unanimous: false })
+  })
+
+  it('flags a solo run, then a repeat solo from the second solo stage on', () => {
+    const s = at('ceremony', {
+      stageIndex: 4,
+      votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'accept' }, { p1: 'accept' }, { p1: 'accept' }],
+    })
+    expect(stageOutcome(s, 6, 1)).toMatchObject({ solo: false, soloRepeat: false })
+    expect(stageOutcome(s, 6, 2)).toMatchObject({ solo: true, soloRepeat: false })
+    expect(stageOutcome(s, 6, 3)).toMatchObject({ solo: true, soloRepeat: true })
+    expect(stageOutcome(s, 6, 4)).toMatchObject({ solo: true, soloRepeat: true })
+  })
+
+  it('does not call it a solo run when the last player cuts off or plays alone', () => {
+    const s = at('ceremony', { stageIndex: 2, votes: [votes(['p1', 'p2']), votes(['p1']), { p1: 'cutoff' }] })
+    expect(stageOutcome(s, STAGES)).toMatchObject({ solo: false, soloRepeat: false, nobody: true })
+    const alone = at('ceremony', { players: players('Solo'), votes: [{ p1: 'accept' }] })
+    expect(stageOutcome(alone, STAGES)).toMatchObject({ solo: false, loneHoldout: false })
   })
 
   it('is unanimous when every active player accepts and at least two remain', () => {

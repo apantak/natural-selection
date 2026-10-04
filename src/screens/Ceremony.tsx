@@ -94,6 +94,7 @@ export function Ceremony() {
               wentOut={wentOut}
               total={players.length}
               allIn={players.length === state.players.length}
+              species={stage.species}
             />
           )}
         </AnimatePresence>

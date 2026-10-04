@@ -1,3 +1,4 @@
+import { figureBox } from '../components/figureScale'
 import { portraitUrl } from '../content/loader'
 import type { Stage } from '../content/types'
 import type { GameResults, Player } from '../game/types'
@@ -215,7 +216,62 @@ function archPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number
   ctx.closePath()
 }
 
-function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, cx: number, cy: number, w: number, h: number, tilt: number) {
+function fill(ctx: CanvasRenderingContext2D, style: CanvasGradient | string, x: number, y: number, w: number, h: number) {
+  ctx.fillStyle = style
+  ctx.fillRect(x, y, w, h)
+}
+
+function opaqueBand(gradient: CanvasGradient, from: number, to: number): CanvasGradient {
+  const clear = 'rgba(0, 0, 0, 0)'
+  gradient.addColorStop(0, from > 0 ? clear : '#000')
+  gradient.addColorStop(from, '#000')
+  gradient.addColorStop(to, '#000')
+  gradient.addColorStop(1, to < 1 ? clear : '#000')
+  return gradient
+}
+
+function featheredFigure(img: HTMLImageElement, w: number, h: number): HTMLCanvasElement | null {
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.max(1, Math.round(w))
+  canvas.height = Math.max(1, Math.round(h))
+  const fctx = canvas.getContext('2d')
+  if (!fctx) return null
+  const { width, height } = canvas
+  fctx.drawImage(img, 0, 0, width, height)
+  fctx.globalCompositeOperation = 'destination-in'
+  fill(fctx, opaqueBand(fctx.createLinearGradient(0, 0, width, 0), 0.18, 0.82), 0, 0, width, height)
+  fill(fctx, opaqueBand(fctx.createLinearGradient(0, height, 0, 0), 0.03, 0.96), 0, 0, width, height)
+  fctx.translate(width / 2, height)
+  fctx.scale(width * 0.8, height * 1.08)
+  fill(fctx, opaqueBand(fctx.createRadialGradient(0, 0, 0, 0, 0, 1), 0, 0.88), -1, -1, 2, 1)
+  return canvas
+}
+
+function studioBackdrop(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+  fill(ctx, '#121210', x, y, w, h)
+  const glow = ctx.createRadialGradient(0, y + h * 0.3, 0, 0, y + h * 0.3, h * 0.6)
+  glow.addColorStop(0, 'rgba(22, 21, 19, 0.9)')
+  glow.addColorStop(1, 'rgba(22, 21, 19, 0)')
+  fill(ctx, glow, x, y, w, h)
+  const mottle = document.createElement('canvas')
+  mottle.width = 22
+  mottle.height = 33
+  const mctx = mottle.getContext('2d')
+  if (mctx) {
+    for (let i = 0; i < mottle.width * mottle.height; i++) {
+      fill(mctx, `rgba(62, 60, 56, ${(Math.random() * 0.36).toFixed(3)})`, i % mottle.width, Math.floor(i / mottle.width), 1, 1)
+    }
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(mottle, x, y, w, h)
+  }
+  const floor = ctx.createLinearGradient(0, y, 0, y + h)
+  floor.addColorStop(0.83, 'rgba(46, 44, 41, 0)')
+  floor.addColorStop(0.91, 'rgba(46, 44, 41, 0.92)')
+  floor.addColorStop(1, 'rgba(42, 40, 38, 0.92)')
+  fill(ctx, floor, x, y, w, h)
+}
+
+function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement | null, meters: number, cx: number, cy: number, w: number, h: number, tilt: number) {
   const x = -w / 2
   const y = -h / 2
   ctx.save()
@@ -234,17 +290,10 @@ function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement | nul
   ctx.save()
   archPath(ctx, x, y, w, h)
   ctx.clip()
-  const backdrop = ctx.createRadialGradient(0, y + h * 0.32, 0, 0, y + h * 0.32, h * 0.75)
-  backdrop.addColorStop(0, '#3a2c22')
-  backdrop.addColorStop(1, '#120d0a')
-  ctx.fillStyle = backdrop
-  ctx.fillRect(x, y, w, h)
-  if (img) {
-    const iw = img.naturalWidth || w
-    const ih = img.naturalHeight || h
-    const scale = Math.min(w / iw, h / ih)
-    ctx.drawImage(img, -iw * scale / 2, y + h - ih * scale, iw * scale, ih * scale)
-  }
+  studioBackdrop(ctx, x, y, w, h)
+  const box = figureBox(meters)
+  const figure = img && featheredFigure(img, w * box.width, h * box.height)
+  if (figure) ctx.drawImage(figure, x + w * box.left, y + h * box.top, w * box.width, h * box.height)
   const shade = ctx.createLinearGradient(0, y + h * 0.7, 0, y + h)
   shade.addColorStop(0, 'rgba(13, 9, 7, 0)')
   shade.addColorStop(1, 'rgba(13, 9, 7, 0.3)')
@@ -307,8 +356,8 @@ function drawGroup(ctx: CanvasRenderingContext2D, summary: ResultsSummary, stage
   }
 
   const pw = (ph * 2) / 3
-  drawPortrait(ctx, images[0], CX - pw / 2 - 20, top + ph / 2, pw, ph, -0.035)
-  drawPortrait(ctx, images[1], CX + pw / 2 + 20, top + ph / 2, pw, ph, 0.035)
+  drawPortrait(ctx, images[0], stage.heightMeters.female, CX - pw / 2 - 20, top + ph / 2, pw, ph, -0.035)
+  drawPortrait(ctx, images[1], stage.heightMeters.male, CX + pw / 2 + 20, top + ph / 2, pw, ph, 0.035)
 
   let y = top + ph + 84
   ctx.save()

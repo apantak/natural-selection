@@ -47,20 +47,40 @@
   cursor: grab;
 }
 
-.viewer__img {
+.viewer__frame {
   grid-area: 1 / 1;
-  display: block;
   width: min(100cqw, 100cqh * 2 / 3);
-  height: auto;
-  aspect-ratio: 2 / 3;
-  object-fit: contain;
-  object-position: 50% 100%;
   border: 1px solid var(--color-gold-line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lift), var(--glow-gold);
-  background: var(--backdrop-studio);
-  user-select: none;
-  -webkit-user-drag: none;
+}
+
+.viewer__marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.viewer__mark {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  translate: 0 -50%;
+  font-size: 0.75rem;
+  font-weight: 550;
+  letter-spacing: 0.04em;
+  color: var(--color-ivory-faint);
+  opacity: 0.75;
+  font-variant-numeric: lining-nums;
+}
+
+.viewer__mark::before {
+  content: '';
+  width: 0.65rem;
+  height: 1px;
+  background: var(--color-gold);
 }
 
 .viewer__footer {

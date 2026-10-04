@@ -19,26 +19,14 @@ const stepVariants: Variants = {
 export function Vote() {
   const { state, stage, dispatch } = useGame()
   const [step, setStep] = useState<Step>('tally')
-  const [accepted, setAccepted] = useState<ReadonlySet<PlayerId>>(() => new Set())
+  const [choices, setChoices] = useState<StageVotes>({})
   const eyebrow = `Stage ${state.stageIndex + 1} · ${stage.species}`
   const active = activePlayers(state)
   const out = state.players
     .filter((p) => !active.includes(p))
     .map((p) => ({ ...p, since: (eliminatedAt(state, p.id) ?? 0) + 1 }))
 
-  const toggle = (id: PlayerId) =>
-    setAccepted((current) => {
-      const next = new Set(current)
-      if (!next.delete(id)) next.add(id)
-      return next
-    })
-
-  const submit = () => {
-    const votes: StageVotes = Object.fromEntries(
-      active.map((p) => [p.id, accepted.has(p.id) ? 'accept' : 'cutoff']),
-    )
-    dispatch({ type: 'submitVotes', votes })
-  }
+  const choose = (id: PlayerId, vote: StageVotes[PlayerId]) => setChoices((current) => ({ ...current, [id]: vote }))
 
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -49,9 +37,9 @@ export function Vote() {
             eyebrow={eyebrow}
             players={active}
             out={out}
-            accepted={accepted}
-            onToggle={toggle}
-            onSubmit={submit}
+            choices={choices}
+            onChoose={choose}
+            onSubmit={() => dispatch({ type: 'submitVotes', votes: choices })}
             onBlindVote={() => setStep('countdown')}
           />
         )}

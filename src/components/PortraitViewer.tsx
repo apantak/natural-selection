@@ -4,6 +4,7 @@ import { AnimatePresence, motion, type PanInfo } from 'motion/react'
 import type { Stage } from '../content/types'
 import { portraitUrl } from '../content/loader'
 import { springUi } from '../theme/motion'
+import { figureStyle, heightMarkTop } from './figureScale'
 import { heightLabel } from './heightLabel'
 import { useOverlay } from './useOverlay'
 import './PortraitViewer.css'
@@ -21,6 +22,7 @@ const SIDES: PortraitSide[] = ['female', 'male']
 const LABEL: Record<PortraitSide, string> = { female: 'Female', male: 'Male' }
 const SWIPE_DISTANCE = 60
 const SWIPE_VELOCITY = 400
+const MARKS = [1, 1.5]
 
 export function PortraitViewer({ open, stage, initialSide = 'female', onClose }: PortraitViewerProps) {
   return createPortal(
@@ -77,21 +79,31 @@ function ViewerPanel({ stage, initialSide, onClose }: Omit<PortraitViewerProps, 
         animate={{ scale: 1, y: 0 }}
         transition={springUi}
       >
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.img
-            key={side}
-            className="viewer__img"
-            src={portraitUrl(stage.images[side])}
-            alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
-            width={1024}
-            height={1536}
-            draggable={false}
-            initial={{ opacity: 0, scale: 1.03 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.22 }}
-          />
-        </AnimatePresence>
+        <div className="figure-frame viewer__frame">
+          <AnimatePresence initial={false}>
+            <motion.img
+              key={side}
+              className="figure-img"
+              style={figureStyle(stage.heightMeters[side])}
+              src={portraitUrl(stage.images[side])}
+              alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
+              width={1024}
+              height={1536}
+              draggable={false}
+              initial={{ opacity: 0, scale: 1.03 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.22 }}
+            />
+          </AnimatePresence>
+          <div className="viewer__marks" aria-hidden="true">
+            {MARKS.map((meters) => (
+              <span key={meters} className="viewer__mark" style={{ top: `${heightMarkTop(meters) * 100}%` }}>
+                {meters} m
+              </span>
+            ))}
+          </div>
+        </div>
       </motion.div>
 
       <div className="viewer__footer">

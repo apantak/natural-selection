@@ -2,7 +2,7 @@ import { useId } from 'react'
 import { motion, type Variants } from 'motion/react'
 import type { Stage } from '../../content/types'
 import { portraitUrl } from '../../content/loader'
-import { heightLabel, type PortraitSide } from '../../components'
+import { figureStyle, heightLabel, type PortraitSide } from '../../components'
 import { fadeUp, springSoft } from '../../theme/motion'
 
 const SIDES: PortraitSide[] = ['female', 'male']
@@ -29,15 +29,18 @@ export function PortraitPair({ stage, onOpen }: { stage: Stage; onOpen: (side: P
             aria-label={`Show the ${LABEL[side].toLowerCase()} portrait fullscreen`}
             aria-describedby={`${id}-${side}`}
           >
-            <img
-              className="portraits__img"
-              src={portraitUrl(stage.images[side])}
-              alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
-              width={1024}
-              height={1536}
-              draggable={false}
-              decoding="async"
-            />
+            <span className="figure-frame portraits__figure">
+              <img
+                className="figure-img"
+                style={figureStyle(stage.heightMeters[side])}
+                src={portraitUrl(stage.images[side])}
+                alt={`${stage.species}, ${LABEL[side].toLowerCase()} reconstruction`}
+                width={1024}
+                height={1536}
+                draggable={false}
+                decoding="async"
+              />
+            </span>
             <span className="portraits__label">{LABEL[side]}</span>
           </motion.button>
           <motion.p id={`${id}-${side}`} variants={fadeUp} className="portraits__height display">

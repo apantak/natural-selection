@@ -10,14 +10,15 @@
   max-width: 24ch;
 }
 
-.vote-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3);
+.vote-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.vote-grid__cell {
-  display: grid;
+.vote-hint {
+  font-size: var(--text-xs);
+  color: var(--color-rose);
 }
 
 .vote-out {
@@ -85,15 +86,17 @@
 
 .tally {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-1) var(--space-3);
   color: var(--color-ivory-muted);
   font-size: var(--text-md);
 }
 
 .tally__pips {
   display: flex;
+  flex: none;
   flex-wrap: wrap;
   gap: 6px;
 }
@@ -106,23 +109,31 @@
   transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out);
 }
 
-.tally__pip--on {
+.tally__pip--accept {
   border-color: var(--color-gold-bright);
   background: var(--color-gold-bright);
   box-shadow: 0 0 10px rgba(236, 202, 132, 0.6);
 }
 
-.tally__text {
-  text-align: right;
+.tally__pip--cutoff {
+  border-color: var(--color-rose);
+  background: var(--color-rose);
 }
 
-.tally__count {
-  display: inline-grid;
-  min-width: 1ch;
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+.tally__text {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.tally__text--done,
+.tally__text--cut {
   font-weight: 650;
   color: var(--color-gold-bright);
-  font-variant-numeric: lining-nums tabular-nums;
-  vertical-align: -0.1em;
+}
+
+.tally__text--cut {
+  color: var(--color-rose);
 }
